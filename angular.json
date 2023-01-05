@@ -68,7 +68,8 @@
               "browserTarget": "angular-tour-of-heroes:build:production"
             },
             "development": {
-              "browserTarget": "angular-tour-of-heroes:build:development"
+              "browserTarget": "angular-tour-of-heroes:build:development",
+              "proxyConfig": "proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"
