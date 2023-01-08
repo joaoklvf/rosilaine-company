@@ -10,7 +10,7 @@ import { HeroService } from '../hero.service';
 })
 export class HeroesComponent implements OnInit {
   heroes: Hero[] = [];
-
+  hero: Hero = { id: 0, title: '', content: '' };
   constructor(private heroService: HeroService) { }
 
   ngOnInit(): void {
@@ -22,8 +22,8 @@ export class HeroesComponent implements OnInit {
       .subscribe(heroes => this.heroes = heroes);
   }
 
-  add(hero: Hero): void {
-    hero.title = hero.title.trim();
+  add(): void {
+    const hero = { ...this.hero, title: this.hero.title.trim() };
     if (!hero.title) { return; }
     this.heroService.addHero(hero)
       .subscribe(hero => {
