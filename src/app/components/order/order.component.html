@@ -1,0 +1,84 @@
+<div class="container">
+  <h1>Pedidos</h1>
+  <div class="card mb-3">
+    <div class="card-body">
+      <div class="product-row">
+        <div>
+          <label for="product-title">Produto: </label>
+          <input
+            #productTitle
+            class="form-control"
+            id="product-title"
+            placeholder="Nome"
+            [(ngModel)]="product.title"
+            name="name"
+          />
+        </div>
+        <div>
+          <app-input-mask
+            [label]="'Preço (R$)'"
+            [value]="product.price"
+            (handleOnChange)="setPrice($event)"
+          >
+          </app-input-mask>
+        </div>
+        <div>
+          <label for="product-amount">Quantidade: </label>
+          <input
+            type="number"
+            class="form-control"
+            id="product-amount"
+            [(ngModel)]="product.amount"
+          />
+        </div>
+        <div>
+          <button type="button" class="btn btn-primary" (click)="add()">
+            Adicionar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="products.length > 0">
+    <div class="card-body table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Produto</th>
+            <th scope="col">Quantidade</th>
+            <th scope="col">Preço</th>
+            <th scope="col">Total</th>
+            <th scope="col">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let product of products; index as index">
+            <td>{{ product.title }}</td>
+            <td>{{ product.amount }}</td>
+            <td>{{ getCurrencyValue(product.price) }}</td>
+            <td>{{ getCurrencyValue(product.total) }}</td>
+            <td class="td-icons">
+              <button
+                type="button"
+                class="btn btn-outline-danger me-2"
+                title="Remover produto"
+                (click)="remove(product)"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+              <button
+                type="button"
+                class="btn btn-outline-success"
+                title="Editar produto"
+                (click)="edit(product)"
+              >
+                <mat-icon>edit</mat-icon>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

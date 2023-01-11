@@ -14,6 +14,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { HeroSearchComponent } from './components/hero-search/hero-search.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { OrderComponent } from './components/order/order.component';
+import { InputMaskComponent } from './input-mask/input-mask.component';
+import { MatIconModule } from '@angular/material/icon';
+import { CustomersComponent } from './components/customers/customers.component';
 
 @NgModule({
   imports: [
@@ -21,7 +25,8 @@ import { NavbarComponent } from './components/navbar/navbar.component';
     FormsModule,
     AppRoutingModule,
     HttpClientModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    MatIconModule
   ],
   declarations: [
     AppComponent,
@@ -30,7 +35,10 @@ import { NavbarComponent } from './components/navbar/navbar.component';
     HeroDetailComponent,
     MessagesComponent,
     HeroSearchComponent,
-    NavbarComponent
+    NavbarComponent,
+    OrderComponent,
+    InputMaskComponent,
+    CustomersComponent
   ],
   bootstrap: [AppComponent]
 })
