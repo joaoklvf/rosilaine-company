@@ -15,7 +15,7 @@ import { HeroSearchComponent } from './components/hero-search/hero-search.compon
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { OrderComponent } from './components/order/order.component';
-import { InputMaskComponent } from './input-mask/input-mask.component';
+import { InputMaskComponent } from './components/input-mask/input-mask.component';
 import { MatIconModule } from '@angular/material/icon';
 import { CustomersComponent } from './components/customers/customers.component';
 import { MatDatepickerModule } from '@angular/material/datepicker'
