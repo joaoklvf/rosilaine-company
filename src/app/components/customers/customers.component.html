@@ -1,1 +1,36 @@
-<p>customers works!</p>
+<div class="container">
+  <h1>Clientes</h1>
+  <div class="card mb-3">
+    <div class="card-body">
+      <div class="product-row">
+        <div>
+          <label for="product-title">Nome: </label>
+          <input
+            #productTitle
+            class="form-control"
+            id="product-title"
+            placeholder="Nome"
+            [(ngModel)]="customer.name"
+            name="name"
+          />
+        </div>
+        <div>
+          <app-br-date-picker></app-br-date-picker>
+        </div>
+        <div>
+          <label for="product-amount">Telefone: </label>
+          <input
+            class="form-control"
+            id="product-amount"
+            [(ngModel)]="customer.phone"
+          />
+        </div>
+        <div>
+          <button type="button" class="btn btn-primary" (click)="add()">
+            Adicionar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

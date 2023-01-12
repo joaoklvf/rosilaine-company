@@ -18,6 +18,12 @@ import { OrderComponent } from './components/order/order.component';
 import { InputMaskComponent } from './input-mask/input-mask.component';
 import { MatIconModule } from '@angular/material/icon';
 import { CustomersComponent } from './components/customers/customers.component';
+import { MatDatepickerModule } from '@angular/material/datepicker'
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatInputModule } from '@angular/material/input';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrDatePickerComponent } from './components/br-date-picker/br-date-picker.component';
 
 @NgModule({
   imports: [
@@ -26,7 +32,12 @@ import { CustomersComponent } from './components/customers/customers.component';
     AppRoutingModule,
     HttpClientModule,
     MatSlideToggleModule,
-    MatIconModule
+    MatIconModule,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    MatNativeDateModule,
+    MatInputModule,
+    BrowserAnimationsModule
   ],
   declarations: [
     AppComponent,
@@ -38,7 +49,8 @@ import { CustomersComponent } from './components/customers/customers.component';
     NavbarComponent,
     OrderComponent,
     InputMaskComponent,
-    CustomersComponent
+    CustomersComponent,
+    BrDatePickerComponent
   ],
   bootstrap: [AppComponent]
 })
