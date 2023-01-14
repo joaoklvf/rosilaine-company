@@ -1,6 +1,6 @@
 <mat-form-field appearance="fill">
-  <mat-label>Verbose datepicker</mat-label>
-  <input matInput [matDatepicker]="dp" />
+  <mat-label>{{ label }}</mat-label>
+  <input matInput [matDatepicker]="dp" (dateChange)="update($event)" />
   <mat-datepicker-toggle matIconSuffix [for]="dp"></mat-datepicker-toggle>
   <mat-datepicker #dp></mat-datepicker>
 </mat-form-field>

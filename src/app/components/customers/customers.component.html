@@ -2,26 +2,32 @@
   <h1>Clientes</h1>
   <div class="card mb-3">
     <div class="card-body">
-      <div class="product-row">
+      <div class="customer-row">
         <div>
-          <label for="product-title">Nome: </label>
+          <label for="customer-name">Nome: </label>
           <input
-            #productTitle
+            #customerName
             class="form-control"
-            id="product-title"
+            id="customer-name"
             placeholder="Nome"
             [(ngModel)]="customer.name"
             name="name"
           />
         </div>
         <div>
-          <app-br-date-picker></app-br-date-picker>
+          <app-br-date-picker
+            [label]="'Data de nascimento'"
+            [value]="customer.birthDate"
+            (handleOnChange)="setBirthDate($event)"
+          ></app-br-date-picker>
         </div>
         <div>
-          <label for="product-amount">Telefone: </label>
+          <label for="customer-phone">Telefone: </label>
           <input
             class="form-control"
-            id="product-amount"
+            id="customer-phone"
+            type="text"
+            mask="123"
             [(ngModel)]="customer.phone"
           />
         </div>
@@ -31,6 +37,46 @@
           </button>
         </div>
       </div>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="customers.length > 0">
+    <div class="card-body table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Nome</th>
+            <th scope="col">Telefone</th>
+            <th scope="col">Data de nascimento</th>
+            <th scope="col">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let customer of customers; index as index">
+            <td>{{ customer.name }}</td>
+            <td>{{ customer.phone }}</td>
+            <td>{{ getFormatDate(customer.birthDate) }}</td>
+            <td class="td-icons">
+              <button
+                type="button"
+                class="btn btn-outline-danger me-2"
+                title="Remover produto"
+                (click)="add()"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+              <button
+                type="button"
+                class="btn btn-outline-success"
+                title="Editar produto"
+                (click)="add()"
+              >
+                <mat-icon>edit</mat-icon>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>

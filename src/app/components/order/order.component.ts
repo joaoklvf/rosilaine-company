@@ -8,7 +8,7 @@ import { Product } from 'src/app/models/product';
 })
 export class OrderComponent {
   product = new Product();
-  products: Product[] = [{ id: 1, title: 'Produto 1', amount: 1, price: 10, total: 10 }];
+  products: Product[] = [];
   @ViewChild("productTitle") myInputField: ElementRef = new ElementRef(null);
 
   add(): void {

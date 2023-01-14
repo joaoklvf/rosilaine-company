@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 import { CustomersComponent } from './components/customers/customers.component';
 
 import { DashboardComponent } from './components/dashboard/dashboard.component';
@@ -17,7 +18,10 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [ RouterModule.forRoot(routes) ],
-  exports: [ RouterModule ]
+  imports: [RouterModule.forRoot(routes),
+    NgxMaskDirective, NgxMaskPipe
+  ],
+  exports: [RouterModule],
+  providers: [provideNgxMask()]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

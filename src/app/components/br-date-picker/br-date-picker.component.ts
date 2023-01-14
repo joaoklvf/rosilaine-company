@@ -1,17 +1,9 @@
-import { Component } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { Moment } from 'moment';
 
-// Depending on whether rollup is used, moment needs to be imported differently.
-// Since Moment.js doesn't have a default export, we normally need to import using the `* as`
-// syntax. However, rollup creates a synthetic default module and we thus need to import it using
-// the `default as` syntax.
-import * as moment from 'moment';
-// tslint:disable-next-line:no-duplicate-imports
-
-// See the Moment.js docs for the meaning of these formats:
-// https://momentjs.com/docs/#/displaying/format/
 export const MY_FORMATS = {
   parse: {
     dateInput: 'DD/MM/YYYY',
@@ -29,9 +21,6 @@ export const MY_FORMATS = {
   templateUrl: './br-date-picker.component.html',
   styleUrls: ['./br-date-picker.component.scss'],
   providers: [
-    // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
-    // application's root module. We provide it at the component level here, due to limitations of
-    // our example generation script.
     {
       provide: DateAdapter,
       useClass: MomentDateAdapter,
@@ -42,5 +31,11 @@ export const MY_FORMATS = {
   ],
 })
 export class BrDatePickerComponent {
-  date = new FormControl(moment());
+  @Input() label = '';
+  @Input() value = new Date();
+  @Output() handleOnChange = new EventEmitter<Date>();
+
+  update(event: MatDatepickerInputEvent<Moment>) {
+    this.handleOnChange.emit(event.value?.toDate());
+  }
 }

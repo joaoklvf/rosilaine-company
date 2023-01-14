@@ -24,7 +24,10 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrDatePickerComponent } from './components/br-date-picker/br-date-picker.component';
-
+import { provideEnvironmentNgxMask } from 'ngx-mask';
+import { CustomAutocompleteComponent } from './components/custom-autocomplete/custom-autocomplete.component';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { ReactiveFormsModule } from '@angular/forms';
 @NgModule({
   imports: [
     BrowserModule,
@@ -37,7 +40,8 @@ import { BrDatePickerComponent } from './components/br-date-picker/br-date-picke
     MatFormFieldModule,
     MatNativeDateModule,
     MatInputModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MatAutocompleteModule
   ],
   declarations: [
     AppComponent,
@@ -50,9 +54,11 @@ import { BrDatePickerComponent } from './components/br-date-picker/br-date-picke
     OrderComponent,
     InputMaskComponent,
     CustomersComponent,
-    BrDatePickerComponent
+    BrDatePickerComponent,
+    CustomAutocompleteComponent
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  providers: [provideEnvironmentNgxMask()]
 })
 
 export class AppModule { }
