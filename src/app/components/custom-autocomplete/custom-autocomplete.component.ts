@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
+import { Customer } from 'src/app/models/customer';
+import { CustomerService } from 'src/app/services/customer/customer.service';
 
 @Component({
   selector: 'app-custom-autocomplete',
@@ -9,20 +11,29 @@ import { startWith, map } from 'rxjs/operators';
   styleUrls: ['./custom-autocomplete.component.scss']
 })
 export class CustomAutocompleteComponent implements OnInit {
-  control = new FormControl('');
-  streets: string[] = ['Champs-Élysées', 'Lombard Street', 'Abbey Road', 'Fifth Avenue'];
-  filteredStreets: Observable<string[]> = new Observable<string[]>();
-
+  myControl = new FormControl<Customer>(new Customer());
+  customers: Customer[] = [];
+  filteredCustomers: Observable<Customer[]> = new Observable<Customer[]>();
+  
+  constructor(private customerService: CustomerService) { }
+  
   ngOnInit() {
-    this.filteredStreets = this.control.valueChanges.pipe(
+    this.customerService.getCustomers()
+      .subscribe(customers => this.customers = customers);
+    this.filteredCustomers = this.myControl.valueChanges.pipe(
       startWith(''),
-      map(value => this._filter(value || '')),
+      map(value => {
+        const name = typeof value === 'string' ? value : value?.name;
+        return name ? this._filter(name as string) : this.customers.slice();
+      }),
     );
   }
-
-  private _filter(value: string): string[] {
+  displayFn(customer: Customer): string {
+    return customer.name || '';
+  }
+  private _filter(value: string): Customer[] {
     const filterValue = this._normalizeValue(value);
-    return this.streets.filter(street => this._normalizeValue(street).includes(filterValue));
+    return this.customers.filter(customer => this._normalizeValue(customer.name).includes(filterValue));
   }
 
   private _normalizeValue(value: string): string {

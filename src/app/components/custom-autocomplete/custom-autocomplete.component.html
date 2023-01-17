@@ -1,13 +1,14 @@
-<form >
+<form>
   <input
     type="text"
     placeholder="Search for a street"
     [matAutocomplete]="auto"
+    [formControl]="myControl" 
     class="form-control"
   />
-  <mat-autocomplete #auto="matAutocomplete">
-    <mat-option *ngFor="let street of filteredStreets | async" [value]="street">
-      {{ street }}
+  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+    <mat-option *ngFor="let customer of filteredCustomers | async" [value]="customer">
+      {{ customer.name }}
     </mat-option>
   </mat-autocomplete>
 </form>

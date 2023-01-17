@@ -28,6 +28,7 @@ import { provideEnvironmentNgxMask } from 'ngx-mask';
 import { CustomAutocompleteComponent } from './components/custom-autocomplete/custom-autocomplete.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { ReactiveFormsModule } from '@angular/forms';
+
 @NgModule({
   imports: [
     BrowserModule,
@@ -41,7 +42,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatNativeDateModule,
     MatInputModule,
     BrowserAnimationsModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    ReactiveFormsModule
   ],
   declarations: [
     AppComponent,
