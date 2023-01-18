@@ -82,7 +82,7 @@ export class CustomerService {
 
   /** PUT: update the customer on the server */
   updateCustomer(customer: Customer): Observable<any> {
-    return this.http.put(this.customersUrl, customer).pipe(
+    return this.http.put(`${this.customersUrl}/${customer.id}`, customer).pipe(
       tap(_ => this.log(`updated customer id=${customer.id}`)),
       catchError(this.handleError<any>('updateCustomer'))
     );
