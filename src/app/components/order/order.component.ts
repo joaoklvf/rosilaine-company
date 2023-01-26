@@ -1,5 +1,8 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Customer } from 'src/app/models/customer';
+import { Order } from 'src/app/models/order';
 import { Product } from 'src/app/models/product';
+import { OrderService } from 'src/app/services/order/order.service';
 
 @Component({
   selector: 'app-order',
@@ -7,35 +10,58 @@ import { Product } from 'src/app/models/product';
   styleUrls: ['./order.component.scss']
 })
 export class OrderComponent {
+  order = new Order();
   product = new Product();
-  products: Product[] = [];
-  @ViewChild("productTitle") myInputField: ElementRef = new ElementRef(null);
 
+  @ViewChild("productDescription") myInputField: ElementRef = new ElementRef(null);
+
+  constructor(private orderService: OrderService) { }
   add(): void {
     const product = {
       ...this.product,
-      title: this.product.title.trim(),
+      description: this.product.description.trim(),
       price: Number(this.product.price),
       total: this.product.amount * this.product.price
     };
-    if (!product.title || product.amount <= 0)
+    if (!product.description || product.amount <= 0)
       return;
 
-    this.products.push(product);
+    const productsToAdd = [...this.order.products, product];
+    const order: Order = {
+      ...this.order,
+      products: productsToAdd,
+    }
+
+    if (order.id > 0) {
+      this.orderService.updateOrder(order)
+        .subscribe(orderResponse => {
+          this.order = orderResponse;
+          this.product = new Product();
+        });
+    } else {
+      this.orderService.addOrder(order)
+        .subscribe(orderResponse => {
+          this.order = orderResponse;
+          this.product = new Product();
+        });
+      this.myInputField.nativeElement.focus();
+    }
+
+    this.order.products.push(product);
     this.product = new Product();
     this.myInputField.nativeElement.focus();
   }
 
   remove(product: Product): void {
-    this.products = this.products.filter(p => p !== product);
+    this.order.products = this.order.products.filter(p => p !== product);
   }
 
   edit(product: Product): void {
-    this.product = product;
+    this.product = { ...product };
   }
 
   update(product: Product, index: number): void {
-    this.products[index] = product;
+    this.order.products[index] = product;
   }
 
   getCurrencyValue = (value: number) =>
@@ -43,5 +69,13 @@ export class OrderComponent {
 
   setPrice(value: number) {
     this.product.price = value;
+  }
+
+  setOrderDate(value: Date) {
+    this.order.orderDate = value;
+  }
+
+  setCustomer(value: any) {
+    this.order.customer = value;
   }
 }

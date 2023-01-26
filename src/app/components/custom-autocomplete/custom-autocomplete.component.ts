@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { MatOptionSelectionChange } from '@angular/material/core';
 import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
 import { Customer } from 'src/app/models/customer';
@@ -11,8 +12,11 @@ import { CustomerService } from 'src/app/services/customer/customer.service';
   styleUrls: ['./custom-autocomplete.component.scss']
 })
 export class CustomAutocompleteComponent implements OnInit {
-  myControl = new FormControl<Customer>(new Customer());
+  @Input() label = '';
+  @Output() handleOnChange = new EventEmitter<Customer>();
+  
   customers: Customer[] = [];
+  myControl = new FormControl<Customer>(new Customer());
   filteredCustomers: Observable<Customer[]> = new Observable<Customer[]>();
   
   constructor(private customerService: CustomerService) { }
@@ -38,5 +42,9 @@ export class CustomAutocompleteComponent implements OnInit {
 
   private _normalizeValue(value: string): string {
     return value.toLowerCase().replace(/\s/g, '');
+  }
+
+  update(event: MatOptionSelectionChange<Customer>){
+    this.handleOnChange.emit(event.source.value);
   }
 }

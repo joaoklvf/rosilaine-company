@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import * as moment from 'moment';
+import { provideNgxMask } from 'ngx-mask';
 import { Customer } from 'src/app/models/customer';
 import { CustomerService } from 'src/app/services/customer/customer.service';
 
@@ -7,6 +8,9 @@ import { CustomerService } from 'src/app/services/customer/customer.service';
   selector: 'app-customers',
   templateUrl: './customers.component.html',
   styleUrls: ['./customers.component.scss'],
+  providers: [
+    provideNgxMask(),
+  ],
 })
 export class CustomersComponent implements OnInit {
   customers: Customer[] = [];
@@ -25,6 +29,7 @@ export class CustomersComponent implements OnInit {
   }
 
   add() {
+    console.log(this.customer);
     const customer = {
       ...this.customer,
       name: this.customer.name.trim(),
@@ -32,13 +37,23 @@ export class CustomersComponent implements OnInit {
     if (!customer.name)
       return;
 
-    this.customerService.addCustomer(customer)
-      .subscribe(customer => {
-        this.customers.push(customer);
-        this.customer = new Customer();
-      });
+    if (customer.id > 0) {
+      this.customerService.updateCustomer(customer)
+        .subscribe(customer => {
+          console.log(customer, 'customer')
+          const customerIndex = this.customers.findIndex(c => c.id === customer.id);
+          this.customers[customerIndex] = customer;
+          this.customer = new Customer();
+        });
+    } else {
+      this.customerService.addCustomer(customer)
+        .subscribe(customer => {
+          this.customers.push(customer);
+          this.customer = new Customer();
+        });
 
-    this.myInputField.nativeElement.focus();
+      this.myInputField.nativeElement.focus();
+    }
   }
 
   getFormatDate(date: Date) {
@@ -47,5 +62,9 @@ export class CustomersComponent implements OnInit {
 
   setBirthDate(value: Date) {
     this.customer.birthDate = value;
+  }
+
+  edit(customer: Customer): void {
+    this.customer = { ...customer };
   }
 }

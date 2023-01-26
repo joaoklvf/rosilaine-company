@@ -2,18 +2,30 @@
   <h1>Pedidos</h1>
   <div class="card mb-3">
     <div class="card-body">
-      <div>
-        <app-custom-autocomplete></app-custom-autocomplete>
+      <div class="card-row">
+        <app-custom-autocomplete
+          [label]="'Cliente'"
+          (handleOnChange)="setCustomer($event)"
+        ></app-custom-autocomplete>
+        <app-br-date-picker
+          [label]="'Data do pedido'"
+          [value]="order.orderDate"
+          (handleOnChange)="setOrderDate($event)"
+        ></app-br-date-picker>
       </div>
-      <div class="product-row">
+    </div>
+  </div>
+  <div class="card mb-3">
+    <div class="card-body">
+      <div class="card-row">
         <div>
-          <label for="product-title">Produto: </label>
+          <label for="product-title">Produto</label>
           <input
-            #productTitle
+            #productDescription
             class="form-control"
             id="product-title"
             placeholder="Nome"
-            [(ngModel)]="product.title"
+            [(ngModel)]="product.description"
             name="name"
           />
         </div>
@@ -26,7 +38,7 @@
           </app-input-mask>
         </div>
         <div>
-          <label for="product-amount">Quantidade: </label>
+          <label for="product-amount">Quantidade</label>
           <input
             type="number"
             class="form-control"
@@ -43,7 +55,7 @@
     </div>
   </div>
 
-  <div class="card" *ngIf="products.length > 0">
+  <div class="card" *ngIf="order.products.length > 0">
     <div class="card-body table-responsive">
       <table class="table">
         <thead>
@@ -56,8 +68,8 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let product of products; index as index">
-            <td>{{ product.title }}</td>
+          <tr *ngFor="let product of order.products; index as index">
+            <td>{{ product.description }}</td>
             <td>{{ product.amount }}</td>
             <td>{{ getCurrencyValue(product.price) }}</td>
             <td>{{ getCurrencyValue(product.total) }}</td>

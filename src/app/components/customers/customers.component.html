@@ -27,7 +27,9 @@
             class="form-control"
             id="customer-phone"
             type="text"
-            mask="123"
+            mask="(00) 00000-0000"
+            matInput
+            [dropSpecialCharacters]="false"
             [(ngModel)]="customer.phone"
           />
         </div>
@@ -69,7 +71,7 @@
                 type="button"
                 class="btn btn-outline-success"
                 title="Editar produto"
-                (click)="add()"
+                (click)="edit(customer)"
               >
                 <mat-icon>edit</mat-icon>
               </button>
