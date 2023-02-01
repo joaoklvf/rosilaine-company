@@ -1,8 +1,10 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import * as moment from 'moment';
 import { provideNgxMask } from 'ngx-mask';
+import { FormatOptions } from 'src/app/interfaces/format';
 import { Customer } from 'src/app/models/customer';
 import { CustomerService } from 'src/app/services/customer/customer.service';
+import { ColumnProps } from '../generic-list/interfaces';
 
 @Component({
   selector: 'app-customers',
@@ -15,6 +17,12 @@ import { CustomerService } from 'src/app/services/customer/customer.service';
 export class CustomersComponent implements OnInit {
   customers: Customer[] = [];
   customer = new Customer();
+  columnsProps: ColumnProps<Customer>[] = [
+    { key: 'id', label: 'Código' },
+    { key: 'name', label: 'Nome' },
+    { key: 'phone', label: 'Telefone' },
+    { key: 'birthDate', label: 'Data de Nascimento', formatOption: FormatOptions.Date },
+  ]
   @ViewChild("customerName") myInputField: ElementRef = new ElementRef(null);
 
   constructor(private customerService: CustomerService) { }

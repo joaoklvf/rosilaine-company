@@ -1,0 +1,39 @@
+<div class="card" *ngIf="data.length > 0">
+  <div class="card-body table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th *ngFor="let column of columnsProps" scope="col">
+            {{ column.label }}
+          </th>
+          <th scope="col">Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let dataRow of data">
+          <td *ngFor="let column of columnsProps">
+            {{ formatValue(dataRow[column.key], column.formatOption) }}
+          </td>
+          <td class="td-icons">
+            <button
+              type="button"
+              class="btn btn-outline-danger me-2"
+              title="Excluir"
+              (click)="deleteAction(dataRow)"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+            <button
+              type="button"
+              class="btn btn-outline-success"
+              title="Editar"
+              (click)="editAction(dataRow)"
+            >
+              <mat-icon>edit</mat-icon>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

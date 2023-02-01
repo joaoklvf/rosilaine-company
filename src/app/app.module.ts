@@ -28,6 +28,7 @@ import { NgxMaskDirective, NgxMaskPipe, provideEnvironmentNgxMask } from 'ngx-ma
 import { CustomAutocompleteComponent } from './components/custom-autocomplete/custom-autocomplete.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { ReactiveFormsModule } from '@angular/forms';
+import { GenericListComponent } from './components/generic-list/generic-list.component';
 
 @NgModule({
   imports: [
@@ -59,7 +60,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     InputMaskComponent,
     CustomersComponent,
     BrDatePickerComponent,
-    CustomAutocompleteComponent
+    CustomAutocompleteComponent,
+    GenericListComponent
   ],
   bootstrap: [AppComponent],
   providers: [provideEnvironmentNgxMask()]

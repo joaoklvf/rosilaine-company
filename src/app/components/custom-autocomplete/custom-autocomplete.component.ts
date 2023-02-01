@@ -11,7 +11,7 @@ import { CustomerService } from 'src/app/services/customer/customer.service';
   templateUrl: './custom-autocomplete.component.html',
   styleUrls: ['./custom-autocomplete.component.scss']
 })
-export class CustomAutocompleteComponent implements OnInit {
+export class CustomAutocompleteComponent<T> implements OnInit {
   @Input() label = '';
   @Output() handleOnChange = new EventEmitter<Customer>();
   
