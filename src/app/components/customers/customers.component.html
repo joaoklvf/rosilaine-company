@@ -42,53 +42,12 @@
     </div>
   </div>
 
-  <!-- <div class="card" *ngIf="customers.length > 0">
-    <div class="card-body table-responsive">
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">Nome</th>
-            <th scope="col">Telefone</th>
-            <th scope="col">Data de nascimento</th>
-            <th scope="col">Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let customer of customers; index as index">
-            <td>{{ customer.name }}</td>
-            <td>{{ customer.phone }}</td>
-            <td>{{ getFormatDate(customer.birthDate) }}</td>
-            <td class="td-icons">
-              <button
-                type="button"
-                class="btn btn-outline-danger me-2"
-                title="Remover produto"
-                (click)="add()"
-              >
-                <mat-icon>delete</mat-icon>
-              </button>
-              <button
-                type="button"
-                class="btn btn-outline-success"
-                title="Editar produto"
-                (click)="edit(customer)"
-              >
-                <mat-icon>edit</mat-icon>
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div> -->
-
-<app-generic-list
-[data]="customers"
-[columnsProps]="columnsProps"
-[title]="'Clientes'"
-[editAction]="edit"
-[deleteAction]="add"
->
-
-</app-generic-list>
+  <app-generic-list
+    [data]="customers"
+    [columnsProps]="columnsProps"
+    [title]="'Clientes'"
+    (editAction)="edit($event)"
+    (deleteAction)="(add)"
+  >
+  </app-generic-list>
+</div>

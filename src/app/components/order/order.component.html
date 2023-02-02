@@ -4,6 +4,8 @@
     <div class="card-body">
       <div class="card-row">
         <app-custom-autocomplete
+          [data]="customers"
+          [getOptionLabel]="getOptionLabelCustomer"
           [label]="'Cliente'"
           (handleOnChange)="setCustomer($event)"
         ></app-custom-autocomplete>
@@ -19,15 +21,13 @@
     <div class="card-body">
       <div class="card-row">
         <div>
-          <label for="product-title">Produto</label>
-          <input
+          <app-custom-autocomplete
             #productDescription
-            class="form-control"
-            id="product-title"
-            placeholder="Nome"
-            [(ngModel)]="product.description"
-            name="name"
-          />
+            [data]="databaseProducts"
+            [getOptionLabel]="getOptionLabelProduct"
+            [label]="'Produto'"
+            (handleOnChange)="setProduct($event)"
+          ></app-custom-autocomplete>
         </div>
         <div>
           <app-input-mask
@@ -54,46 +54,12 @@
       </div>
     </div>
   </div>
-
-  <div class="card" *ngIf="order.products.length > 0">
-    <div class="card-body table-responsive">
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">Produto</th>
-            <th scope="col">Quantidade</th>
-            <th scope="col">Preço</th>
-            <th scope="col">Total</th>
-            <th scope="col">Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let product of order.products; index as index">
-            <td>{{ product.description }}</td>
-            <td>{{ product.amount }}</td>
-            <td>{{ getCurrencyValue(product.price) }}</td>
-            <td>{{ getCurrencyValue(product.total) }}</td>
-            <td class="td-icons">
-              <button
-                type="button"
-                class="btn btn-outline-danger me-2"
-                title="Remover produto"
-                (click)="remove(product)"
-              >
-                <mat-icon>delete</mat-icon>
-              </button>
-              <button
-                type="button"
-                class="btn btn-outline-success"
-                title="Editar produto"
-                (click)="edit(product)"
-              >
-                <mat-icon>edit</mat-icon>
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+  <app-generic-list
+    [data]="order.products"
+    [columnsProps]="columnsProps"
+    [title]="'Produtos'"
+    (editAction)="edit($event)"
+    (deleteAction)="remove(product)"
+  >
+  </app-generic-list>
 </div>
