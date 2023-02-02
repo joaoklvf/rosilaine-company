@@ -3,8 +3,6 @@ import { FormControl } from '@angular/forms';
 import { MatOptionSelectionChange } from '@angular/material/core';
 import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
-import { Customer } from 'src/app/models/customer';
-import { CustomerService } from 'src/app/services/customer/customer.service';
 
 @Component({
   selector: 'app-custom-autocomplete',
@@ -13,38 +11,37 @@ import { CustomerService } from 'src/app/services/customer/customer.service';
 })
 export class CustomAutocompleteComponent<T> implements OnInit {
   @Input() label = '';
-  @Output() handleOnChange = new EventEmitter<Customer>();
-  
-  customers: Customer[] = [];
-  myControl = new FormControl<Customer>(new Customer());
-  filteredCustomers: Observable<Customer[]> = new Observable<Customer[]>();
-  
-  constructor(private customerService: CustomerService) { }
-  
+  @Output() handleOnChange = new EventEmitter<T>();
+  @Input() data: T[] = [];
+  @Input() getOptionLabel: (value: T | null) => string = (value: T | null) => value?.toString() || '';
+  myControl = new FormControl<T | null>(null);
+  filteredData: Observable<T[]> = new Observable<T[]>();
+
   ngOnInit() {
-    this.customerService.getCustomers()
-      .subscribe(customers => this.customers = customers);
-    this.filteredCustomers = this.myControl.valueChanges.pipe(
+    this.filteredData = this.myControl.valueChanges.pipe(
       startWith(''),
       map(value => {
-        const name = typeof value === 'string' ? value : value?.name;
-        return name ? this._filter(name as string) : this.customers.slice();
+        let name = null;
+        if (value && typeof value === 'string')
+          name = value;
+        else if (value && typeof value !== 'string')
+          name = this.getOptionLabel(value);
+
+        return name ? this._filter(name as string) : this.data.slice();
       }),
     );
   }
-  displayFn(customer: Customer): string {
-    return customer.name || '';
-  }
-  private _filter(value: string): Customer[] {
+
+  private _filter(value: string): T[] {
     const filterValue = this._normalizeValue(value);
-    return this.customers.filter(customer => this._normalizeValue(customer.name).includes(filterValue));
+    return this.data.filter(valueToFilter => this._normalizeValue(this.getOptionLabel(valueToFilter)).includes(filterValue));
   }
 
   private _normalizeValue(value: string): string {
     return value.toLowerCase().replace(/\s/g, '');
   }
 
-  update(event: MatOptionSelectionChange<Customer>){
+  update(event: MatOptionSelectionChange<T>) {
     this.handleOnChange.emit(event.source.value);
   }
 }

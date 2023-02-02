@@ -2,19 +2,19 @@
   <label>{{ label }}</label>
   <input
     type="text"
-    placeholder="Pesquisar cliente"
+    placeholder="Pesquisar {{ label.toLocaleLowerCase() }}"
     [matAutocomplete]="auto"
     [formControl]="myControl"
     matInput
     class="form-control"
   />
-  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+  <mat-autocomplete #auto="matAutocomplete" [displayWith]="getOptionLabel">
     <mat-option
-      *ngFor="let customer of filteredCustomers | async"
-      [value]="customer"
+      *ngFor="let value of filteredData | async"
+      [value]="value"
       (onSelectionChange)="update($event)"
     >
-      {{ customer.name }}
+      {{ getOptionLabel(value) }}
     </mat-option>
   </mat-autocomplete>
 </form>
