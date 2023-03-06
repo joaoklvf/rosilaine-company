@@ -1,8 +1,9 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormatOptions } from 'src/app/interfaces/format';
-import { Customer } from 'src/app/models/customer';
-import { Order } from 'src/app/models/order';
-import { Product } from 'src/app/models/product';
+import { Customer } from 'src/app/models/customer/customer';
+import { Order } from 'src/app/models/order/order';
+import { OrderItem } from 'src/app/models/order/order-item';
+import { Product } from 'src/app/models/product/product';
 import { CustomerService } from 'src/app/services/customer/customer.service';
 import { OrderService } from 'src/app/services/order/order.service';
 import { ProductService } from 'src/app/services/product/product.service';
@@ -15,13 +16,13 @@ import { ColumnProps } from '../generic-list/interfaces';
 })
 export class OrderComponent implements OnInit {
   order = new Order();
-  product = new Product();
+  orderItem = new OrderItem();
   customers: Customer[] = [];
   databaseProducts: Product[] = [];
-  columnsProps: ColumnProps<Product>[] = [
-    { key: 'description', label: 'Produto' },
-    { key: 'amount', label: 'Quantidade' },
-    { key: 'price', label: 'Preço', formatOption: FormatOptions.Currency },
+  columnsProps: ColumnProps<OrderItem>[] = [
+    { key: 'product', label: 'Produto' },
+    { key: 'quantity', label: 'Quantidade' },
+    { key: 'sellingPrice', label: 'Preço', formatOption: FormatOptions.Currency },
     { key: 'total', label: 'Total', formatOption: FormatOptions.Currency },
   ];
   @ViewChild("productDescription") myInputField: ElementRef = new ElementRef(null);
@@ -44,62 +45,53 @@ export class OrderComponent implements OnInit {
   }
 
   add(): void {
-    const product = {
-      ...this.product,
-      description: this.product.description.trim(),
-      price: Number(this.product.price),
-      total: this.product.amount * this.product.price
-    };
-    if (!product.description || product.amount <= 0)
-      return;
+    const product: OrderItem = { ...this.orderItem };
 
-    const productsToAdd = [...this.order.products, product];
+    const productsToAdd = [...this.order.orderItems, product];
     const order: Order = {
       ...this.order,
-      products: productsToAdd,
+      orderItems: productsToAdd,
     }
 
     if (order.id > 0) {
       this.orderService.updateOrder(order)
         .subscribe(orderResponse => {
           this.order = orderResponse;
-          this.product = new Product();
+          this.orderItem = new OrderItem();
         });
     } else {
       this.orderService.addOrder(order)
         .subscribe(orderResponse => {
           this.order = orderResponse;
-          this.product = new Product();
+          this.orderItem = new OrderItem();
         });
       this.myInputField.nativeElement.focus();
     }
 
-    this.order.products.push(product);
-    this.product = new Product();
     this.myInputField.nativeElement.focus();
   }
 
-  remove(product: Product): void {
-    this.order.products = this.order.products.filter(p => p !== product);
+  remove(item: OrderItem): void {
+    this.order.orderItems.splice(this.order.orderItems.indexOf(item), 1);
   }
 
-  edit(product: Product): void {
-    this.product = { ...product };
+  edit(item: OrderItem): void {
+    this.orderItem = { ...item };
   }
 
-  update(product: Product, index: number): void {
-    this.order.products[index] = product;
+  update(item: OrderItem, index: number): void {
+    this.order.orderItems[index] = item;
   }
 
   getCurrencyValue = (value: number) =>
     value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
   setPrice(value: number) {
-    this.product.price = value;
+    this.orderItem.sellingPrice = value;
   }
 
   setOrderDate(value: Date) {
-    this.order.orderDate = value;
+    this.order.deliveryDate = value;
   }
 
   setCustomer(customer: Customer) {
@@ -107,6 +99,6 @@ export class OrderComponent implements OnInit {
   }
 
   setProduct(product: Product) {
-    this.product = product;
+    this.orderItem.product = product;
   }
 }

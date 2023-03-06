@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import * as moment from 'moment';
 import { provideNgxMask } from 'ngx-mask';
 import { FormatOptions } from 'src/app/interfaces/format';
-import { Customer } from 'src/app/models/customer';
+import { Customer } from 'src/app/models/customer/customer';
 import { CustomerService } from 'src/app/services/customer/customer.service';
 import { ColumnProps } from '../generic-list/interfaces';
 

@@ -5,6 +5,7 @@
     [matDatepicker]="dp"
     (dateChange)="update($event)"
     [(ngModel)]="value"
+    disabled
   />
   <mat-datepicker-toggle matIconSuffix [for]="dp"></mat-datepicker-toggle>
   <mat-datepicker #dp></mat-datepicker>

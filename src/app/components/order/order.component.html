@@ -11,8 +11,9 @@
         ></app-custom-autocomplete>
         <app-br-date-picker
           [label]="'Data do pedido'"
-          [value]="order.orderDate"
+          [value]="order.createdDate"
           (handleOnChange)="setOrderDate($event)"
+          
         ></app-br-date-picker>
       </div>
     </div>
@@ -32,7 +33,7 @@
         <div>
           <app-input-mask
             [label]="'Preço (R$)'"
-            [value]="product.price"
+            [value]="orderItem.sellingPrice"
             (handleOnChange)="setPrice($event)"
           >
           </app-input-mask>
@@ -43,7 +44,7 @@
             type="number"
             class="form-control"
             id="product-amount"
-            [(ngModel)]="product.amount"
+            [(ngModel)]="orderItem.quantity"
           />
         </div>
         <div>
@@ -55,11 +56,11 @@
     </div>
   </div>
   <app-generic-list
-    [data]="order.products"
+    [data]="order.orderItems"
     [columnsProps]="columnsProps"
     [title]="'Produtos'"
     (editAction)="edit($event)"
-    (deleteAction)="remove(product)"
+    (deleteAction)="remove(orderItem)"
   >
   </app-generic-list>
 </div>

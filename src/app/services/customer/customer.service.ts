@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, tap, map, of } from 'rxjs';
-import { Customer } from 'src/app/models/customer';
+import { Customer } from 'src/app/models/customer/customer';
 import { MessageService } from '../message/message.service';
 
 @Injectable({
