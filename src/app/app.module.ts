@@ -22,6 +22,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker'
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrDatePickerComponent } from './components/br-date-picker/br-date-picker.component';
 import { NgxMaskDirective, NgxMaskPipe, provideEnvironmentNgxMask } from 'ngx-mask';
@@ -29,6 +30,7 @@ import { CustomAutocompleteComponent } from './components/custom-autocomplete/cu
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { ReactiveFormsModule } from '@angular/forms';
 import { GenericListComponent } from './components/generic-list/generic-list.component';
+import { ProductsComponent } from './components/products/products.component';
 
 @NgModule({
   imports: [
@@ -42,6 +44,7 @@ import { GenericListComponent } from './components/generic-list/generic-list.com
     MatFormFieldModule,
     MatNativeDateModule,
     MatInputModule,
+    MatSelectModule,
     BrowserAnimationsModule,
     MatAutocompleteModule,
     ReactiveFormsModule,
@@ -61,7 +64,8 @@ import { GenericListComponent } from './components/generic-list/generic-list.com
     CustomersComponent,
     BrDatePickerComponent,
     CustomAutocompleteComponent,
-    GenericListComponent
+    GenericListComponent,
+    ProductsComponent
   ],
   bootstrap: [AppComponent],
   providers: [provideEnvironmentNgxMask()]

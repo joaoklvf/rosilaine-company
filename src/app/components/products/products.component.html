@@ -1,0 +1,61 @@
+<div class="container">
+  <h1>Clientes</h1>
+  <div class="card mb-3">
+    <div class="card-body">
+      <div class="customer-row">
+        <div>
+          <label for="customer-name">Descrição: </label>
+          <input
+            #customerName
+            class="form-control"
+            id="customer-name"
+            placeholder="Descrição"
+            [(ngModel)]="product.description"
+            name="name"
+          />
+          <label for="customer-name">Código Natura: </label>
+          <input
+            class="form-control"
+            id="customer-name"
+            placeholder="Código Natura"
+            [(ngModel)]="product.productCode"
+            name="name"
+          />
+          <app-input-mask
+            [label]="'Preço (R$)'"
+            [value]="product.price"
+            (handleOnChange)="setPrice($event)"
+          >
+          </app-input-mask>
+          <!-- TODO: Componentizar isso aqui -->
+          <h4>mat-select</h4>
+          <mat-form-field appearance="fill">
+            <mat-label>Categoria do produto</mat-label>
+            <mat-select [(ngModel)]="product.category" name="category">
+              <mat-option
+                *ngFor="let category of productCategories"
+                [value]="category.id"
+              >
+                {{ category.description }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div>
+          <button type="button" class="btn btn-primary" (click)="add()">
+            Adicionar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <app-generic-list
+    [data]="databaseProducts"
+    [columnsProps]="columnsProps"
+    [title]="'Clientes'"
+    (editAction)="edit($event)"
+    (deleteAction)="remove($event)"
+  >
+  </app-generic-list>
+</div>
