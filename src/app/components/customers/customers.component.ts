@@ -5,12 +5,13 @@ import { Customer } from 'src/app/models/customer';
 import { CustomerService } from 'src/app/services/customer/customer.service';
 
 @Component({
-  selector: 'app-customers',
-  templateUrl: './customers.component.html',
-  styleUrls: ['./customers.component.scss'],
-  providers: [
-    provideNgxMask(),
-  ],
+    selector: 'app-customers',
+    templateUrl: './customers.component.html',
+    styleUrls: ['./customers.component.scss'],
+    providers: [
+        provideNgxMask(),
+    ],
+    standalone: false
 })
 export class CustomersComponent implements OnInit {
   customers: Customer[] = [];

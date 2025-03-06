@@ -10,9 +10,10 @@ import { HeroService } from 'src/app/services/hero/hero.service';
 import { Hero } from '../../interfaces/hero';
 
 @Component({
-  selector: 'app-hero-search',
-  templateUrl: './hero-search.component.html',
-  styleUrls: [ './hero-search.component.scss' ]
+    selector: 'app-hero-search',
+    templateUrl: './hero-search.component.html',
+    styleUrls: ['./hero-search.component.scss'],
+    standalone: false
 })
 export class HeroSearchComponent implements OnInit {
   heroes$!: Observable<Hero[]>;

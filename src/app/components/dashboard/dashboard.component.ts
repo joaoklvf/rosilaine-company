@@ -3,9 +3,10 @@ import { Hero } from '../../interfaces/hero';
 import { HeroService } from 'src/app/services/hero/hero.service';
 
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: [ './dashboard.component.scss' ]
+    selector: 'app-dashboard',
+    templateUrl: './dashboard.component.html',
+    styleUrls: ['./dashboard.component.scss'],
+    standalone: false
 })
 export class DashboardComponent implements OnInit {
   heroes: Hero[] = [];

@@ -7,9 +7,10 @@ import { Customer } from 'src/app/models/customer';
 import { CustomerService } from 'src/app/services/customer/customer.service';
 
 @Component({
-  selector: 'app-custom-autocomplete',
-  templateUrl: './custom-autocomplete.component.html',
-  styleUrls: ['./custom-autocomplete.component.scss']
+    selector: 'app-custom-autocomplete',
+    templateUrl: './custom-autocomplete.component.html',
+    styleUrls: ['./custom-autocomplete.component.scss'],
+    standalone: false
 })
 export class CustomAutocompleteComponent implements OnInit {
   @Input() label = '';

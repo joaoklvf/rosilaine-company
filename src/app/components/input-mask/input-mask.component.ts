@@ -1,9 +1,10 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
-  selector: 'app-input-mask',
-  templateUrl: './input-mask.component.html',
-  styleUrls: ['./input-mask.component.scss']
+    selector: 'app-input-mask',
+    templateUrl: './input-mask.component.html',
+    styleUrls: ['./input-mask.component.scss'],
+    standalone: false
 })
 export class InputMaskComponent {
   @Input() label = '';
