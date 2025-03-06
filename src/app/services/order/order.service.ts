@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, tap, map, of } from 'rxjs';
-import { Order } from 'src/app/models/order';
 import { MessageService } from '../message/message.service';
+import { Order } from 'src/app/models/order/order';
 
 @Injectable({
   providedIn: 'root'

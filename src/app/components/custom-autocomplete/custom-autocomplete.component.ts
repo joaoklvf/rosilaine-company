@@ -3,7 +3,7 @@ import { FormControl } from '@angular/forms';
 import { MatOptionSelectionChange } from '@angular/material/core';
 import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
-import { Customer } from 'src/app/models/customer';
+import { Customer } from 'src/app/models/customer/customer';
 import { CustomerService } from 'src/app/services/customer/customer.service';
 
 @Component({

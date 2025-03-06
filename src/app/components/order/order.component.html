@@ -25,14 +25,14 @@
             class="form-control"
             id="product-title"
             placeholder="Nome"
-            [(ngModel)]="product.description"
+            [(ngModel)]="orderItem.product.description"
             name="name"
           />
         </div>
         <div>
           <app-input-mask
             [label]="'Preço (R$)'"
-            [value]="product.price"
+            [value]="orderItem.itemPrice"
             (handleOnChange)="setPrice($event)"
           >
           </app-input-mask>
@@ -43,7 +43,7 @@
             type="number"
             class="form-control"
             id="product-amount"
-            [(ngModel)]="product.amount"
+            [(ngModel)]="orderItem.itemAmount"
           />
         </div>
         <div>
@@ -55,7 +55,7 @@
     </div>
   </div>
 
-  <div class="card" *ngIf="order.products.length > 0">
+  <div class="card" *ngIf="order.orderItems.length > 0">
     <div class="card-body table-responsive">
       <table class="table">
         <thead>
@@ -68,17 +68,17 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let product of order.products; index as index">
-            <td>{{ product.description }}</td>
-            <td>{{ product.amount }}</td>
-            <td>{{ getCurrencyValue(product.price) }}</td>
-            <td>{{ getCurrencyValue(product.total) }}</td>
+          <tr *ngFor="let orderItem of order.orderItems; index as index">
+            <td>{{ orderItem.product.description }}</td>
+            <td>{{ orderItem.itemAmount }}</td>
+            <td>{{ getCurrencyValue(orderItem.itemPrice) }}</td>
+            <td>{{ getCurrencyValue(orderItem.itemTotal) }}</td>
             <td class="td-icons">
               <button
                 type="button"
                 class="btn btn-outline-danger me-2"
                 title="Remover produto"
-                (click)="remove(product)"
+                (click)="remove(orderItem)"
               >
                 <mat-icon>delete</mat-icon>
               </button>
@@ -86,7 +86,7 @@
                 type="button"
                 class="btn btn-outline-success"
                 title="Editar produto"
-                (click)="edit(product)"
+                (click)="edit(orderItem)"
               >
                 <mat-icon>edit</mat-icon>
               </button>

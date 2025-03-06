@@ -1,75 +1,77 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { Customer } from 'src/app/models/customer';
-import { Order } from 'src/app/models/order';
-import { Product } from 'src/app/models/product';
+import { Order } from 'src/app/models/order/order';
+import { OrderItem } from 'src/app/models/order/order-item';
+import { Product } from 'src/app/models/product/product';
 import { OrderService } from 'src/app/services/order/order.service';
 
 @Component({
-    selector: 'app-order',
-    templateUrl: './order.component.html',
-    styleUrls: ['./order.component.scss'],
-    standalone: false
+  selector: 'app-order',
+  templateUrl: './order.component.html',
+  styleUrls: ['./order.component.scss'],
+  standalone: false
 })
 export class OrderComponent {
   order = new Order();
-  product = new Product();
+  orderItem = new OrderItem();
 
   @ViewChild("productDescription") myInputField: ElementRef = new ElementRef(null);
 
   constructor(private orderService: OrderService) { }
   add(): void {
-    const product = {
-      ...this.product,
-      description: this.product.description.trim(),
-      price: Number(this.product.price),
-      total: this.product.amount * this.product.price
+
+    const orderItem = {
+      ...this.orderItem,
+      description: this.orderItem.product.description.trim(),
+      price: Number(this.orderItem.itemPrice),
+      total: this.orderItem.itemPrice * this.orderItem.itemAmount
     };
-    if (!product.description || product.amount <= 0)
+
+    if (!orderItem.product.description || orderItem.itemAmount <= 0)
       return;
 
-    const productsToAdd = [...this.order.products, product];
+    const orderItems = [...this.order.orderItems, orderItem];
     const order: Order = {
       ...this.order,
-      products: productsToAdd,
+      orderItems: orderItems,
     }
 
     if (order.id > 0) {
       this.orderService.updateOrder(order)
         .subscribe(orderResponse => {
           this.order = orderResponse;
-          this.product = new Product();
+          this.orderItem = new OrderItem();
         });
     } else {
       this.orderService.addOrder(order)
         .subscribe(orderResponse => {
           this.order = orderResponse;
-          this.product = new Product();
+          this.orderItem = new OrderItem();
         });
       this.myInputField.nativeElement.focus();
     }
 
-    this.order.products.push(product);
-    this.product = new Product();
+    this.order.orderItems.push(orderItem);
+    this.orderItem = new OrderItem();
     this.myInputField.nativeElement.focus();
   }
 
-  remove(product: Product): void {
-    this.order.products = this.order.products.filter(p => p !== product);
+  remove(orderItem: OrderItem): void {
+    this.order.orderItems = this.order.orderItems.filter(p => p !== orderItem);
   }
 
-  edit(product: Product): void {
-    this.product = { ...product };
+  edit(orderItem: OrderItem): void {
+    this.orderItem = { ...orderItem };
   }
 
-  update(product: Product, index: number): void {
-    this.order.products[index] = product;
+  update(orderItem: OrderItem, index: number): void {
+    this.order.orderItems[index] = orderItem;
   }
 
   getCurrencyValue = (value: number) =>
     value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
   setPrice(value: number) {
-    this.product.price = value;
+    this.orderItem.itemPrice = value;
   }
 
   setOrderDate(value: Date) {
