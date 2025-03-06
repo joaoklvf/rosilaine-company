@@ -9,7 +9,7 @@ import { HeroesComponent } from './components/heroes/heroes.component';
 import { MessagesComponent } from './messages/messages.component';
 
 import { AppRoutingModule } from './app-routing.module';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 import { HeroSearchComponent } from './components/hero-search/hero-search.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
@@ -29,40 +29,33 @@ import { CustomAutocompleteComponent } from './components/custom-autocomplete/cu
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { ReactiveFormsModule } from '@angular/forms';
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    FormsModule,
-    AppRoutingModule,
-    HttpClientModule,
-    MatSlideToggleModule,
-    MatIconModule,
-    MatDatepickerModule,
-    MatFormFieldModule,
-    MatNativeDateModule,
-    MatInputModule,
-    BrowserAnimationsModule,
-    MatAutocompleteModule,
-    ReactiveFormsModule,
-    NgxMaskDirective,
-    NgxMaskPipe
-  ],
-  declarations: [
-    AppComponent,
-    DashboardComponent,
-    HeroesComponent,
-    HeroDetailComponent,
-    MessagesComponent,
-    HeroSearchComponent,
-    NavbarComponent,
-    OrderComponent,
-    InputMaskComponent,
-    CustomersComponent,
-    BrDatePickerComponent,
-    CustomAutocompleteComponent
-  ],
-  bootstrap: [AppComponent],
-  providers: [provideEnvironmentNgxMask()]
-})
+@NgModule({ declarations: [
+        AppComponent,
+        DashboardComponent,
+        HeroesComponent,
+        HeroDetailComponent,
+        MessagesComponent,
+        HeroSearchComponent,
+        NavbarComponent,
+        OrderComponent,
+        InputMaskComponent,
+        CustomersComponent,
+        BrDatePickerComponent,
+        CustomAutocompleteComponent
+    ],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        FormsModule,
+        AppRoutingModule,
+        MatSlideToggleModule,
+        MatIconModule,
+        MatDatepickerModule,
+        MatFormFieldModule,
+        MatNativeDateModule,
+        MatInputModule,
+        BrowserAnimationsModule,
+        MatAutocompleteModule,
+        ReactiveFormsModule,
+        NgxMaskDirective,
+        NgxMaskPipe], providers: [provideEnvironmentNgxMask(), provideHttpClient(withInterceptorsFromDi())] })
 
 export class AppModule { }
