@@ -1,5 +1,5 @@
 <form>
-  <label>{{ label }}</label>
+  <label>{{ label() }}</label>
   <input
     type="text"
     placeholder="Pesquisar cliente"
@@ -14,7 +14,7 @@
       [value]="item"
       (onSelectionChange)="update($event)"
     >
-      {{ item[displayValue] }}
+      {{ item[displayValue()] }}
     </mat-option>
   </mat-autocomplete>
 </form>

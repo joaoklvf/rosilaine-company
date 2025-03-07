@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, OnInit, input, output } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatOptionSelectionChange } from '@angular/material/core';
 import { Observable } from 'rxjs';
@@ -12,11 +12,11 @@ import { startWith, map } from 'rxjs/operators';
 })
 
 export class CustomAutocompleteComponent<T> implements OnInit {
-  @Input() label = '';
-  @Input() displayValue: keyof T = 'name' as keyof T;
-  @Input() data: T[] = [];
-  @Input() isCreatable = false;
-  @Output() handleOnChange = new EventEmitter<T>();
+  readonly label = input('');
+  readonly displayValue = input<keyof T>('name' as keyof T);
+  readonly data = input<T[]>([]);
+  readonly isCreatable = input(false);
+  readonly handleOnChange = output<T>();
 
   myControl = new FormControl<T | null>(null);
   filteredData: Observable<T[]> = new Observable<T[]>();
@@ -24,7 +24,7 @@ export class CustomAutocompleteComponent<T> implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    if (this.isCreatable) {
+    if (this.isCreatable()) {
       this.filteredData = this.myControl.valueChanges.pipe(
         startWith(''),
         map(value => {
@@ -38,19 +38,19 @@ export class CustomAutocompleteComponent<T> implements OnInit {
 
     this.filteredData = this.myControl.valueChanges.pipe(
       map(value => {
-        const name = typeof value === 'string' ? value : value?.[this.displayValue];
-        return name ? this._filter(name as string) : this.data.slice();
+        const name = typeof value === 'string' ? value : value?.[this.displayValue()];
+        return name ? this._filter(name as string) : this.data().slice();
       }),
     );
   }
 
   displayFn = (customer: T) =>
-    customer[this.displayValue] as string || 'ERRO';
+    customer[this.displayValue()] as string || 'ERRO';
 
 
   private _filter(value: string): T[] {
     const filterValue = this._normalizeValue(value);
-    return this.data.filter(customer => this._normalizeValue(customer[this.displayValue] as string).includes(filterValue));
+    return this.data().filter(customer => this._normalizeValue(customer[this.displayValue()] as string).includes(filterValue));
   }
 
   private _normalizeValue(value: string): string {
