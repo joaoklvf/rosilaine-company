@@ -10,11 +10,11 @@
   />
   <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
     <mat-option
-      *ngFor="let customer of filteredCustomers | async"
-      [value]="customer"
+      *ngFor="let item of filteredData | async"
+      [value]="item"
       (onSelectionChange)="update($event)"
     >
-      {{ customer.name }}
+      {{ item[displayValue] }}
     </mat-option>
   </mat-autocomplete>
 </form>

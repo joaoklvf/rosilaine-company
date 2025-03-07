@@ -1,7 +1,8 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Customer } from 'src/app/models/customer/customer';
 import { Order } from 'src/app/models/order/order';
 import { OrderItem } from 'src/app/models/order/order-item';
-import { Product } from 'src/app/models/product/product';
+import { CustomerService } from 'src/app/services/customer/customer.service';
 import { OrderService } from 'src/app/services/order/order.service';
 
 @Component({
@@ -10,15 +11,21 @@ import { OrderService } from 'src/app/services/order/order.service';
   styleUrls: ['./order.component.scss'],
   standalone: false
 })
-export class OrderComponent {
+export class OrderComponent implements OnInit {
   order = new Order();
   orderItem = new OrderItem();
 
   @ViewChild("productDescription") myInputField: ElementRef = new ElementRef(null);
+  customers: Customer[] = [];
 
-  constructor(private orderService: OrderService) { }
+  constructor(private orderService: OrderService, private customerService: CustomerService) { }
+
+  ngOnInit() {
+    this.customerService.getCustomers()
+      .subscribe(customers => this.customers = customers);
+  }
+
   add(): void {
-
     const orderItem = {
       ...this.orderItem,
       description: this.orderItem.product.description.trim(),

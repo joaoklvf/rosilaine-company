@@ -27,9 +27,12 @@ import { BrDatePickerComponent } from './components/br-date-picker/br-date-picke
 import { NgxMaskDirective, NgxMaskPipe, provideEnvironmentNgxMask } from 'ngx-mask';
 import { CustomAutocompleteComponent } from './components/custom-autocomplete/custom-autocomplete.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatSelectModule } from '@angular/material/select';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ProductsComponent } from './components/products/products.component';
 
-@NgModule({ declarations: [
+@NgModule({
+    declarations: [
         AppComponent,
         DashboardComponent,
         HeroesComponent,
@@ -41,9 +44,14 @@ import { ReactiveFormsModule } from '@angular/forms';
         InputMaskComponent,
         CustomersComponent,
         BrDatePickerComponent,
-        CustomAutocompleteComponent
+        CustomAutocompleteComponent,
+        ProductsComponent
     ],
-    bootstrap: [AppComponent], imports: [BrowserModule,
+    bootstrap: [
+        AppComponent
+    ],
+    imports: [
+        BrowserModule,
         FormsModule,
         AppRoutingModule,
         MatSlideToggleModule,
@@ -56,6 +64,13 @@ import { ReactiveFormsModule } from '@angular/forms';
         MatAutocompleteModule,
         ReactiveFormsModule,
         NgxMaskDirective,
-        NgxMaskPipe], providers: [provideEnvironmentNgxMask(), provideHttpClient(withInterceptorsFromDi())] })
+        NgxMaskPipe,
+        MatSelectModule
+    ],
+    providers: [
+        provideEnvironmentNgxMask(),
+        provideHttpClient(withInterceptorsFromDi())
+    ]
+})
 
 export class AppModule { }

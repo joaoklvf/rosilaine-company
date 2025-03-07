@@ -6,6 +6,8 @@
         <app-custom-autocomplete
           [label]="'Cliente'"
           (handleOnChange)="setCustomer($event)"
+          [data]="customers"
+          [displayValue]="'name'"
         ></app-custom-autocomplete>
         <app-br-date-picker
           [label]="'Data do pedido'"

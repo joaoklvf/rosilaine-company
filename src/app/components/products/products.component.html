@@ -1,0 +1,8 @@
+<p>products works!</p>
+<app-custom-autocomplete
+  [label]="'Categoria'"
+  (handleOnChange)="setCustomer($event)"
+  [data]="categories"
+  [isCreatable]="true"
+  displayValue="description"
+></app-custom-autocomplete>
