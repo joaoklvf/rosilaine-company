@@ -28,7 +28,7 @@ export class CustomAutocompleteComponent<T> implements OnInit {
       this.filteredData = this.myControl.valueChanges.pipe(
         startWith(''),
         map(value => {
-          const filtered = this._filter(value as string);
+          const filtered = this.filter(value as string);
           return (value as string).length === 0 ? filtered : [{ name: `Criar ${value}` } as T, ...filtered]; // Adiciona o novo item ao final
         })
       );
@@ -39,22 +39,17 @@ export class CustomAutocompleteComponent<T> implements OnInit {
     this.filteredData = this.myControl.valueChanges.pipe(
       map(value => {
         const name = typeof value === 'string' ? value : value?.[this.displayValue()];
-        return name ? this._filter(name as string) : this.data().slice();
+        return name ? this.filter(name as string) : this.data().slice();
       }),
     );
   }
 
   displayFn = (customer: T) =>
-    customer[this.displayValue()] as string || 'ERRO';
+    customer[this.displayValue()] as string;
 
-
-  private _filter(value: string): T[] {
-    const filterValue = this._normalizeValue(value);
-    return this.data().filter(customer => this._normalizeValue(customer[this.displayValue()] as string).includes(filterValue));
-  }
-
-  private _normalizeValue(value: string): string {
-    return value.toLowerCase().replace(/\s/g, '');
+  private filter(value: string) {
+    const filterValue = value?.toLowerCase();
+    return this.data().filter(option => (option[this.displayValue()] as string).toLowerCase().includes(filterValue));
   }
 
   update(event: MatOptionSelectionChange<T>) {
