@@ -1,8 +1,8 @@
-import { Component, OnInit, input, output } from '@angular/core';
+import { Component, input, OnInit, output } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatOptionSelectionChange } from '@angular/material/core';
 import { Observable } from 'rxjs';
-import { startWith, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-custom-autocomplete',
@@ -13,7 +13,7 @@ import { startWith, map } from 'rxjs/operators';
 
 export class CustomAutocompleteComponent<T> implements OnInit {
   readonly label = input('');
-  readonly displayValue = input<keyof T>('name' as keyof T);
+  readonly displayValue = input.required<keyof T>();
   readonly data = input<T[]>([]);
   readonly isCreatable = input(false);
   readonly handleOnChange = output<T>();
@@ -21,38 +21,48 @@ export class CustomAutocompleteComponent<T> implements OnInit {
   myControl = new FormControl<T | null>(null);
   filteredData: Observable<T[]> = new Observable<T[]>();
 
-  constructor() { }
-
   ngOnInit() {
-    if (this.isCreatable()) {
-      this.filteredData = this.myControl.valueChanges.pipe(
-        startWith(''),
-        map(value => {
-          const filtered = this.filter(value as string);
-          return (value as string).length === 0 ? filtered : [{ name: `Criar ${value}` } as T, ...filtered]; // Adiciona o novo item ao final
-        })
-      );
-
-      return;
-    }
-
     this.filteredData = this.myControl.valueChanges.pipe(
       map(value => {
-        const name = typeof value === 'string' ? value : value?.[this.displayValue()];
-        return name ? this.filter(name as string) : this.data().slice();
-      }),
+        const dataFiltered = this.getFilteredData(value);
+
+        if (this.isCreatable() && typeof value === 'string' && value.length > 0) {
+          return [{ [this.displayValue()]: `Criar ${value}` } as T, ...dataFiltered];
+        }
+
+        return dataFiltered;
+      })
     );
   }
 
   displayFn = (customer: T) =>
-    customer[this.displayValue()] as string;
+    customer?.[this.displayValue()] as string;
 
-  private filter(value: string) {
+  private getFilteredData(value: T | string | null) {
+    const filter = typeof value === 'string' ?
+      value : value?.[this.displayValue()];
+
+    return filter ?
+      this._filter(filter as string) : this.data().slice(0, 10);
+  }
+
+  private _filter(value: string) {
     const filterValue = value?.toLowerCase();
-    return this.data().filter(option => (option[this.displayValue()] as string).toLowerCase().includes(filterValue));
+
+    return this.data().filter(option => {
+      const fieldValue = option[this.displayValue()];
+      return typeof fieldValue === 'string' && fieldValue.toLowerCase().includes(filterValue);
+    });
   }
 
   update(event: MatOptionSelectionChange<T>) {
-    this.handleOnChange.emit(event.source.value);
+    let currentValue = event.source.value;
+    const currentKey = this.displayValue();
+
+    if (typeof currentValue[currentKey] === 'string') {
+      currentValue[currentKey] = currentValue[currentKey].replace("Criar ", "") as T[keyof T];
+    }
+
+    this.handleOnChange.emit(currentValue);
   }
 }

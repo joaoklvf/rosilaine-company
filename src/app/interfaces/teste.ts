@@ -1,1 +1,0 @@
-export type DisplayValue<T> = keyof T;
