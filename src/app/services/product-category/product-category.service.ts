@@ -12,13 +12,13 @@ export class ProductCategoryService {
   constructor(
     private http: HttpClient,
     private messageService: MessageService) { }
-  private productsUrl = `http://localhost:3001/api/product-category-categories`;// URL to web api
+  private productsUrl = `http://localhost:3001/api/product-categories`;// URL to web api
 
-  /** GET product-category-categories from the server */
+  /** GET product-categories from the server */
   getProductCategories(): Observable<ProductCategory[]> {
     return this.http.get<ProductCategory[]>(this.productsUrl)
       .pipe(
-        tap(_ => this.log('fetched product-category-categories')),
+        tap(_ => this.log('fetched product-categories')),
         catchError(this.handleError<ProductCategory[]>('getProducts', []))
       );
   }
@@ -46,7 +46,7 @@ export class ProductCategoryService {
     );
   }
 
-  /* GET product-category-categories whose name contains search term */
+  /* GET product-categories whose name contains search term */
   searchProductCategories(term: string): Observable<ProductCategory[]> {
     if (!term.trim()) {
       // if not search term, return empty customer array.
@@ -54,8 +54,8 @@ export class ProductCategoryService {
     }
     return this.http.get<ProductCategory[]>(`${this.productsUrl}/?name=${term}`).pipe(
       tap(x => x.length ?
-        this.log(`found product-category-categories matching "${term}"`) :
-        this.log(`no product-category-categories matching "${term}"`)),
+        this.log(`found product-categories matching "${term}"`) :
+        this.log(`no product-categories matching "${term}"`)),
       catchError(this.handleError<ProductCategory[]>('searchProducts', []))
     );
   }
