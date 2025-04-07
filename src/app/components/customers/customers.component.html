@@ -1,84 +1,82 @@
-<div class="container">
-  <h1>Clientes</h1>
-  <div class="card mb-3">
-    <div class="card-body">
-      <div class="customer-row">
-        <div>
-          <label for="customer-name">Nome: </label>
-          <input
-            #customerName
-            class="form-control"
-            id="customer-name"
-            placeholder="Nome"
-            [(ngModel)]="customer.name"
-            name="name"
-          />
-        </div>
-        <div>
-          <app-br-date-picker
-            [label]="'Data de nascimento'"
-            [value]="customer.birthDate"
-            (handleOnChange)="setBirthDate($event)"
-          ></app-br-date-picker>
-        </div>
-        <div>
-          <label for="customer-phone">Telefone: </label>
-          <input
-            class="form-control"
-            id="customer-phone"
-            type="text"
-            mask="(00) 00000-0000"
-            matInput
-            [dropSpecialCharacters]="false"
-            [(ngModel)]="customer.phone"
-          />
-        </div>
-        <div>
-          <button type="button" class="btn btn-primary" (click)="add()">
-            Adicionar
-          </button>
-        </div>
+<h1>Clientes</h1>
+<div class="card mb-3">
+  <div class="card-body">
+    <div class="customer-row">
+      <div>
+        <label for="customer-name">Nome: </label>
+        <input
+          #customerName
+          class="form-control"
+          id="customer-name"
+          placeholder="Nome"
+          [(ngModel)]="customer.name"
+          name="name"
+        />
+      </div>
+      <div>
+        <app-br-date-picker
+          [label]="'Data de nascimento'"
+          [value]="customer.birthDate"
+          (handleOnChange)="setBirthDate($event)"
+        ></app-br-date-picker>
+      </div>
+      <div>
+        <label for="customer-phone">Telefone: </label>
+        <input
+          class="form-control"
+          id="customer-phone"
+          type="text"
+          mask="(00) 00000-0000"
+          matInput
+          [dropSpecialCharacters]="false"
+          [(ngModel)]="customer.phone"
+        />
+      </div>
+      <div>
+        <button type="button" class="btn btn-primary" (click)="add()">
+          Adicionar
+        </button>
       </div>
     </div>
   </div>
+</div>
 
-  <div class="card" *ngIf="customers.length > 0">
-    <div class="card-body table-responsive">
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">Nome</th>
-            <th scope="col">Telefone</th>
-            <th scope="col">Data de nascimento</th>
-            <th scope="col">Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let customer of customers; index as index">
-            <td>{{ customer.name }}</td>
-            <td>{{ customer.phone }}</td>
-            <td>{{ getFormatDate(customer.birthDate) }}</td>
-            <td class="td-icons">
-              <button
-                type="button"
-                class="btn btn-outline-danger me-2"
-                title="Remover produto"
-                (click)="add()"
-              >
-                <mat-icon>delete</mat-icon>
-              </button>
-              <button
-                type="button"
-                class="btn btn-outline-success"
-                title="Editar produto"
-                (click)="edit(customer)"
-              >
-                <mat-icon>edit</mat-icon>
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+<div class="card" *ngIf="customers.length > 0">
+  <div class="card-body table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Nome</th>
+          <th scope="col">Telefone</th>
+          <th scope="col">Data de nascimento</th>
+          <th scope="col">Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let customer of customers; index as index">
+          <td>{{ customer.name }}</td>
+          <td>{{ customer.phone }}</td>
+          <td>{{ getFormatDate(customer.birthDate) }}</td>
+          <td class="td-icons">
+            <button
+              type="button"
+              class="btn btn-outline-danger me-2"
+              title="Remover produto"
+              (click)="add()"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+            <button
+              type="button"
+              class="btn btn-outline-success"
+              title="Editar produto"
+              (click)="edit(customer)"
+            >
+              <mat-icon>edit</mat-icon>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
