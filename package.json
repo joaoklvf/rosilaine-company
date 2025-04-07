@@ -21,7 +21,7 @@
     "@angular/platform-browser": "^19.2.1",
     "@angular/platform-browser-dynamic": "^19.2.1",
     "@angular/router": "^19.2.1",
-    "angular-in-memory-web-api": "^0.15.0",
+    "angular-tour-of-heroes": "file:",
     "bootstrap": "^5.3.3",
     "moment": "^2.29.4",
     "ngx-mask": "^15.0.2",
