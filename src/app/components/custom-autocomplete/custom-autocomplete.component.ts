@@ -24,7 +24,7 @@ export class CustomAutocompleteComponent<T> {
   constructor() {
     this.filteredData = this.myControl.valueChanges.pipe(
       startWith(''),
-      map(option => option ? this._filterData(option): this.data().slice())
+      map(option => this._filterData(option || ''))
     );
   }
 
