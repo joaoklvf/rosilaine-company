@@ -1,8 +1,8 @@
-import { Component, input, OnInit, output } from '@angular/core';
+import { Component, input, OnChanges, output } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatOptionSelectionChange } from '@angular/material/core';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, startWith } from 'rxjs/operators';
 
 @Component({
   selector: 'app-custom-autocomplete',
@@ -11,7 +11,7 @@ import { map } from 'rxjs/operators';
   standalone: false
 })
 
-export class CustomAutocompleteComponent<T> implements OnInit {
+export class CustomAutocompleteComponent<T> implements OnChanges {
   readonly label = input('');
   readonly displayValue = input.required<keyof T>();
   readonly data = input<T[]>([]);
@@ -21,8 +21,9 @@ export class CustomAutocompleteComponent<T> implements OnInit {
   myControl = new FormControl<T | null>(null);
   filteredData: Observable<T[]> = new Observable<T[]>();
 
-  ngOnInit() {
+  ngOnChanges() {
     this.filteredData = this.myControl.valueChanges.pipe(
+      startWith(''),
       map(value => {
         const dataFiltered = this.getFilteredData(value);
 
