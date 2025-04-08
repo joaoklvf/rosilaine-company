@@ -8,7 +8,7 @@
     matInput
     class="form-control"
   />
-  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+  <mat-autocomplete #auto="matAutocomplete">
     <mat-option
       *ngFor="let item of filteredData | async"
       [value]="item"
