@@ -37,3 +37,43 @@
     </button>
   </div>
 </div>
+
+<div class="card mt-3" *ngIf="products.length > 0">
+  <div class="card-body table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Produto</th>
+          <th scope="col">Código</th>
+          <th scope="col">Categoria</th>
+          <th scope="col">Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let product of products; index as index">
+          <td>{{ product.description }}</td>
+          <td>{{ product.productCode }}</td>
+          <td>{{ product.category.description }}</td>
+          <td class="td-icons">
+            <button
+              type="button"
+              class="btn btn-outline-danger me-2"
+              title="Remover produto"
+              (click)="add()"
+            >
+              <mat-icon fontIcon="delete" />
+            </button>
+            <button
+              type="button"
+              class="btn btn-outline-success"
+              title="Editar produto"
+              (click)="edit(product)"
+            >
+              <mat-icon fontIcon="edit" />
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

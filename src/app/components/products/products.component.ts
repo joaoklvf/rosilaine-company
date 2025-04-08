@@ -10,6 +10,7 @@ import { Product } from 'src/app/models/product/product';
   standalone: false,
   styleUrl: './products.component.scss'
 })
+
 export class ProductsComponent implements OnInit {
   categories: ProductCategory[] = [];
   products: Product[] = [];
@@ -62,5 +63,9 @@ export class ProductsComponent implements OnInit {
 
       this.productDescriptionField.nativeElement.focus();
     }
+  }
+
+  edit(product: Product): void {
+    this.product = { ...product };
   }
 }
