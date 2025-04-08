@@ -17,7 +17,7 @@ import { CustomerService } from 'src/app/services/customer/customer.service';
 export class CustomersComponent implements OnInit {
   customers: Customer[] = [];
   customer = new Customer();
-  @ViewChild("customerName") myInputField: ElementRef = new ElementRef(null);
+  @ViewChild("customerName") customerNameField: ElementRef = new ElementRef(null);
 
   constructor(private customerService: CustomerService) { }
 
@@ -54,7 +54,7 @@ export class CustomersComponent implements OnInit {
           this.customer = new Customer();
         });
 
-      this.myInputField.nativeElement.focus();
+      this.customerNameField.nativeElement.focus();
     }
   }
 

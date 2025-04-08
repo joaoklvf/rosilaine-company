@@ -15,7 +15,7 @@ export class OrderComponent implements OnInit {
   order = new Order();
   orderItem = new OrderItem();
 
-  @ViewChild("productDescription") myInputField: ElementRef = new ElementRef(null);
+  @ViewChild("productDescription") productDescriptionField: ElementRef = new ElementRef(null);
   customers: Customer[] = [];
 
   constructor(private orderService: OrderService, private customerService: CustomerService) { }
@@ -54,12 +54,12 @@ export class OrderComponent implements OnInit {
           this.order = orderResponse;
           this.orderItem = new OrderItem();
         });
-      this.myInputField.nativeElement.focus();
+      this.productDescriptionField.nativeElement.focus();
     }
 
     this.order.orderItems.push(orderItem);
     this.orderItem = new OrderItem();
-    this.myInputField.nativeElement.focus();
+    this.productDescriptionField.nativeElement.focus();
   }
 
   remove(orderItem: OrderItem): void {
