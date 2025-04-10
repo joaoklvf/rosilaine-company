@@ -20,15 +20,12 @@
   <div class="card-body">
     <div class="card-row">
       <div>
-        <label for="product-title">Produto</label>
-        <input
-          #productDescription
-          class="form-control"
-          id="product-title"
-          placeholder="Nome"
-          [(ngModel)]="orderItem.product.description"
-          name="name"
-        />
+        <app-custom-autocomplete
+          [label]="'Produto'"
+          (handleOnChange)="setProduct($event)"
+          [data]="products"
+          [displayValue]="'description'"
+        ></app-custom-autocomplete>
       </div>
       <div>
         <app-input-mask

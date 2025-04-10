@@ -1,9 +1,11 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Customer } from 'src/app/models/customer/customer';
 import { Order } from 'src/app/models/order/order';
 import { OrderItem } from 'src/app/models/order/order-item';
+import { Product } from 'src/app/models/product/product';
 import { CustomerService } from 'src/app/services/customer/customer.service';
 import { OrderService } from 'src/app/services/order/order.service';
+import { ProductService } from 'src/app/services/product/product.service';
 
 @Component({
   selector: 'app-order',
@@ -15,14 +17,17 @@ export class OrderComponent implements OnInit {
   order = new Order();
   orderItem = new OrderItem();
 
-  @ViewChild("productDescription") productDescriptionField: ElementRef = new ElementRef(null);
   customers: Customer[] = [];
+  products: Product[] = [];
 
-  constructor(private orderService: OrderService, private customerService: CustomerService) { }
+  constructor(private orderService: OrderService, private customerService: CustomerService, private productService: ProductService) { }
 
   ngOnInit() {
     this.customerService.getCustomers()
       .subscribe(customers => this.customers = customers);
+
+    this.productService.getProducts()
+    .subscribe(products => this.products = products);
   }
 
   add(): void {
@@ -54,12 +59,10 @@ export class OrderComponent implements OnInit {
           this.order = orderResponse;
           this.orderItem = new OrderItem();
         });
-      this.productDescriptionField.nativeElement.focus();
     }
 
     this.order.orderItems.push(orderItem);
     this.orderItem = new OrderItem();
-    this.productDescriptionField.nativeElement.focus();
   }
 
   remove(orderItem: OrderItem): void {
@@ -85,7 +88,11 @@ export class OrderComponent implements OnInit {
     this.order.orderDate = value;
   }
 
-  setCustomer(value: any) {
+  setCustomer(value: Customer) {
     this.order.customer = value;
+  }
+
+  setProduct(value: Product) {
+    this.orderItem.product = value;
   }
 }
