@@ -1,4 +1,4 @@
-import { Component, input, OnChanges, output } from '@angular/core';
+import { Component, Input, input, OnChanges, output } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatOptionSelectionChange } from '@angular/material/core';
 import { Observable } from 'rxjs';
@@ -17,11 +17,14 @@ export class CustomAutocompleteComponent<T> implements OnChanges {
   readonly data = input<T[]>([]);
   readonly isCreatable = input(false);
   readonly handleOnChange = output<T>();
+  @Input() value: T | null = null;
 
   myControl = new FormControl<T | null>(null);
   filteredData: Observable<T[]> = new Observable<T[]>();
 
   ngOnChanges() {
+    this.myControl.setValue(this.value, { emitEvent: false });
+
     this.filteredData = this.myControl.valueChanges.pipe(
       startWith(''),
       map(value => {
