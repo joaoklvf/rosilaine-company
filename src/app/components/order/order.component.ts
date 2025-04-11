@@ -27,15 +27,17 @@ export class OrderComponent implements OnInit {
       .subscribe(customers => this.customers = customers);
 
     this.productService.getProducts()
-    .subscribe(products => this.products = products);
+      .subscribe(products => this.products = products);
   }
 
   add(): void {
-    const orderItem = {
+    // Desenvolvimento prévio até implementar preço de venda
+    const total = this.orderItem.itemPrice * this.orderItem.itemAmount;
+
+    const orderItem: OrderItem = {
       ...this.orderItem,
-      description: this.orderItem.product.description.trim(),
-      price: Number(this.orderItem.itemPrice),
-      total: this.orderItem.itemPrice * this.orderItem.itemAmount
+      itemTotal: total, 
+      itemSellingPrice: total
     };
 
     if (!orderItem.product.description || orderItem.itemAmount <= 0)
