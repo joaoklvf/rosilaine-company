@@ -9,6 +9,6 @@ import { Product } from "src/app/models/product/product";
 })
 export class ProductService extends BaseApiService<Product> {
   constructor(http: HttpClient, messageService: MessageService) {
-    super(http, messageService, 'product');
+    super(http, messageService, 'products');
   }
 }

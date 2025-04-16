@@ -9,6 +9,6 @@ import { ProductCategory } from "src/app/models/product/product-category";
 })
 export class ProductCategoryService extends BaseApiService<ProductCategory> {
   constructor(http: HttpClient, messageService: MessageService) {
-    super(http, messageService, 'product-category');
+    super(http, messageService, 'product-categories');
   }
 }

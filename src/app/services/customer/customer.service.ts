@@ -9,6 +9,6 @@ import { Customer } from "src/app/models/customer/customer";
 })
 export class CustomerService extends BaseApiService<Customer> {
   constructor(http: HttpClient, messageService: MessageService) {
-    super(http, messageService, 'customer');
+    super(http, messageService, 'customers');
   }
 }
