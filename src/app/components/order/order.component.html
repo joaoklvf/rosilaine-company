@@ -1,90 +1,26 @@
 <h1>Pedidos</h1>
-<div class="card mb-3">
-  <div class="card-body">
-    <div class="card-row">
-      <app-custom-autocomplete
-        [label]="'Cliente'"
-        (handleOnChange)="setCustomer($event)"
-        [data]="customers"
-        [displayValue]="'name'"
-      ></app-custom-autocomplete>
-      <app-custom-autocomplete
-        [label]="'Status'"
-        (handleOnChange)="setOrderStatus($event)"
-        [data]="orderStatus"
-        [isCreatable]="true"
-        displayValue="description"
-        [value]="order.status"
-      ></app-custom-autocomplete>
-      <app-br-date-picker
-        [label]="'Data do pedido'"
-        [value]="order.orderDate"
-        (handleOnChange)="setOrderDate($event)"
-      ></app-br-date-picker>
-    </div>
-  </div>
-</div>
-<div class="card mb-3">
-  <div class="card-body">
-    <div class="card-row">
-      <div>
-        <app-custom-autocomplete
-          [label]="'Produto'"
-          (handleOnChange)="setProduct($event)"
-          [data]="products"
-          [displayValue]="'description'"
-        ></app-custom-autocomplete>
-      </div>
-      <div>
-        <app-input-mask
-          [label]="'Preço (R$)'"
-          [value]="orderItem.itemPrice"
-          (handleOnChange)="setPrice($event)"
-        >
-        </app-input-mask>
-      </div>
-      <div>
-        <label for="product-amount">Quantidade</label>
-        <input
-          type="number"
-          class="form-control"
-          id="product-amount"
-          [(ngModel)]="orderItem.itemAmount"
-        />
-      </div>
-      <div>
-        <button type="button" class="btn btn-primary" (click)="add()">
-          Adicionar
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="card" *ngIf="order.orderItems.length > 0">
+<div class="card mt-3" *ngIf="orders.length > 0">
   <div class="card-body table-responsive">
     <table class="table">
       <thead>
         <tr>
-          <th scope="col">Produto</th>
-          <th scope="col">Quantidade</th>
-          <th scope="col">Preço</th>
-          <th scope="col">Total</th>
+          <th scope="col">Cliente</th>
+          <th scope="col">Data do pedido</th>
+          <th scope="col">Status</th>
           <th scope="col">Ações</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let orderItem of order.orderItems; index as index">
-          <td>{{ orderItem.product.description }}</td>
-          <td>{{ orderItem.itemAmount }}</td>
-          <td>{{ getCurrencyValue(orderItem.itemPrice) }}</td>
-          <td>{{ getCurrencyValue(orderItem.itemTotal) }}</td>
+        <tr *ngFor="let order of orders; index as index">
+          <td>{{ order.customer.name }}</td>
+          <td>{{ getBrDate(order.orderDate) }}</td>
+          <td>{{ order.status.description }}</td>
           <td class="td-icons">
             <button
               type="button"
               class="btn btn-outline-danger me-2"
               title="Remover produto"
-              (click)="remove(orderItem)"
+              (click)="remove(order.id)"
             >
               <mat-icon fontIcon="delete" />
             </button>
@@ -92,7 +28,7 @@
               type="button"
               class="btn btn-outline-success"
               title="Editar produto"
-              (click)="edit(orderItem)"
+              routerLink="/order/{{order.id}}"
             >
               <mat-icon fontIcon="edit" />
             </button>

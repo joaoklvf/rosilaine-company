@@ -7,11 +7,15 @@ import { HeroDetailComponent } from './components/hero-detail/hero-detail.compon
 import { HeroesComponent } from './components/heroes/heroes.component';
 import { OrderComponent } from './components/order/order.component';
 import { ProductsComponent } from './components/products/products.component';
+import { OrderCreateComponent } from './components/order-create/order-create.component';
+import { OrderDetailComponent } from './components/order-detail/order-detail.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
   { path: 'dashboard', component: DashboardComponent },
   { path: 'orders', component: OrderComponent },
+  { path: 'orders/create', component: OrderCreateComponent },
+  { path: 'order/:id', component: OrderDetailComponent },
   { path: 'customers', component: CustomersComponent },
   { path: 'products', component: ProductsComponent },
   { path: 'detail/:id', component: HeroDetailComponent },

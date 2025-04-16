@@ -30,6 +30,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSelectModule } from '@angular/material/select';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ProductsComponent } from './components/products/products.component';
+import { OrderCreateComponent } from './components/order-create/order-create.component';
 
 @NgModule({
     declarations: [
@@ -45,7 +46,8 @@ import { ProductsComponent } from './components/products/products.component';
         CustomersComponent,
         BrDatePickerComponent,
         CustomAutocompleteComponent,
-        ProductsComponent
+        ProductsComponent,
+        OrderCreateComponent
     ],
     bootstrap: [
         AppComponent
