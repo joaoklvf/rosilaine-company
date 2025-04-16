@@ -26,7 +26,7 @@ export class CustomersComponent implements OnInit {
   }
 
   getHeroes(): void {
-    this.customerService.getCustomers()
+    this.customerService.get()
       .subscribe(customers => this.customers = customers);
   }
 
@@ -40,7 +40,7 @@ export class CustomersComponent implements OnInit {
       return;
 
     if (customer.id > 0) {
-      this.customerService.updateCustomer(customer)
+      this.customerService.update(customer)
         .subscribe(customer => {
           console.log(customer, 'customer')
           const customerIndex = this.customers.findIndex(c => c.id === customer.id);
@@ -48,7 +48,7 @@ export class CustomersComponent implements OnInit {
           this.customer = new Customer();
         });
     } else {
-      this.customerService.addCustomer(customer)
+      this.customerService.add(customer)
         .subscribe(customer => {
           this.customers.push(customer);
           this.customer = new Customer();

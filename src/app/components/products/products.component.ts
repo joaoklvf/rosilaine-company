@@ -21,10 +21,10 @@ export class ProductsComponent implements OnInit {
   constructor(private productService: ProductService, private productCategoryService: ProductCategoryService) { }
 
   ngOnInit() {
-    this.productCategoryService.getProductCategories()
+    this.productCategoryService.get()
       .subscribe(categories => this.categories = categories);
 
-    this.productService.getProducts()
+    this.productService.get()
       .subscribe(products => this.products = products);
   }
 
@@ -47,7 +47,7 @@ export class ProductsComponent implements OnInit {
       return;
 
     if (product.id > 0) {
-      this.productService.updateProduct(product)
+      this.productService.update(product)
         .subscribe(product => {
           console.log(product, 'product')
           const customerIndex = this.products.findIndex(c => c.id === product.id);
@@ -55,7 +55,7 @@ export class ProductsComponent implements OnInit {
           this.product = new Product();
         });
     } else {
-      this.productService.addProduct(product)
+      this.productService.add(product)
         .subscribe(product => {
           this.products.push(product);
           this.product = new Product();
