@@ -8,6 +8,7 @@ import { CustomerService } from '../../services/customer/customer.service';
 import { OrderStatusService } from '../../services/order-status/order-status.service';
 import { OrderService } from '../../services/order/order.service';
 import { ProductService } from '../../services/product/product.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-order-create',
@@ -23,9 +24,14 @@ export class OrderCreateComponent implements OnInit {
   products: Product[] = [];
   orderStatus: OrderStatus[] = [];
 
-  constructor(private orderService: OrderService, private customerService: CustomerService, private productService: ProductService, private orderStatusService: OrderStatusService) { }
+  constructor(private orderService: OrderService, private customerService: CustomerService, private productService: ProductService, private orderStatusService: OrderStatusService, private route: ActivatedRoute) { }
 
   ngOnInit() {
+    const id = parseInt(this.route.snapshot.paramMap.get('id')!, 10);
+    if (id)
+      this.orderService.getById(id)
+        .subscribe(order => this.order = { ...order });
+
     this.customerService.get()
       .subscribe(customers => this.customers = customers);
 

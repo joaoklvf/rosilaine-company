@@ -15,7 +15,7 @@ const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent },
   { path: 'orders', component: OrderComponent },
   { path: 'orders/create', component: OrderCreateComponent },
-  { path: 'order/:id', component: OrderDetailComponent },
+  { path: 'order/:id', component: OrderCreateComponent },
   { path: 'customers', component: CustomersComponent },
   { path: 'products', component: ProductsComponent },
   { path: 'detail/:id', component: HeroDetailComponent },
