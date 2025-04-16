@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Customer } from 'src/app/models/customer/customer';
 import { Order } from 'src/app/models/order/order';
 import { OrderItem } from 'src/app/models/order/order-item';
+import { OrderStatus } from 'src/app/models/order/order-status';
 import { Product } from 'src/app/models/product/product';
 import { CustomerService } from 'src/app/services/customer/customer.service';
+import { OrderStatusService } from 'src/app/services/order-status/order-status.service';
 import { OrderService } from 'src/app/services/order/order.service';
 import { ProductService } from 'src/app/services/product/product.service';
 
@@ -19,15 +21,19 @@ export class OrderComponent implements OnInit {
 
   customers: Customer[] = [];
   products: Product[] = [];
+  orderStatus: OrderStatus[] = [];
 
-  constructor(private orderService: OrderService, private customerService: CustomerService, private productService: ProductService) { }
+  constructor(private orderService: OrderService, private customerService: CustomerService, private productService: ProductService, private orderStatusService: OrderStatusService) { }
 
   ngOnInit() {
-    this.customerService.getCustomers()
+    this.customerService.get()
       .subscribe(customers => this.customers = customers);
 
-    this.productService.getProducts()
+    this.productService.get()
       .subscribe(products => this.products = products);
+
+    this.orderStatusService.get()
+      .subscribe(status => this.orderStatus = status);
   }
 
   add(): void {
@@ -36,7 +42,7 @@ export class OrderComponent implements OnInit {
 
     const orderItem: OrderItem = {
       ...this.orderItem,
-      itemTotal: total, 
+      itemTotal: total,
       itemSellingPrice: total
     };
 
@@ -50,13 +56,13 @@ export class OrderComponent implements OnInit {
     }
 
     if (order.id > 0) {
-      this.orderService.updateOrder(order)
+      this.orderService.update(order)
         .subscribe(orderResponse => {
           this.order = orderResponse;
           this.orderItem = new OrderItem();
         });
     } else {
-      this.orderService.addOrder(order)
+      this.orderService.add(order)
         .subscribe(orderResponse => {
           this.order = orderResponse;
           this.orderItem = new OrderItem();
@@ -96,5 +102,9 @@ export class OrderComponent implements OnInit {
 
   setProduct(value: Product) {
     this.orderItem.product = value;
+  }
+
+  setOrderStatus(value: OrderStatus) {
+    this.order.status = value;
   }
 }

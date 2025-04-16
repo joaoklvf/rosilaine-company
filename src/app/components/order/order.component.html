@@ -8,6 +8,14 @@
         [data]="customers"
         [displayValue]="'name'"
       ></app-custom-autocomplete>
+      <app-custom-autocomplete
+        [label]="'Status'"
+        (handleOnChange)="setOrderStatus($event)"
+        [data]="orderStatus"
+        [isCreatable]="true"
+        displayValue="description"
+        [value]="order.status"
+      ></app-custom-autocomplete>
       <app-br-date-picker
         [label]="'Data do pedido'"
         [value]="order.orderDate"
