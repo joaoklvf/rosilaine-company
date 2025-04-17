@@ -1,41 +1,45 @@
 <h1>Produtos</h1>
-<div class="row">
-  <div class="col-12 col-md-6 col-lg-5">
-    <label for="product-description">Produto</label>
-    <input
-      #customerName
-      class="form-control"
-      id="product-description"
-      placeholder="Produto"
-      [(ngModel)]="product.description"
-      name="name"
-    />
-  </div>
-  <div class="col-12 col-md-6 col-lg">
-    <label for="product-description">Código</label>
-    <input
-      #customerName
-      class="form-control"
-      id="product-productCode"
-      placeholder="Código"
-      [(ngModel)]="product.productCode"
-      name="name"
-    />
-  </div>
-  <div class="col-12 col-md-6 col-lg">
-    <app-custom-autocomplete
-      [label]="'Categoria'"
-      (handleOnChange)="setCategory($event)"
-      [data]="categories"
-      [isCreatable]="true"
-      displayValue="description"
-      [value]="product.category"
-    ></app-custom-autocomplete>
-  </div>
-  <div class="col-12 col-md-6 col-lg align-content-end">
-    <button type="button" class="btn btn-primary" (click)="add()">
-      Adicionar
-    </button>
+<div class="card mb-3">
+  <div class="card-body">
+    <div class="row">
+      <div class="col-12 col-md-6 col-lg-6">
+        <label for="product-description">Produto</label>
+        <input
+          #customerName
+          class="form-control"
+          id="product-description"
+          placeholder="Produto"
+          [(ngModel)]="product.description"
+          name="name"
+        />
+      </div>
+      <div class="col-12 col-md-6 col-lg">
+        <label for="product-description">Código</label>
+        <input
+          #customerName
+          class="form-control"
+          id="product-productCode"
+          placeholder="Código"
+          [(ngModel)]="product.productCode"
+          name="name"
+        />
+      </div>
+      <div class="col-12 col-md-6 col-lg">
+        <app-custom-autocomplete
+          [label]="'Categoria'"
+          (handleOnChange)="setCategory($event)"
+          [data]="categories"
+          [isCreatable]="true"
+          displayValue="description"
+          [value]="product.category"
+        ></app-custom-autocomplete>
+      </div>
+      <div class="col-12 col-md-6 col-lg align-content-end text-end">
+        <button type="button" class="btn btn-primary" (click)="add()">
+          Adicionar
+        </button>
+      </div>
+    </div>
   </div>
 </div>
 
