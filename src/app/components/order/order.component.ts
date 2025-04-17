@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Order } from 'src/app/models/order/order';
 import { OrderService } from 'src/app/services/order/order.service';
+import { getDateStrBr } from 'src/app/utils/text-format';
 
 @Component({
   selector: 'app-order',
@@ -23,6 +24,6 @@ export class OrderComponent implements OnInit {
   }
 
   getBrDate(value: Date) {
-    return new Date(value).toLocaleString('pt-BR', { dateStyle: 'short' });
+    return getDateStrBr(value);
   }
 }

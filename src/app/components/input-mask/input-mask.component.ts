@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { getCurrencyStrBr } from 'src/app/utils/text-format';
 
 @Component({
     selector: 'app-input-mask',
@@ -12,7 +13,7 @@ export class InputMaskComponent {
   @Output() handleOnChange = new EventEmitter<number>();
 
   getCurrencyValue = (value: number) =>
-    value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    getCurrencyStrBr(value);
 
   update() {
     this.handleOnChange.emit(this.value);

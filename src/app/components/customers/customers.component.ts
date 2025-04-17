@@ -1,8 +1,8 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import * as moment from 'moment';
 import { provideNgxMask } from 'ngx-mask';
 import { Customer } from 'src/app/models/customer/customer';
 import { CustomerService } from 'src/app/services/customer/customer.service';
+import { getDateStrBr } from 'src/app/utils/text-format';
 
 @Component({
   selector: 'app-customers',
@@ -58,12 +58,12 @@ export class CustomersComponent implements OnInit {
     }
   }
 
-  getFormatDate(date: Date) {
-    return moment(date).format('DD/MM/YYYY');
-  }
-
   setBirthDate(value: Date) {
     this.customer.birthDate = value;
+  }
+
+  getFormatDate(date: Date) {
+    return getDateStrBr(date);
   }
 
   edit(customer: Customer): void {

@@ -9,6 +9,7 @@ import { OrderStatusService } from '../../services/order-status/order-status.ser
 import { OrderService } from '../../services/order/order.service';
 import { ProductService } from '../../services/product/product.service';
 import { ActivatedRoute } from '@angular/router';
+import { getCurrencyStrBr } from 'src/app/utils/text-format';
 
 @Component({
   selector: 'app-order-create',
@@ -92,7 +93,7 @@ export class OrderCreateComponent implements OnInit {
   }
 
   getCurrencyValue = (value: number) =>
-    value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    getCurrencyStrBr(value);
 
   setPrice(value: number) {
     this.orderItem.itemPrice = value;
