@@ -7,12 +7,12 @@
     [formControl]="myControl"
     matInput
     class="form-control"
+    (blur)="onBlur()"
   />
-  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="update($event)">
     <mat-option
       *ngFor="let item of filteredData | async"
       [value]="item"
-      (onSelectionChange)="update($event)"
     >
       {{ item[displayValue()] }}
     </mat-option>

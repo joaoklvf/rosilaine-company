@@ -1,5 +1,6 @@
 import { Component, Input, input, OnChanges, output } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatOptionSelectionChange } from '@angular/material/core';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
@@ -59,14 +60,31 @@ export class CustomAutocompleteComponent<T> implements OnChanges {
     });
   }
 
-  update(event: MatOptionSelectionChange<T>) {
-    let currentValue = event.source.value;
+  update(event: MatAutocompleteSelectedEvent) {
+    const currentValue = event.option.value;
+    if (currentValue)
+      this.emitOnChange(currentValue);
+  }
+
+  onBlur() {
+    const currentValue = this.myControl.value;
+    if (currentValue)
+      this.emitOnChange(currentValue);
+  }
+
+  emitOnChange(value: T | string) {
+    console.log('value', value)
     const currentKey = this.displayValue();
 
-    if (typeof currentValue[currentKey] === 'string') {
-      currentValue[currentKey] = currentValue[currentKey].replace("Criar ", "") as T[keyof T];
+    if (typeof value === "string") {
+      this.handleOnChange.emit({ [currentKey]: value } as T);
+      return;
     }
 
-    this.handleOnChange.emit(currentValue);
+    if (typeof value[currentKey] === 'string') {
+      value[currentKey] = value[currentKey].replace("Criar ", "") as T[keyof T];
+    }
+
+    this.handleOnChange.emit(value);
   }
 }
