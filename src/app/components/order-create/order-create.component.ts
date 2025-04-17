@@ -24,15 +24,18 @@ export class OrderCreateComponent implements OnInit {
   customers: Customer[] = [];
   products: Product[] = [];
   orderStatus: OrderStatus[] = [];
-
+  title = 'Criar pedido'
   constructor(private orderService: OrderService, private customerService: CustomerService, private productService: ProductService, private orderStatusService: OrderStatusService, private route: ActivatedRoute) { }
 
   ngOnInit() {
     const id = parseInt(this.route.snapshot.paramMap.get('id')!, 10);
-    if (id)
+    if (id) {
       this.orderService.getById(id)
         .subscribe(order => this.order = { ...order });
 
+      this.title = 'Editar pedido';
+    }
+    
     this.customerService.get()
       .subscribe(customers => this.customers = customers);
 
