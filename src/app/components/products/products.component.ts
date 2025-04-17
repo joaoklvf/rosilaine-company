@@ -37,7 +37,6 @@ export class ProductsComponent implements OnInit {
   }
 
   add() {
-    console.log(this.product);
     const product = {
       ...this.product,
       name: this.product.description.trim(),
