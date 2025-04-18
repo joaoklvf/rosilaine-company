@@ -8,7 +8,6 @@ import { HeroesComponent } from './components/heroes/heroes.component';
 import { OrderComponent } from './components/order/order.component';
 import { ProductsComponent } from './components/products/products.component';
 import { OrderCreateComponent } from './components/order-create/order-create.component';
-import { OrderDetailComponent } from './components/order-detail/order-detail.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
