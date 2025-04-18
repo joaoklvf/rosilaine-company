@@ -3,6 +3,7 @@ import { ProductCategory } from 'src/app/models/product/product-category';
 import { ProductService } from 'src/app/services/product/product.service';
 import { ProductCategoryService } from 'src/app/services/product-category/product-category.service';
 import { Product } from 'src/app/models/product/product';
+import { getCurrencyStrBr } from 'src/app/utils/text-format';
 
 @Component({
   selector: 'app-products',
@@ -36,6 +37,10 @@ export class ProductsComponent implements OnInit {
     this.product.category = value;
   }
 
+  setPrice(value: number) {
+    this.product.productPrice = value;
+  }
+
   add() {
     const product = {
       ...this.product,
@@ -67,4 +72,7 @@ export class ProductsComponent implements OnInit {
   edit(product: Product): void {
     this.product = { ...product };
   }
+
+  getCurrencyValue = (value: number) =>
+    getCurrencyStrBr(value);
 }
