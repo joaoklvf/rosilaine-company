@@ -16,7 +16,7 @@ export class ProductsComponent implements OnInit {
   products: Product[] = [];
   product = new Product();
 
-  @ViewChild("product-description") productDescriptionField: ElementRef = new ElementRef(null);
+  @ViewChild("productDescription") productDescriptionField: ElementRef = new ElementRef(null);
 
   constructor(private productService: ProductService, private productCategoryService: ProductCategoryService) { }
 
