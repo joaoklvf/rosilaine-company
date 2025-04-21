@@ -1,0 +1,146 @@
+<h1>{{ title }}</h1>
+<div class="card mb-3">
+  <div class="card-body">
+    <div class="customer-row">
+      <div>
+        <label for="customer-name">Nome</label>
+        <input
+          class="form-control"
+          id="customer-name"
+          placeholder="Nome"
+          [(ngModel)]="customer.name"
+          name="name"
+        />
+      </div>
+      <div>
+        <div>
+          <label for="customer-birth-date">Date de nascimento</label>
+          <input
+            class="form-control"
+            id="customer-birth-date"
+            placeholder="Date de nascimento"
+            name="birth-date"
+            mask="00/00/0000"
+            matInput
+            [dropSpecialCharacters]="false"
+            [(ngModel)]="customer.birthDate"
+          />
+        </div>
+      </div>
+      <div>
+        <label for="customer-phone">Telefone</label>
+        <input
+          class="form-control"
+          id="customer-phone"
+          type="text"
+          mask="(00) 00000-0000"
+          matInput
+          [dropSpecialCharacters]="false"
+          [(ngModel)]="customer.phone"
+        />
+      </div>
+      <div>
+        <button type="button" class="btn btn-primary" (click)="add()">
+          Adicionar
+        </button>
+      </div>
+    </div>
+    <div [formGroup]="address">
+      <div>
+        <label for="customer-zip-code">Cep</label>
+        <input
+          class="form-control"
+          id="customer-zip-code"
+          placeholder="Cep"
+          name="zip-code"
+          type="text"
+          mask="00000-000"
+          matInput
+          [dropSpecialCharacters]="false"
+          (blur)="getAddressByZipCode()"
+          formControlName="zipCode"
+          [(ngModel)]="customer.zipCode"
+        />
+      </div>
+      <div>
+        <label for="customer-street">Rua</label>
+        <input
+          class="form-control"
+          id="customer-street"
+          placeholder="Rua"
+          name="street"
+          formControlName="street"
+          [(ngModel)]="customer.street"
+        />
+      </div>
+      <div>
+        <label for="customer-neighborhood">Bairro</label>
+        <input
+          class="form-control"
+          id="customer-neighborhood"
+          placeholder="Bairro"
+          name="neighborhood"
+          formControlName="neighborhood"
+          [(ngModel)]="customer.neighborhood"
+        />
+      </div>
+      <div>
+        <label for="customer-house-number">Número</label>
+        <input
+          class="form-control"
+          id="customer-house-number"
+          placeholder="Número"
+          [(ngModel)]="customer.houseNumber"
+          name="house-number"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+      <div>
+        <label for="customer-city">Cidade</label>
+        <input
+          class="form-control"
+          id="customer-city"
+          placeholder="Cidade"
+          name="city"
+          formControlName="city"
+          [(ngModel)]="customer.city"
+        />
+      </div>
+      <div>
+        <label for="customer-state">Estado (UF)</label>
+        <input
+          class="form-control"
+          id="customer-state"
+          placeholder="Estado (UF)"
+          name="state"
+          [maxLength]="2"
+          formControlName="state"
+          [(ngModel)]="customer.state"
+          (keyup)="upper($event)"
+        />
+      </div>
+      <div>
+        <label for="customer-complemento">Complemento</label>
+        <input
+          class="form-control"
+          id="customer-complemento"
+          placeholder="Complemento"
+          name="complemento"
+          formControlName="complemento"
+          [(ngModel)]="customer.complemento"
+        />
+      </div>
+      <div>
+        <label for="customer-address-observation">Observação</label>
+        <input
+          class="form-control"
+          id="customer-address-observation"
+          placeholder="Observação"
+          [(ngModel)]="customer.addressObservation"
+          name="address-observation"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+    </div>
+  </div>
+</div>

@@ -3,12 +3,14 @@ export class Customer {
   name = '';
   phone = '';
   birthDate = new Date();
-  zipCode? = '';
-  street? = '';
-  neighborhood? = '';
-  streetNumber? = '';
-  city? = '';
-  state? = '';
+  zipCode: string | null = null;
+  street: string | null = null;
+  neighborhood: string | null = null;
+  houseNumber: string | null = null;
+  city: string | null = null;
+  state: string | null = null;
+  complemento: string | null = null;
+  addressObservation: string | null = null;
   createdDate = new Date();
   updatedDate = new Date();
 }

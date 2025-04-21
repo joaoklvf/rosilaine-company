@@ -17,7 +17,6 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { OrderComponent } from './components/order/order.component';
 import { InputMaskComponent } from './components/input-mask/input-mask.component';
 import { MatIconModule } from '@angular/material/icon';
-import { CustomersComponent } from './components/customers/customers.component';
 import { MatDatepickerModule } from '@angular/material/datepicker'
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -31,6 +30,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ProductsComponent } from './components/products/products.component';
 import { OrderCreateComponent } from './components/order-create/order-create.component';
+import { CustomerCreateComponent } from './components/customer-create/customer-create.component';
+import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 
 @NgModule({
     declarations: [
@@ -43,7 +44,7 @@ import { OrderCreateComponent } from './components/order-create/order-create.com
         NavbarComponent,
         OrderComponent,
         InputMaskComponent,
-        CustomersComponent,
+        CustomerCreateComponent,
         BrDatePickerComponent,
         CustomAutocompleteComponent,
         ProductsComponent,
@@ -71,7 +72,8 @@ import { OrderCreateComponent } from './components/order-create/order-create.com
     ],
     providers: [
         provideEnvironmentNgxMask(),
-        provideHttpClient(withInterceptorsFromDi())
+        provideHttpClient(withInterceptorsFromDi()),
+        { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 30000 } }
     ]
 })
 

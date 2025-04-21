@@ -1,3 +1,17 @@
+:root {
+  .snackbar-success {
+    --mdc-snackbar-container-color: green;
+  }
+
+  .snackbar-error {
+    background-color: red;
+  } 
+
+  .snackbar-info {
+    background-color: blue;
+  }
+}
+
 html,
 body {
   height: 100%;

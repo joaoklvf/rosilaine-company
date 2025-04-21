@@ -31,14 +31,3 @@ thead>tr>th {
     width: 10%;
   }
 }
-
-.customer-row {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 1rem;
-
-  & :first-child {
-    flex-grow: 1;
-  }
-}

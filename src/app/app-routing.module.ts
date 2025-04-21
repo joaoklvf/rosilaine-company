@@ -8,6 +8,7 @@ import { HeroesComponent } from './components/heroes/heroes.component';
 import { OrderComponent } from './components/order/order.component';
 import { ProductsComponent } from './components/products/products.component';
 import { OrderCreateComponent } from './components/order-create/order-create.component';
+import { CustomerCreateComponent } from './components/customer-create/customer-create.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
@@ -16,6 +17,8 @@ const routes: Routes = [
   { path: 'orders/create', component: OrderCreateComponent },
   { path: 'order/:id', component: OrderCreateComponent },
   { path: 'customers', component: CustomersComponent },
+  { path: 'customers/create', component: CustomerCreateComponent },
+  { path: 'customer/:id', component: CustomerCreateComponent },
   { path: 'products', component: ProductsComponent },
   { path: 'detail/:id', component: HeroDetailComponent },
   { path: 'heroes', component: HeroesComponent }

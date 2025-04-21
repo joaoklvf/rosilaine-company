@@ -24,7 +24,7 @@ export class OrderCreateComponent implements OnInit {
   customers: Customer[] = [];
   products: Product[] = [];
   orderStatus: OrderStatus[] = [];
-  title = 'Criar pedido'
+  title = 'Cadastrar pedido'
   constructor(private orderService: OrderService, private customerService: CustomerService, private productService: ProductService, private orderStatusService: OrderStatusService, private route: ActivatedRoute) { }
 
   ngOnInit() {
