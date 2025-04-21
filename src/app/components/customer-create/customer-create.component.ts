@@ -79,7 +79,7 @@ export class CustomerCreateComponent implements OnInit {
 
   async getAddressByZipCode() {
     const zipCode = this.address.value.zipCode?.replace('.', '').replace('-', '');
-    if (zipCode?.length !== 8)
+    if (zipCode?.length !== 8 || !this.address.controls.zipCode.dirty)
       return;
 
     this.viaCepService.get(zipCode).subscribe(address => {
@@ -101,6 +101,8 @@ export class CustomerCreateComponent implements OnInit {
         street: address.logradouro,
         zipCode: address.cep
       });
+
+      this.address.markAsPristine();
     });
   }
 
