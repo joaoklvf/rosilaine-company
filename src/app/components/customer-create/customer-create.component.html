@@ -1,10 +1,10 @@
 <h1>{{ title }}</h1>
 <div class="card mb-3">
   <div class="card-body">
-    <div class="customer-row">
-      <div>
+    <div class="row">
+      <div class="col-md-4">
         <label for="customer-name">Nome</label>
-        <input        
+        <input
           class="form-control"
           id="customer-name"
           placeholder="Nome"
@@ -12,22 +12,20 @@
           name="name"
         />
       </div>
-      <div>
-        <div>
-          <label for="customer-birth-date">Date de nascimento</label>
-          <input
-            class="form-control"
-            id="customer-birth-date"
-            placeholder="Date de nascimento"
-            name="birth-date"
-            mask="00/00/0000"
-            matInput
-            [dropSpecialCharacters]="false"
-            [(ngModel)]="customer.birthDate"
-          />
-        </div>
+      <div class="col-md-4">
+        <label for="customer-birth-date">Data de nascimento</label>
+        <input
+          class="form-control"
+          id="customer-birth-date"
+          placeholder="dd/mm/aaaa"
+          name="birth-date"
+          mask="00/00/0000"
+          matInput
+          [dropSpecialCharacters]="false"
+          [(ngModel)]="customer.birthDate"
+        />
       </div>
-      <div>
+      <div class="col-md-4">
         <label for="customer-phone">Telefone</label>
         <input
           class="form-control"
@@ -35,23 +33,19 @@
           type="text"
           mask="(00) 00000-0000"
           matInput
+          placeholder="(99) 99999-9999"
           [dropSpecialCharacters]="false"
           [(ngModel)]="customer.phone"
         />
       </div>
-      <div>
-        <button type="button" class="btn btn-primary" (click)="add()">
-          Adicionar
-        </button>
-      </div>
     </div>
-    <div [formGroup]="address">
-      <div>
-        <label for="customer-zip-code">Cep</label>
+    <div class="row" [formGroup]="address">
+      <div class="col-md-4">
+        <label for="customer-zip-code">CEP</label>
         <input
           class="form-control"
           id="customer-zip-code"
-          placeholder="Cep"
+          placeholder="CEP"
           name="zip-code"
           type="text"
           mask="00000-000"
@@ -59,21 +53,31 @@
           [dropSpecialCharacters]="false"
           (blur)="getAddressByZipCode()"
           formControlName="zipCode"
-          [(ngModel)]="customer.zipCode"
         />
       </div>
-      <div>
-        <label for="customer-street">Rua</label>
+      <div class="col-md-4">
+        <label for="customer-state">Estado (UF)</label>
         <input
           class="form-control"
-          id="customer-street"
-          placeholder="Rua"
-          name="street"
-          formControlName="street"
-          [(ngModel)]="customer.street"
+          id="customer-state"
+          placeholder="Estado (UF)"
+          name="state"
+          [maxLength]="2"
+          formControlName="state"
+          (keyup)="upper($event)"
         />
       </div>
-      <div>
+      <div class="col-md-4">
+        <label for="customer-city">Cidade</label>
+        <input
+          class="form-control"
+          id="customer-city"
+          placeholder="Cidade"
+          name="city"
+          formControlName="city"
+        />
+      </div>
+      <div class="col-md-4">
         <label for="customer-neighborhood">Bairro</label>
         <input
           class="form-control"
@@ -81,10 +85,19 @@
           placeholder="Bairro"
           name="neighborhood"
           formControlName="neighborhood"
-          [(ngModel)]="customer.neighborhood"
         />
       </div>
-      <div>
+      <div class="col-md-4">
+        <label for="customer-street">Rua</label>
+        <input
+          class="form-control"
+          id="customer-street"
+          placeholder="Rua"
+          name="street"
+          formControlName="street"
+        />
+      </div>
+      <div class="col-md-4">
         <label for="customer-house-number">Número</label>
         <input
           class="form-control"
@@ -95,42 +108,18 @@
           [ngModelOptions]="{ standalone: true }"
         />
       </div>
-      <div>
-        <label for="customer-city">Cidade</label>
-        <input
-          class="form-control"
-          id="customer-city"
-          placeholder="Cidade"
-          name="city"
-          formControlName="city"
-          [(ngModel)]="customer.city"
-        />
-      </div>
-      <div>
-        <label for="customer-state">Estado (UF)</label>
-        <input
-          class="form-control"
-          id="customer-state"
-          placeholder="Estado (UF)"
-          name="state"
-          [maxLength]="2"
-          formControlName="state"
-          [(ngModel)]="customer.state"
-          (keyup)="upper($event)"
-        />
-      </div>
-      <div>
+      <div class="col-md-6">
         <label for="customer-complemento">Complemento</label>
         <input
           class="form-control"
           id="customer-complemento"
           placeholder="Complemento"
           name="complemento"
-          formControlName="complemento"
           [(ngModel)]="customer.complemento"
+          [ngModelOptions]="{ standalone: true }"
         />
       </div>
-      <div>
+      <div class="col-md-6">
         <label for="customer-address-observation">Observação</label>
         <input
           class="form-control"
@@ -140,6 +129,13 @@
           name="address-observation"
           [ngModelOptions]="{ standalone: true }"
         />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col align-content-end text-end m-0">
+        <button type="button" class="btn btn-primary" (click)="add()">
+          {{ buttonText }}
+        </button>
       </div>
     </div>
   </div>
