@@ -19,15 +19,14 @@ import { ViaCepService } from 'src/app/services/via-cep/via-cep.service';
 
 export class CustomerCreateComponent implements OnInit {
   customer = new Customer();
-  title = 'Cadastrar Cliente'
-
+  title = 'Cadastrar Cliente';
+  buttonText = 'Adicionar';
   address = new FormGroup({
     street: new FormControl<null | string>(null),
     city: new FormControl<null | string>(null),
     state: new FormControl<null | string>(null),
     zipCode: new FormControl<null | string>(null),
-    neighborhood: new FormControl<null | string>(null),
-    complemento: new FormControl<null | string>(null),
+    neighborhood: new FormControl<null | string>(null)
   });
 
   constructor(private customerService: CustomerService, private viaCepService: ViaCepService, private route: ActivatedRoute, private snackBarService: SnackBarService, private router: Router) { }
@@ -43,35 +42,40 @@ export class CustomerCreateComponent implements OnInit {
 
         this.address.setValue({
           city: customer.city,
-          complemento: customer.complemento,
           state: customer.state,
           neighborhood: customer.neighborhood,
           street: customer.street,
           zipCode: customer.zipCode
         });
-
-        console.log(this.customer)
       });
 
     this.title = 'Editar Cliente';
+    this.buttonText = 'Atualizar';
   }
 
   add() {
-    console.log(this.customer);
-    const customer = {
+    let customer = {
       ...this.customer,
       name: this.customer.name.trim(),
     };
+
+    if (this.address.value.city && (!this.customer.city || this.customer.city.length === 0)) {
+      customer = {
+        ...customer,
+        ...this.address.value
+      }
+    }
+
     if (!customer.name)
       return;
 
     if (customer.id > 0)
-      this.customerService.update(customer).subscribe(customer => {
+      this.customerService.update(customer).subscribe(_ => {
         this.snackBarService.success(`Cliente ${this.customer.name.split(" ")[0]} atualizado com sucesso!`);
         this.router.navigate(['customers']);
       });
     else
-      this.customerService.add(customer).subscribe(customer => {
+      this.customerService.add(customer).subscribe(_ => {
         this.snackBarService.success(`Cliente ${this.customer.name.split(" ")[0]} criado com sucesso!`);
         this.router.navigate(['customers']);
       });
@@ -95,7 +99,6 @@ export class CustomerCreateComponent implements OnInit {
 
       this.address.setValue({
         city: address.localidade,
-        complemento: address.complemento,
         state: address.uf,
         neighborhood: address.bairro,
         street: address.logradouro,
