@@ -3,6 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { provideNgxMask } from 'ngx-mask';
 import { Customer } from 'src/app/models/customer/customer';
+import { CustomerTag } from 'src/app/models/customer/customer-tag';
 import { CustomerService } from 'src/app/services/customer/customer.service';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 import { ViaCepService } from 'src/app/services/via-cep/via-cep.service';
@@ -111,5 +112,13 @@ export class CustomerCreateComponent implements OnInit {
 
   upper(event: any) {
     event.target.value = event.target.value.toUpperCase()
+  }
+
+  setTags(tags: CustomerTag[]) {
+    this.customer.tags = [...tags];
+  }
+
+  log(){
+    console.log(this.customer.tags)
   }
 }
