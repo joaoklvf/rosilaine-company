@@ -1,3 +1,5 @@
+import { CustomerTag } from "./customer-tag";
+
 export class Customer {
   id = 0;
   name = '';
@@ -13,4 +15,5 @@ export class Customer {
   addressObservation: string | null = null;
   createdDate = new Date();
   updatedDate = new Date();
+  tags: null | CustomerTag[] = null;
 }
