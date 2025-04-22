@@ -16,7 +16,7 @@ export class CustomAutocompleteComponent<T> implements OnChanges {
   readonly label = input('');
   readonly displayValue = input.required<keyof T>();
   readonly data = input<T[]>([]);
-  readonly isCreatable = input(false);
+  readonly creatable = input(false);
   readonly handleOnChange = output<T>();
   @Input() value: T | null = null;
 
@@ -31,7 +31,7 @@ export class CustomAutocompleteComponent<T> implements OnChanges {
       map(value => {
         const dataFiltered = this.getFilteredData(value);
 
-        if (this.isCreatable() && typeof value === 'string' && value.length > 0) {
+        if (this.creatable() && typeof value === 'string' && value.length > 0) {
           return [{ [this.displayValue()]: `Criar ${value}` } as T, ...dataFiltered];
         }
 

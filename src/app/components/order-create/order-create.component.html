@@ -13,7 +13,7 @@
         [label]="'Status'"
         (handleOnChange)="setOrderStatus($event)"
         [data]="orderStatus"
-        [isCreatable]="true"
+        [creatable]="true"
         displayValue="description"
         [value]="order.status"
       ></app-custom-autocomplete>
