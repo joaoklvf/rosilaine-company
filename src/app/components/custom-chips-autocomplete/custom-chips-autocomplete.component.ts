@@ -1,10 +1,8 @@
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { ChangeDetectionStrategy, Component, computed, inject, model, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, model, output, signal } from '@angular/core';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { CustomerTag } from 'src/app/models/customer/customer-tag';
-import { CustomerTagService } from 'src/app/services/customer-tag/customer-tag.service';
 
 @Component({
   selector: 'app-custom-chips-autocomplete',
@@ -13,58 +11,58 @@ import { CustomerTagService } from 'src/app/services/customer-tag/customer-tag.s
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
-export class CustomChipsAutocompleteComponent {
+export class CustomChipsAutocompleteComponent<T> {
+  readonly displayValue = input.required<keyof T>();
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
-  readonly currentFruit = model('');
-  readonly fruits = signal<string[]>([]);
-  allFruits: CustomerTag[] = [];
-  readonly filteredFruits = computed(() => {
-    const currentFruit = this.currentFruit().toLowerCase();
-    const options = currentFruit
-      ? this.allFruits.filter(fruit => fruit.description.toLowerCase().includes(currentFruit))
-      : this.allFruits.slice();
+  readonly currentOption = model('');
+  readonly selectedOptions = signal<string[]>([]);
+  readonly data = input<T[]>([]);
+  readonly handleOnChange = output<T[]>();
+  readonly announcer = inject(LiveAnnouncer);  
+  readonly label  = input.required<string>();
+  readonly filteredData = computed(() => {
+    const currentOption = this.currentOption().toLowerCase();
+    const options = currentOption
+      ? this.data().filter(option => (option[this.displayValue()] as string).toLowerCase().includes(currentOption))
+      : this.data().slice();
 
-    return [`Criar ${currentFruit}`, ...options.map(x => x.description)]
+    if (currentOption.length > 0)
+      return [`Criar ${currentOption}`, ...options.map(x => x[this.displayValue()])]
+
+    return [...options.map(x => x[this.displayValue()])];
   });
-  readonly handleOnChange = output<CustomerTag[]>();
-
-  readonly announcer = inject(LiveAnnouncer);
-
-  constructor(private customerTagService: CustomerTagService) {
-    customerTagService.get().subscribe(tags => this.allFruits = tags);
-  }
-
 
   add(event: MatChipInputEvent): void {
-    console.log('add');
     const value = (event.value || '').trim();
-    // Add our fruit
     if (value) {
-      this.fruits.update(fruits => [...fruits, value]);
+      this.selectedOptions.update(selectedOptions => [...selectedOptions, value]);
     }
 
-    // Clear the input value
-    this.currentFruit.set('');
+    this.currentOption.set('');
+    this.handleOnChange.emit(this.selectedOptions().map(x => ({ description: x, id: x.length } as T)))
   }
 
-  remove(fruit: string): void {
-    this.fruits.update(fruits => {
-      const index = fruits.indexOf(fruit);
+  remove(option: string): void {
+    this.selectedOptions.update(selectedOptions => {
+      const index = selectedOptions.indexOf(option);
       if (index < 0) {
-        return fruits;
+        return selectedOptions;
       }
 
-      fruits.splice(index, 1);
-      this.announcer.announce(`Removed ${fruit}`);
-      return [...fruits];
+      selectedOptions.splice(index, 1);
+      this.announcer.announce(`Removed ${option}`);
+      return [...selectedOptions];
     });
   }
 
   selected(event: MatAutocompleteSelectedEvent): void {
-    console.log('aqui')
-    this.fruits.update(fruits => [...fruits, event.option.viewValue.replace('Criar ', '')]);
-    this.currentFruit.set('');
+    const optionToAdd = event.option.viewValue.replace('Criar ', '');
+    if (this.selectedOptions().includes(optionToAdd))
+      return;
+    
+    this.selectedOptions.update(selectedOptions => [...selectedOptions, optionToAdd]);
+    this.currentOption.set('');
     event.option.deselect();
-    this.handleOnChange.emit(this.fruits().map(x => ({ description: x, id: x.length } as CustomerTag)))
+    this.handleOnChange.emit(this.selectedOptions().map(x => ({ description: x, id: x.length } as T)))
   }
 }

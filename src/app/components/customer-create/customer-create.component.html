@@ -129,11 +129,13 @@
           name="address-observation"
           [ngModelOptions]="{ standalone: true }"
         />
-        <button type="button" (click)="log()">log</button>
       </div>
       <div class="col-md-4">
-        <app-custom-chips-autocomplete 
-        (handleOnChange)="setTags($event)"
+        <app-custom-chips-autocomplete
+          [data]="tags"
+          (handleOnChange)="setTags($event)"
+          displayValue="description"
+          label="Tags"
         />
       </div>
     </div>

@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { provideNgxMask } from 'ngx-mask';
 import { Customer } from 'src/app/models/customer/customer';
 import { CustomerTag } from 'src/app/models/customer/customer-tag';
+import { CustomerTagService } from 'src/app/services/customer-tag/customer-tag.service';
 import { CustomerService } from 'src/app/services/customer/customer.service';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 import { ViaCepService } from 'src/app/services/via-cep/via-cep.service';
@@ -29,10 +30,12 @@ export class CustomerCreateComponent implements OnInit {
     zipCode: new FormControl<null | string>(null),
     neighborhood: new FormControl<null | string>(null)
   });
-
-  constructor(private customerService: CustomerService, private viaCepService: ViaCepService, private route: ActivatedRoute, private snackBarService: SnackBarService, private router: Router) { }
+  tags: CustomerTag[] = [];
+  constructor(private customerService: CustomerService, private viaCepService: ViaCepService, private route: ActivatedRoute, private snackBarService: SnackBarService, private router: Router, private customerTagService: CustomerTagService) { }
 
   ngOnInit(): void {
+    this.customerTagService.get().subscribe(tags => this.tags = [...tags]);
+
     const id = parseInt(this.route.snapshot.paramMap.get('id')!, 10);
     if (!id)
       return;
@@ -116,9 +119,5 @@ export class CustomerCreateComponent implements OnInit {
 
   setTags(tags: CustomerTag[]) {
     this.customer.tags = [...tags];
-  }
-
-  log(){
-    console.log(this.customer.tags)
   }
 }

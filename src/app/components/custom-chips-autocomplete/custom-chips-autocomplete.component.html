@@ -1,31 +1,31 @@
 <mat-form-field class="w-100">
-  <mat-label>Favorite Fruits</mat-label>
-  <mat-chip-grid #chipGrid aria-label="Fruit selection">
-    @for (fruit of fruits(); track $index) {
-    <mat-chip-row (removed)="remove(fruit)">
-      {{ fruit }}
-      <button matChipRemove [attr.aria-label]="'remove ' + fruit">
+  <mat-label>{{ label() }}</mat-label>
+  <mat-chip-grid #chipGrid aria-label="Escolher opção">
+    @for (item of selectedOptions(); track $index) {
+    <mat-chip-row (removed)="remove(item)">
+      {{ item }}
+      <button matChipRemove [attr.aria-label]="'remove ' + item">
         <mat-icon>cancel</mat-icon>
       </button>
     </mat-chip-row>
     }
   </mat-chip-grid>
   <input
-    name="currentFruit"
-    placeholder="New Fruit..."
-    #fruitInput
-    [(ngModel)]="currentFruit"
+    name="currentOption"
+    placeholder="Nova opção..."
+    #autoInput
+    [(ngModel)]="currentOption"
     [matChipInputFor]="chipGrid"
     [matAutocomplete]="auto"
     [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-    (matChipInputTokenEnd)="add($event)"
+    (matChipInputTokenEnd)="add($event); autoInput.value = ''"
   />
   <mat-autocomplete
     #auto="matAutocomplete"
-    (optionSelected)="selected($event); fruitInput.value = ''"
+    (optionSelected)="selected($event); autoInput.value = ''"
   >
-    <mat-option *ngFor="let fruit of filteredFruits()" [value]="fruit"
-      >{{ fruit }}
+    <mat-option *ngFor="let item of filteredData()" [value]="item"
+      >{{ item }}
     </mat-option>
   </mat-autocomplete>
 </mat-form-field>
