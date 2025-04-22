@@ -32,6 +32,8 @@ import { ProductsComponent } from './components/products/products.component';
 import { OrderCreateComponent } from './components/order-create/order-create.component';
 import { CustomerCreateComponent } from './components/customer-create/customer-create.component';
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
+import { CustomChipsAutocompleteComponent } from "./components/custom-chips-autocomplete/custom-chips-autocomplete.component";
+import { MatChipsModule } from '@angular/material/chips';
 
 @NgModule({
     declarations: [
@@ -48,7 +50,8 @@ import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
         BrDatePickerComponent,
         CustomAutocompleteComponent,
         ProductsComponent,
-        OrderCreateComponent
+        OrderCreateComponent,
+        CustomChipsAutocompleteComponent
     ],
     bootstrap: [
         AppComponent
@@ -68,7 +71,8 @@ import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
         ReactiveFormsModule,
         NgxMaskDirective,
         NgxMaskPipe,
-        MatSelectModule
+        MatSelectModule,
+        MatChipsModule
     ],
     providers: [
         provideEnvironmentNgxMask(),

@@ -1,0 +1,31 @@
+<mat-form-field class="w-100">
+  <mat-label>Favorite Fruits</mat-label>
+  <mat-chip-grid #chipGrid aria-label="Fruit selection">
+    @for (fruit of fruits(); track $index) {
+    <mat-chip-row (removed)="remove(fruit)">
+      {{ fruit }}
+      <button matChipRemove [attr.aria-label]="'remove ' + fruit">
+        <mat-icon>cancel</mat-icon>
+      </button>
+    </mat-chip-row>
+    }
+  </mat-chip-grid>
+  <input
+    name="currentFruit"
+    placeholder="New Fruit..."
+    #fruitInput
+    [(ngModel)]="currentFruit"
+    [matChipInputFor]="chipGrid"
+    [matAutocomplete]="auto"
+    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+    (matChipInputTokenEnd)="add($event)"
+  />
+  <mat-autocomplete
+    #auto="matAutocomplete"
+    (optionSelected)="selected($event); fruitInput.value = ''"
+  >
+    <mat-option *ngFor="let fruit of filteredFruits()" [value]="fruit"
+      >{{ fruit }}
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>
