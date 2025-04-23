@@ -108,7 +108,7 @@
           [ngModelOptions]="{ standalone: true }"
         />
       </div>
-      <div class="col-md-4">
+      <div class="col-md-6">
         <label for="customer-complemento">Complemento</label>
         <input
           class="form-control"
@@ -119,7 +119,7 @@
           [ngModelOptions]="{ standalone: true }"
         />
       </div>
-      <div class="col-md-4">
+      <div class="col-md-6">
         <label for="customer-address-observation">Observação</label>
         <input
           class="form-control"
@@ -130,7 +130,7 @@
           [ngModelOptions]="{ standalone: true }"
         />
       </div>
-      <div class="col-md-4">
+      <div class="col">
         <app-custom-chips-autocomplete
           [data]="tags"
           (handleOnChange)="setTags($event)"
