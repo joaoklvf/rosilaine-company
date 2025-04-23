@@ -1,15 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { Customer } from '../../models/customer/customer';
 import { Order } from '../../models/order/order';
-import { OrderItem } from '../../models/order/order-item';
+import { OrderItem } from '../../models/order/order-item/order-item';
 import { OrderStatus } from '../../models/order/order-status';
 import { Product } from '../../models/product/product';
 import { CustomerService } from '../../services/customer/customer.service';
-import { OrderStatusService } from '../../services/order-status/order-status.service';
+import { OrderStatusService } from '../../services/order/order-status/order-status.service';
 import { OrderService } from '../../services/order/order.service';
 import { ProductService } from '../../services/product/product.service';
 import { ActivatedRoute } from '@angular/router';
 import { getCurrencyStrBr } from 'src/app/utils/text-format';
+import { OrderItemStatus } from 'src/app/models/order/order-item/order-item-status';
+import { OrderItemStatusService } from 'src/app/services/order/order-item-status/order-item-status.service';
 
 @Component({
   selector: 'app-order-create',
@@ -24,8 +26,9 @@ export class OrderCreateComponent implements OnInit {
   customers: Customer[] = [];
   products: Product[] = [];
   orderStatus: OrderStatus[] = [];
+  orderItemStatus: OrderItemStatus[] = [];
   title = 'Cadastrar pedido'
-  constructor(private orderService: OrderService, private customerService: CustomerService, private productService: ProductService, private orderStatusService: OrderStatusService, private route: ActivatedRoute) { }
+  constructor(private orderService: OrderService, private customerService: CustomerService, private productService: ProductService, private orderStatusService: OrderStatusService, private route: ActivatedRoute, private orderItemStatusService: OrderItemStatusService) { }
 
   ngOnInit() {
     const id = parseInt(this.route.snapshot.paramMap.get('id')!, 10);
@@ -35,7 +38,7 @@ export class OrderCreateComponent implements OnInit {
 
       this.title = 'Editar pedido';
     }
-    
+
     this.customerService.get()
       .subscribe(customers => this.customers = customers);
 
@@ -44,6 +47,9 @@ export class OrderCreateComponent implements OnInit {
 
     this.orderStatusService.get()
       .subscribe(status => this.orderStatus = status);
+
+    this.orderItemStatusService.get()
+      .subscribe(itemStatus => this.orderItemStatus = itemStatus);
   }
 
   add(): void {
@@ -117,5 +123,9 @@ export class OrderCreateComponent implements OnInit {
 
   setOrderStatus(value: OrderStatus) {
     this.order.status = value;
+  }
+
+  setOrderItemStatus(value: OrderItemStatus) {
+    this.orderItem.status = value;
   }
 }

@@ -1,6 +1,6 @@
 import { Customer } from "../customer/customer";
 import { OrderInstallment } from "./order-installment";
-import { OrderItem } from "./order-item";
+import { OrderItem } from "./order-item/order-item";
 import { OrderStatus } from "./order-status";
 
 export class Order {

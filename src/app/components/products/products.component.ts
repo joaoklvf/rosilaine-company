@@ -1,9 +1,9 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ProductCategory } from 'src/app/models/product/product-category';
 import { ProductService } from 'src/app/services/product/product.service';
-import { ProductCategoryService } from 'src/app/services/product-category/product-category.service';
 import { Product } from 'src/app/models/product/product';
 import { getCurrencyStrBr } from 'src/app/utils/text-format';
+import { ProductCategoryService } from 'src/app/services/product/product-category/product-category.service';
 
 @Component({
   selector: 'app-products',

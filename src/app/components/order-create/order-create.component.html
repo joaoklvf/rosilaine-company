@@ -38,6 +38,16 @@
         ></app-custom-autocomplete>
       </div>
       <div>
+        <app-custom-autocomplete
+          [label]="'Status'"
+          (handleOnChange)="setOrderItemStatus($event)"
+          [data]="orderItemStatus"
+          [creatable]="true"
+          displayValue="description"
+          [value]="orderItem.status"
+        ></app-custom-autocomplete>
+      </div>
+      <div>
         <app-input-mask
           [label]="'Preço (R$)'"
           [value]="orderItem.itemPrice"

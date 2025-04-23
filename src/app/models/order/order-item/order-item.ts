@@ -1,4 +1,5 @@
-import { Product } from "../product/product";
+import { Product } from "../../product/product";
+import { OrderItemStatus } from "./order-item-status";
 
 export class OrderItem {
   id = 0;
@@ -8,4 +9,5 @@ export class OrderItem {
   itemDiscount?: number;
   itemSellingPrice = 0;
   product = new Product();
+  status = new OrderItemStatus();
 }

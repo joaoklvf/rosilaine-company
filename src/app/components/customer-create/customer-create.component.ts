@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { provideNgxMask } from 'ngx-mask';
 import { Customer } from 'src/app/models/customer/customer';
 import { CustomerTag } from 'src/app/models/customer/customer-tag';
-import { CustomerTagService } from 'src/app/services/customer-tag/customer-tag.service';
+import { CustomerTagService } from 'src/app/services/customer/customer-tag/customer-tag.service';
 import { CustomerService } from 'src/app/services/customer/customer.service';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 import { ViaCepService } from 'src/app/services/via-cep/via-cep.service';
