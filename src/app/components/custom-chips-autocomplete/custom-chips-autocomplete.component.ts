@@ -1,6 +1,6 @@
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { ChangeDetectionStrategy, Component, computed, inject, input, model, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, model, OnChanges, output, signal } from '@angular/core';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
 
@@ -11,15 +11,16 @@ import { MatChipInputEvent } from '@angular/material/chips';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
-export class CustomChipsAutocompleteComponent<T> {
+export class CustomChipsAutocompleteComponent<T> implements OnChanges {
   readonly displayValue = input.required<keyof T>();
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   readonly currentOption = model('');
   readonly selectedOptions = signal<string[]>([]);
-  readonly data = input<T[]>([]);
+  readonly data = input.required<T[]>();
+  readonly defaultValue = input<T[] | null>(null);
   readonly handleOnChange = output<T[]>();
-  readonly announcer = inject(LiveAnnouncer);  
-  readonly label  = input.required<string>();
+  readonly announcer = inject(LiveAnnouncer);
+  readonly label = input.required<string>();
   readonly filteredData = computed(() => {
     const currentOption = this.currentOption().toLowerCase();
     const options = currentOption
@@ -32,14 +33,18 @@ export class CustomChipsAutocompleteComponent<T> {
     return [...options.map(x => x[this.displayValue()])];
   });
 
+  ngOnChanges(): void {
+    const defaultValue = this.defaultValue();
+    if (!defaultValue)
+      return;
+
+    const options = defaultValue.map(x => x[this.displayValue()] as string);
+    this.selectedOptions.set(options);
+  }
+
   add(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
-    if (value) {
-      this.selectedOptions.update(selectedOptions => [...selectedOptions, value]);
-    }
-
-    this.currentOption.set('');
-    this.handleOnChange.emit(this.selectedOptions().map(x => ({ description: x, id: x.length } as T)))
+    this.addOption(value);
   }
 
   remove(option: string): void {
@@ -59,10 +64,27 @@ export class CustomChipsAutocompleteComponent<T> {
     const optionToAdd = event.option.viewValue.replace('Criar ', '');
     if (this.selectedOptions().includes(optionToAdd))
       return;
-    
-    this.selectedOptions.update(selectedOptions => [...selectedOptions, optionToAdd]);
-    this.currentOption.set('');
+
+    this.addOption(optionToAdd);
     event.option.deselect();
-    this.handleOnChange.emit(this.selectedOptions().map(x => ({ description: x, id: x.length } as T)))
+  }
+
+  addOption(option: string) {
+    if (!option)
+      return;
+
+    if (this.selectedOptions().includes(option))
+      return;
+
+    this.selectedOptions.update(selectedOptions => [option, ...selectedOptions]);
+    this.currentOption.set('');
+    const displayValue = this.displayValue();
+
+    const finalOptions = this.selectedOptions().map(selectedOption => {
+      const existingOption = this.data().find(x => x[displayValue] === selectedOption);
+      return existingOption ?? { [displayValue]: selectedOption } as T;
+    })
+
+    this.handleOnChange.emit(finalOptions);
   }
 }

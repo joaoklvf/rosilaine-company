@@ -15,7 +15,7 @@ import { map, startWith } from 'rxjs/operators';
 export class CustomAutocompleteComponent<T> implements OnChanges {
   readonly label = input('');
   readonly displayValue = input.required<keyof T>();
-  readonly data = input<T[]>([]);
+  readonly data = input.required<T[]>();
   readonly creatable = input(false);
   readonly handleOnChange = output<T>();
   @Input() value: T | null = null;
