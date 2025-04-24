@@ -12,6 +12,8 @@ import { ActivatedRoute } from '@angular/router';
 import { getCurrencyStrBr } from 'src/app/utils/text-format';
 import { OrderItemStatus } from 'src/app/models/order/order-item/order-item-status';
 import { OrderItemStatusService } from 'src/app/services/order/order-item-status/order-item-status.service';
+import { MatSelectChange } from '@angular/material/select';
+import { OrderItemService } from 'src/app/services/order/order-item/order-item.service';
 
 @Component({
   selector: 'app-order-create',
@@ -28,7 +30,7 @@ export class OrderCreateComponent implements OnInit {
   orderStatus: OrderStatus[] = [];
   orderItemStatus: OrderItemStatus[] = [];
   title = 'Cadastrar pedido'
-  constructor(private orderService: OrderService, private customerService: CustomerService, private productService: ProductService, private orderStatusService: OrderStatusService, private route: ActivatedRoute, private orderItemStatusService: OrderItemStatusService) { }
+  constructor(private orderService: OrderService, private customerService: CustomerService, private productService: ProductService, private orderStatusService: OrderStatusService, private route: ActivatedRoute, private orderItemStatusService: OrderItemStatusService, private orderItemService: OrderItemService) { }
 
   ngOnInit() {
     const id = parseInt(this.route.snapshot.paramMap.get('id')!, 10);
@@ -122,5 +124,21 @@ export class OrderCreateComponent implements OnInit {
 
   setOrderItemStatus(value: OrderItemStatus) {
     this.orderItem.itemStatus = value;
+  }
+
+  changeItemStatus(selectEvent: MatSelectChange<number>, orderItemSelected: OrderItem) {
+    const optionSelected = this.orderItemStatus.find(x => x.id === selectEvent.value);
+    if (!optionSelected)
+      return;
+
+    const orderItemChanged = { ...orderItemSelected, itemStatus: optionSelected };
+    this.orderItemService.update(orderItemChanged).subscribe(orderItem => {
+      const prevItems = [...this.order.orderItems];
+      const orderItems = orderItem.id
+        ? prevItems.map(item => item.id === orderItem.id ? { ...orderItem } : item)
+        : [...prevItems, orderItem];
+
+      this.order.orderItems = orderItems;
+    })
   }
 }

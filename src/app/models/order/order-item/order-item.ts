@@ -9,4 +9,5 @@ export class OrderItem {
   itemOriginalPrice = 0;
   product = new Product();
   itemStatus = new OrderItemStatus();
+  deliveryDate: Date | null = null;
 }

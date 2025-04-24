@@ -5,13 +5,13 @@ import { OrderStatus } from "./order-status";
 
 export class Order {
   id = 0;
-  deliveryDate = new Date();
   total = 0;
   createdDate = new Date();
   updatedDate = new Date();
   orderDate = new Date();
   customer = new Customer();
   status = new OrderStatus();
+  deliveryDate: Date | null = null;
   orderItems: OrderItem[] = [];
   installments: OrderInstallment[] = [];
 }

@@ -90,6 +90,8 @@
       <thead>
         <tr>
           <th scope="col">Produto</th>
+          <th scope="col">Status</th>
+          <th scope="col">Data de entrega</th>
           <th scope="col">Quantidade</th>
           <th scope="col">Preço</th>
           <th scope="col">Total</th>
@@ -99,6 +101,19 @@
       <tbody>
         <tr *ngFor="let orderItem of order.orderItems; index as index">
           <td>{{ orderItem.product.description }}</td>
+          <td>
+            <mat-form-field>
+              <mat-label>Status</mat-label>
+              <mat-select (selectionChange)="changeItemStatus($event, orderItem)" [(value)]="orderItem.itemStatus.id">
+                @for (status of orderItemStatus; track status) {
+                <mat-option [value]="status.id">{{
+                  status.description
+                }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </td>
+          <td>{{ orderItem.deliveryDate }}</td>
           <td>{{ orderItem.itemAmount }}</td>
           <td>{{ getCurrencyValue(orderItem.itemSellingPrice) }}</td>
           <td>{{ getCurrencyValue(orderItem.itemSellingTotal) }}</td>
