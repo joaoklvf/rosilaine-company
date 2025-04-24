@@ -7,7 +7,7 @@ import { MessageService } from '../message/message.service';
 @Injectable({
   providedIn: 'root'
 })
-export class BaseApiService<T extends { id: number }> {
+export class BaseApiService<T extends { id?: string }> {
   constructor(private http: HttpClient, private messageService: MessageService, @Inject('collection') private collection: string) { }
   private apiUrl = `${environment.apiUrl}/${this.collection}`;// URL to web api
 
@@ -21,7 +21,7 @@ export class BaseApiService<T extends { id: number }> {
   }
 
   /** GET data by id. Return `undefined` when id not found */
-  getNo404<Data>(id: number): Observable<T> {
+  getNo404<Data>(id: string): Observable<T> {
     const url = `${this.apiUrl}/?id=${id}`;
     return this.http.get<T[]>(url)
       .pipe(
@@ -35,7 +35,7 @@ export class BaseApiService<T extends { id: number }> {
   }
 
   /** GET data by id. Will 404 if id not found */
-  getById(id: number): Observable<T> {
+  getById(id: string): Observable<T> {
     const url = `${this.apiUrl}/${id}`;
     return this.http.get<T>(url).pipe(
       tap(_ => this.log(`fetched data id=${id}`)),
@@ -68,7 +68,7 @@ export class BaseApiService<T extends { id: number }> {
   }
 
   /** DELETE: delete the data from the server */
-  delete(id: number): Observable<T> {
+  delete(id: string): Observable<T> {
     const url = `${this.apiUrl}/${id}`;
 
     return this.http.delete<T>(url).pipe(

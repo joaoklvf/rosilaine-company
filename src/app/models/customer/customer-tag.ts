@@ -1,6 +1,5 @@
-export class CustomerTag {
-  id = 0;
+import { BaseEntity } from "../base-entity";
+
+export class CustomerTag extends BaseEntity {
   description = '';
-  createdDate = new Date();
-  updatedDate = new Date();
 }

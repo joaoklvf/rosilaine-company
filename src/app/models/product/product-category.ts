@@ -1,6 +1,6 @@
-export class ProductCategory {
-  id = 0;
+import { BaseEntity } from "../base-entity";
+
+export class ProductCategory extends BaseEntity {
   description = '';
-  createdDate = new Date();
-  updatedDate = new Date();
+
 }

@@ -36,7 +36,7 @@ export class CustomerCreateComponent implements OnInit {
   ngOnInit(): void {
     this.customerTagService.get().subscribe(tags => this.tags = [...tags]);
 
-    const id = parseInt(this.route.snapshot.paramMap.get('id')!, 10);
+    const id = this.route.snapshot.paramMap.get('id')!;
     if (!id)
       return;
 
@@ -73,7 +73,7 @@ export class CustomerCreateComponent implements OnInit {
     if (!customer.name)
       return;
 
-    if (customer.id > 0)
+    if (customer.id)
       this.customerService.update(customer).subscribe(_ => {
         this.snackBarService.success(`Cliente ${this.customer.name.split(" ")[0]} atualizado com sucesso!`);
         this.router.navigate(['customers']);

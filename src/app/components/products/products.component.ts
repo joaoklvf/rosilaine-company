@@ -50,7 +50,7 @@ export class ProductsComponent implements OnInit {
     if (!product.name || !product.category)
       return;
 
-    if (product.id > 0) {
+    if (product.id) {
       this.productService.update(product)
         .subscribe(product => {
           const customerIndex = this.products.findIndex(c => c.id === product.id);

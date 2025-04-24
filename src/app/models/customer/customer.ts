@@ -1,7 +1,7 @@
+import { BaseEntity } from "../base-entity";
 import { CustomerTag } from "./customer-tag";
 
-export class Customer {
-  id = 0;
+export class Customer extends BaseEntity {
   name = '';
   phone = '';
   birthDate = new Date();
@@ -13,7 +13,5 @@ export class Customer {
   state: string | null = null;
   complemento: string | null = null;
   addressObservation: string | null = null;
-  createdDate = new Date();
-  updatedDate = new Date();
   tags: null | CustomerTag[] = null;
 }

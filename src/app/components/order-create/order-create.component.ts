@@ -33,7 +33,7 @@ export class OrderCreateComponent implements OnInit {
   constructor(private orderService: OrderService, private customerService: CustomerService, private productService: ProductService, private orderStatusService: OrderStatusService, private route: ActivatedRoute, private orderItemStatusService: OrderItemStatusService, private orderItemService: OrderItemService) { }
 
   ngOnInit() {
-    const id = parseInt(this.route.snapshot.paramMap.get('id')!, 10);
+    const id = this.route.snapshot.paramMap.get('id')!;
     if (id) {
       this.orderService.getById(id)
         .subscribe(order => this.order = { ...order });
@@ -69,7 +69,7 @@ export class OrderCreateComponent implements OnInit {
       orderItems: orderItems,
     }
 
-    if (order.id > 0) {
+    if (order.id) {
       this.orderService.update(order)
         .subscribe(orderResponse => {
           this.orderItem = new OrderItem();
@@ -126,7 +126,7 @@ export class OrderCreateComponent implements OnInit {
     this.orderItem.itemStatus = value;
   }
 
-  changeItemStatus(selectEvent: MatSelectChange<number>, orderItemSelected: OrderItem) {
+  changeItemStatus(selectEvent: MatSelectChange<string>, orderItemSelected: OrderItem) {
     const optionSelected = this.orderItemStatus.find(x => x.id === selectEvent.value);
     if (!optionSelected)
       return;

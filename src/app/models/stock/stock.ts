@@ -1,9 +1,7 @@
+import { BaseEntity } from "../base-entity";
 import { Product } from "../product/product";
 
-export class Stock {
-  id = 0;
+export class Stock extends BaseEntity {
   description = '';
-  createdDate = new Date();
-  updatedDate = new Date();
   stockProducts: Product[] = [];
 }

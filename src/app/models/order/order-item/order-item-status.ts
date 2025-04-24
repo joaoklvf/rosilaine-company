@@ -1,6 +1,5 @@
-export class OrderItemStatus {
-  id = 0;
+import { BaseEntity } from "../../base-entity";
+
+export class OrderItemStatus extends BaseEntity {
   description = '';
-  createdDate = new Date();
-  updatedDate = new Date();
 }

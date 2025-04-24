@@ -19,7 +19,7 @@ export class OrderComponent implements OnInit {
       .subscribe(orders => this.orders = orders);
   }
 
-  remove(id: number) {
+  remove(id: string) {
     alert('ainda não implementado')
   }
 
