@@ -53,7 +53,6 @@ export class ProductsComponent implements OnInit {
     if (product.id > 0) {
       this.productService.update(product)
         .subscribe(product => {
-          console.log(product, 'product')
           const customerIndex = this.products.findIndex(c => c.id === product.id);
           this.products[customerIndex] = product;
           this.product = new Product();

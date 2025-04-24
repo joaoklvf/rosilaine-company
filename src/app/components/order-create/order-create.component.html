@@ -49,7 +49,7 @@
               [data]="orderItemStatus"
               [creatable]="true"
               displayValue="description"
-              [value]="orderItem.status"
+              [value]="orderItem.itemStatus"
             ></app-custom-autocomplete>
           </div>
         </div>
@@ -59,7 +59,7 @@
           <div class="col-xl-5 col-md-6 mb-xl-0 mb-2">
             <app-input-mask
               [label]="'Preço (R$)'"
-              [value]="orderItem.itemPrice"
+              [value]="orderItem.itemSellingPrice"
               (handleOnChange)="setPrice($event)"
             >
             </app-input-mask>
@@ -100,8 +100,8 @@
         <tr *ngFor="let orderItem of order.orderItems; index as index">
           <td>{{ orderItem.product.description }}</td>
           <td>{{ orderItem.itemAmount }}</td>
-          <td>{{ getCurrencyValue(orderItem.itemPrice) }}</td>
-          <td>{{ getCurrencyValue(orderItem.itemTotal) }}</td>
+          <td>{{ getCurrencyValue(orderItem.itemSellingPrice) }}</td>
+          <td>{{ getCurrencyValue(orderItem.itemSellingTotal) }}</td>
           <td class="td-icons">
             <button
               type="button"

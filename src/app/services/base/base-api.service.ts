@@ -61,7 +61,6 @@ export class BaseApiService<T extends { id: number }> {
 
   /** POST: add a new data to the server */
   add(data: T): Observable<T> {
-    console.log(data, 'data');
     return this.http.post<T>(this.apiUrl, data).pipe(
       tap((newT: T) => this.log(`added data w/ id=${newT.id}`)),
       catchError(this.handleError<T>('addT'))

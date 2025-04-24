@@ -53,19 +53,15 @@ export class OrderCreateComponent implements OnInit {
   }
 
   add(): void {
-    // Desenvolvimento prévio até implementar preço de venda
-    const total = this.orderItem.itemPrice * this.orderItem.itemAmount;
-
-    const orderItem: OrderItem = {
-      ...this.orderItem,
-      itemTotal: total,
-      itemSellingPrice: total
-    };
-
-    if (!orderItem.product.description || orderItem.itemAmount <= 0)
+    const orderItem = { ...this.orderItem };
+    if (!orderItem.product.id || orderItem.itemAmount <= 0)
       return;
 
-    const orderItems = [...this.order.orderItems, orderItem];
+    const prevItems = [...this.order.orderItems];
+    const orderItems = orderItem.id
+      ? prevItems.map(item => item.id === orderItem.id ? { ...orderItem } : item)
+      : [...prevItems, orderItem];
+
     const order: Order = {
       ...this.order,
       orderItems: orderItems,
@@ -74,19 +70,17 @@ export class OrderCreateComponent implements OnInit {
     if (order.id > 0) {
       this.orderService.update(order)
         .subscribe(orderResponse => {
-          this.order = orderResponse;
           this.orderItem = new OrderItem();
-        });
-    } else {
-      this.orderService.add(order)
-        .subscribe(orderResponse => {
-          this.order = orderResponse;
-          this.orderItem = new OrderItem();
+          this.order = { ...orderResponse };
         });
     }
-
-    this.order.orderItems.push(orderItem);
-    this.orderItem = new OrderItem();
+    else {
+      this.orderService.add(order)
+        .subscribe(orderResponse => {
+          this.orderItem = new OrderItem();
+          this.order = { ...orderResponse };
+        });
+    }
   }
 
   remove(orderItem: OrderItem): void {
@@ -95,6 +89,7 @@ export class OrderCreateComponent implements OnInit {
 
   edit(orderItem: OrderItem): void {
     this.orderItem = { ...orderItem };
+    this.orderItem.itemStatus = orderItem.itemStatus;
   }
 
   update(orderItem: OrderItem, index: number): void {
@@ -105,7 +100,7 @@ export class OrderCreateComponent implements OnInit {
     getCurrencyStrBr(value);
 
   setPrice(value: number) {
-    this.orderItem.itemPrice = value;
+    this.orderItem.itemSellingPrice = value;
   }
 
   setOrderDate(value: Date) {
@@ -118,7 +113,7 @@ export class OrderCreateComponent implements OnInit {
 
   setProduct(value: Product) {
     this.orderItem.product = value;
-    this.orderItem.itemPrice = value.productPrice;
+    this.orderItem.itemSellingPrice = value.productPrice;
   }
 
   setOrderStatus(value: OrderStatus) {
@@ -126,6 +121,6 @@ export class OrderCreateComponent implements OnInit {
   }
 
   setOrderItemStatus(value: OrderItemStatus) {
-    this.orderItem.status = value;
+    this.orderItem.itemStatus = value;
   }
 }

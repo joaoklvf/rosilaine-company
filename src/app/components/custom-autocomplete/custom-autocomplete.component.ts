@@ -73,7 +73,6 @@ export class CustomAutocompleteComponent<T> implements OnChanges {
   }
 
   emitOnChange(value: T | string) {
-    console.log('value', value)
     const currentKey = this.displayValue();
 
     if (typeof value === "string") {
