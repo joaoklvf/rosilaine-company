@@ -7,7 +7,7 @@
           <th scope="col">Cliente</th>
           <th scope="col">Data do pedido</th>
           <th scope="col">Status</th>
-          <th scope="col">Ações</th>
+          <th scope="col" class="text-center">Ações</th>
         </tr>
       </thead>
       <tbody>
@@ -15,7 +15,7 @@
           <td>{{ order.customer.name }}</td>
           <td>{{ getBrDate(order.orderDate) }}</td>
           <td>{{ order.status.description }}</td>
-          <td class="td-icons">
+          <td class="td-icons text-center">
             <button
               type="button"
               class="btn btn-outline-danger me-2"

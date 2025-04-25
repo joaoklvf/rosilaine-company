@@ -1,4 +1,14 @@
 <h1>{{ title }}</h1>
+<div class="card mb-3" *ngIf="order.orderItems.length > 0">
+  <div class="card-body">
+    <div class="d-flex justify-content-between">
+      <label>Total do pedido</label>
+      <div class="fs-6 fw-medium" style="color: limegreen">
+        {{ orderTotal }}
+      </div>
+    </div>
+  </div>
+</div>
 <div class="card mb-3">
   <div class="card-body">
     <div class="row">
@@ -83,8 +93,7 @@
     </div>
   </div>
 </div>
-
-<div class="card" *ngIf="order.orderItems.length > 0">
+<div class="card mb-3" *ngIf="order.orderItems.length > 0">
   <div class="card-body table-responsive">
     <table class="table">
       <thead>
@@ -95,7 +104,7 @@
           <th scope="col">Quantidade</th>
           <th scope="col">Preço</th>
           <th scope="col">Total</th>
-          <th scope="col">Ações</th>
+          <th scope="col" class="text-center">Ações</th>
         </tr>
       </thead>
       <tbody>
@@ -120,7 +129,7 @@
           <td>{{ orderItem.itemAmount }}</td>
           <td>{{ getCurrencyValue(orderItem.itemSellingPrice) }}</td>
           <td>{{ getCurrencyValue(orderItem.itemSellingTotal) }}</td>
-          <td class="td-icons">
+          <td class="td-icons text-center">
             <button
               type="button"
               class="btn btn-outline-danger me-2"

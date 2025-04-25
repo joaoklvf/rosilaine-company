@@ -24,6 +24,7 @@ import { OrderItemService } from 'src/app/services/order/order-item/order-item.s
 export class OrderCreateComponent implements OnInit {
   order = new Order();
   orderItem = new OrderItem();
+  orderTotal = '';
 
   customers: Customer[] = [];
   products: Product[] = [];
@@ -36,7 +37,9 @@ export class OrderCreateComponent implements OnInit {
     const id = this.route.snapshot.paramMap.get('id')!;
     if (id) {
       this.orderService.getById(id)
-        .subscribe(order => this.order = { ...order });
+        .subscribe(order => {
+          this.updateOrder(order);
+        });
 
       this.title = 'Editar pedido';
     }
@@ -72,15 +75,13 @@ export class OrderCreateComponent implements OnInit {
     if (order.id) {
       this.orderService.update(order)
         .subscribe(orderResponse => {
-          this.orderItem = new OrderItem();
-          this.order = { ...orderResponse };
+          this.updateOrder(orderResponse);
         });
     }
     else {
       this.orderService.add(order)
         .subscribe(orderResponse => {
-          this.orderItem = new OrderItem();
-          this.order = { ...orderResponse };
+          this.updateOrder(orderResponse);
         });
     }
   }
@@ -156,5 +157,11 @@ export class OrderCreateComponent implements OnInit {
 
   getBrDate(value: Date | null) {
     return value && getDateStrBr(value);
+  }
+
+  updateOrder(order: Order) {
+    this.orderItem = new OrderItem();
+    this.order = { ...order };
+    this.orderTotal = getCurrencyStrBr(order.orderItems.reduce((prev, acc) => prev + Number(acc.itemSellingTotal), 0));
   }
 }
