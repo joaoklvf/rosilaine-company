@@ -104,7 +104,10 @@
           <td>
             <mat-form-field>
               <mat-label>Status</mat-label>
-              <mat-select (selectionChange)="changeItemStatus($event, orderItem)" [(value)]="orderItem.itemStatus.id">
+              <mat-select
+                (selectionChange)="changeItemStatus($event, orderItem)"
+                [(value)]="orderItem.itemStatus.id"
+              >
                 @for (status of orderItemStatus; track status) {
                 <mat-option [value]="status.id">{{
                   status.description
@@ -113,7 +116,7 @@
               </mat-select>
             </mat-form-field>
           </td>
-          <td>{{ orderItem.deliveryDate }}</td>
+          <td>{{ getBrDate(orderItem.deliveryDate) }}</td>
           <td>{{ orderItem.itemAmount }}</td>
           <td>{{ getCurrencyValue(orderItem.itemSellingPrice) }}</td>
           <td>{{ getCurrencyValue(orderItem.itemSellingTotal) }}</td>
@@ -128,11 +131,19 @@
             </button>
             <button
               type="button"
-              class="btn btn-outline-success"
+              class="btn btn-outline-success me-2"
               title="Editar produto"
               (click)="edit(orderItem)"
             >
               <mat-icon fontIcon="edit" />
+            </button>
+            <button
+              type="button"
+              class="btn btn-outline-primary"
+              title="Marcar como entregue"
+              (click)="deliveryItem(orderItem)"
+            >
+              <mat-icon fontIcon="local_shipping" />
             </button>
           </td>
         </tr>

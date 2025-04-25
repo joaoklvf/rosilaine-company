@@ -1,9 +1,11 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { ProductCategory } from 'src/app/models/product/product-category';
 import { ProductService } from 'src/app/services/product/product.service';
 import { Product } from 'src/app/models/product/product';
 import { getCurrencyStrBr } from 'src/app/utils/text-format';
 import { ProductCategoryService } from 'src/app/services/product/product-category/product-category.service';
+import { CustomDialogComponent } from '../custom-dialog/custom-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-products',
@@ -20,6 +22,7 @@ export class ProductsComponent implements OnInit {
   @ViewChild("productDescription") productDescriptionField: ElementRef = new ElementRef(null);
 
   constructor(private productService: ProductService, private productCategoryService: ProductCategoryService) { }
+  readonly dialog = inject(MatDialog);
 
   ngOnInit() {
     this.productCategoryService.get()
@@ -74,4 +77,26 @@ export class ProductsComponent implements OnInit {
 
   getCurrencyValue = (value: number) =>
     getCurrencyStrBr(value);
+
+  deleteProduct(product: Product) {
+    this.productService.update({ ...product, isDeleted: true })
+      .subscribe(productUpdated => {
+        if (!productUpdated)
+          return;
+
+        const products = this.products.filter(x => x.id !== product.id);
+        this.products = [...products];
+      });
+  }
+
+  openDialog(product: Product): void {
+    this.dialog.open(CustomDialogComponent, {
+      width: '500px',
+      data: {
+        title: "Deletar produto",
+        content: `Deseja deletar o produto ${product.description}?`,
+        onConfirmAction: () => this.deleteProduct(product)
+      }
+    });
+  }
 }

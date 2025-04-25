@@ -9,7 +9,7 @@ import { OrderStatusService } from '../../services/order/order-status/order-stat
 import { OrderService } from '../../services/order/order.service';
 import { ProductService } from '../../services/product/product.service';
 import { ActivatedRoute } from '@angular/router';
-import { getCurrencyStrBr } from 'src/app/utils/text-format';
+import { getCurrencyStrBr, getDateStrBr } from 'src/app/utils/text-format';
 import { OrderItemStatus } from 'src/app/models/order/order-item/order-item-status';
 import { OrderItemStatusService } from 'src/app/services/order/order-item-status/order-item-status.service';
 import { MatSelectChange } from '@angular/material/select';
@@ -140,5 +140,21 @@ export class OrderCreateComponent implements OnInit {
 
       this.order.orderItems = orderItems;
     })
+  }
+
+  deliveryItem(orderItem: OrderItem) {
+    const orderItemChanged = { ...orderItem, deliveryDate: new Date() };
+    this.orderItemService.update(orderItemChanged).subscribe(orderItem => {
+      const prevItems = [...this.order.orderItems];
+      const orderItems = orderItem.id
+        ? prevItems.map(item => item.id === orderItem.id ? { ...orderItem } : item)
+        : [...prevItems, orderItem];
+
+      this.order.orderItems = orderItems;
+    })
+  }
+
+  getBrDate(value: Date | null) {
+    return value && getDateStrBr(value);
   }
 }

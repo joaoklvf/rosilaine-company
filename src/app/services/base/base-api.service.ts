@@ -3,6 +3,7 @@ import { Inject, Injectable } from '@angular/core';
 import { Observable, tap, catchError, map, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { MessageService } from '../message/message.service';
+import { DeleteResult } from './delete-result';
 
 @Injectable({
   providedIn: 'root'
@@ -68,12 +69,12 @@ export class BaseApiService<T extends { id?: string }> {
   }
 
   /** DELETE: delete the data from the server */
-  delete(id: string): Observable<T> {
+  delete(id: string): Observable<DeleteResult> {
     const url = `${this.apiUrl}/${id}`;
 
-    return this.http.delete<T>(url).pipe(
+    return this.http.delete<DeleteResult>(url).pipe(
       tap(_ => this.log(`deleted data id=${id}`)),
-      catchError(this.handleError<T>('deleteT'))
+      catchError(this.handleError<DeleteResult>('deleteT'))
     );
   }
 
