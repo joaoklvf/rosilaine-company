@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Customer } from '../../models/customer/customer';
 import { Order } from '../../models/order/order';
 import { OrderItem } from '../../models/order/order-item/order-item';
@@ -14,6 +14,8 @@ import { OrderItemStatus } from 'src/app/models/order/order-item/order-item-stat
 import { OrderItemStatusService } from 'src/app/services/order/order-item-status/order-item-status.service';
 import { MatSelectChange } from '@angular/material/select';
 import { OrderItemService } from 'src/app/services/order/order-item/order-item.service';
+import { MatDialog } from '@angular/material/dialog';
+import { InstallmentManagementComponent } from './installment-management/installment-management.component';
 
 @Component({
   selector: 'app-order-create',
@@ -30,7 +32,9 @@ export class OrderCreateComponent implements OnInit {
   products: Product[] = [];
   orderStatus: OrderStatus[] = [];
   orderItemStatus: OrderItemStatus[] = [];
-  title = 'Cadastrar pedido'
+  title = 'Cadastrar pedido';
+  readonly dialog = inject(MatDialog);
+
   constructor(private orderService: OrderService, private customerService: CustomerService, private productService: ProductService, private orderStatusService: OrderStatusService, private route: ActivatedRoute, private orderItemStatusService: OrderItemStatusService, private orderItemService: OrderItemService) { }
 
   ngOnInit() {
@@ -110,6 +114,10 @@ export class OrderCreateComponent implements OnInit {
     this.order.orderDate = value;
   }
 
+  setFirstInstallmentDate(value: Date) {
+    this.order.orderDate = value;
+  }
+
   setCustomer(value: Customer) {
     this.order.customer = value;
   }
@@ -163,5 +171,16 @@ export class OrderCreateComponent implements OnInit {
     this.orderItem = new OrderItem();
     this.order = { ...order };
     this.orderTotal = getCurrencyStrBr(order.orderItems.reduce((prev, acc) => prev + Number(acc.itemSellingTotal), 0));
+  }
+
+  installmentsManagement() {
+    this.dialog.open(InstallmentManagementComponent, {
+      width: '500px',
+      data: {
+        title: "Deletar pedido",
+        content: `Deseja deletar o pedido?`,
+        onConfirmAction: () => alert('opcional')
+      }
+    });
   }
 }

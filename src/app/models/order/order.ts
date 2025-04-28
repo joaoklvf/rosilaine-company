@@ -10,6 +10,7 @@ export class Order extends BaseEntity {
   customer = new Customer();
   status = new OrderStatus();
   deliveryDate: Date | null = null;
+  firstInstallmentDate: Date | null = null;
   orderItems: OrderItem[] = [];
   installments: OrderInstallment[] = [];
 }
