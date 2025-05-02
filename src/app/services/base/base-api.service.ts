@@ -79,10 +79,10 @@ export class BaseApiService<T extends { id?: string }> {
   }
 
   /** PUT: update the data on the server */
-  update(data: T): Observable<any> {
-    return this.http.put(`${this.apiUrl}/${data.id}`, data).pipe(
+  update(data: T): Observable<T> {
+    return this.http.put<T>(`${this.apiUrl}/${data.id}`, data).pipe(
       tap(_ => this.log(`updated data id=${data.id}`)),
-      catchError(this.handleError<any>('updateT'))
+      catchError(this.handleError<T>('updateT'))
     );
   }
 

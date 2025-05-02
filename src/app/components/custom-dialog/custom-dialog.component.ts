@@ -13,6 +13,7 @@ export interface CustomDialogComponentProps {
   title: string
   content: string | Node
   onConfirmAction: () => void;
+  onCancelAction?: () => void;
   cancelButtonTitle?: string;
   confirmButtonTitle?: string;
 }
@@ -29,4 +30,8 @@ export class CustomDialogComponent {
   readonly dialogRef = inject(MatDialogRef<CustomDialogComponent>);
   readonly cancelButtonTitle = this.data.cancelButtonTitle ?? "Cancelar";
   readonly confirmButtonTitle = this.data.confirmButtonTitle ?? "Confirmar";
+
+  onCancelAction(){
+    this.onCancelAction && this.onCancelAction();
+  }
 }

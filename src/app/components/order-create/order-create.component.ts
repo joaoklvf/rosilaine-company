@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, EventEmitter, inject, OnInit } from '@angular/core';
 import { Customer } from '../../models/customer/customer';
 import { Order } from '../../models/order/order';
 import { OrderItem } from '../../models/order/order-item/order-item';
@@ -8,7 +8,7 @@ import { CustomerService } from '../../services/customer/customer.service';
 import { OrderStatusService } from '../../services/order/order-status/order-status.service';
 import { OrderService } from '../../services/order/order.service';
 import { ProductService } from '../../services/product/product.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { getCurrencyStrBr, getDateStrBr } from 'src/app/utils/text-format';
 import { OrderItemStatus } from 'src/app/models/order/order-item/order-item-status';
 import { OrderItemStatusService } from 'src/app/services/order/order-item-status/order-item-status.service';
@@ -16,6 +16,8 @@ import { MatSelectChange } from '@angular/material/select';
 import { OrderItemService } from 'src/app/services/order/order-item/order-item.service';
 import { MatDialog } from '@angular/material/dialog';
 import { InstallmentManagementComponent } from './installment-management/installment-management.component';
+import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
+import { CustomDialogComponent } from '../custom-dialog/custom-dialog.component';
 
 @Component({
   selector: 'app-order-create',
@@ -27,22 +29,27 @@ export class OrderCreateComponent implements OnInit {
   order = new Order();
   orderItem = new OrderItem();
   orderTotal = '';
-
   customers: Customer[] = [];
   products: Product[] = [];
   orderStatus: OrderStatus[] = [];
   orderItemStatus: OrderItemStatus[] = [];
   title = 'Cadastrar pedido';
+  installmentsAmount = 0;
   readonly dialog = inject(MatDialog);
 
-  constructor(private orderService: OrderService, private customerService: CustomerService, private productService: ProductService, private orderStatusService: OrderStatusService, private route: ActivatedRoute, private orderItemStatusService: OrderItemStatusService, private orderItemService: OrderItemService) { }
+  constructor(private orderService: OrderService, private customerService: CustomerService, private productService: ProductService, private orderStatusService: OrderStatusService, private route: ActivatedRoute, private orderItemStatusService: OrderItemStatusService, private orderItemService: OrderItemService, private snackBarService: SnackBarService, private router: Router) { }
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id')!;
     if (id) {
       this.orderService.getById(id)
         .subscribe(order => {
+          if (!order) {
+            this.snackBarService.error('Pedido não encontrado');
+            this.router.navigate(['orders']);
+          }
           this.updateOrder(order);
+          this.installmentsAmount = order.installments?.length ?? 0;
         });
 
       this.title = 'Editar pedido';
@@ -182,5 +189,31 @@ export class OrderCreateComponent implements OnInit {
         onConfirmAction: () => alert('opcional')
       }
     });
+  }
+
+  public generateInstallmentsAndSaveOrder(amount: number) {
+    const orderWithInstallments = { ...this.orderService.generateInstallments(this.order, amount) };
+    this.orderService.update(orderWithInstallments).subscribe(order => {
+      this.snackBarService.success(`Parcelas geradas com sucesso!`);
+      this.order = { ...order };
+      this.installmentsAmount = order.installments!.length;
+    });
+  }
+
+  changeInstallments(event: MatSelectChange<number>) {
+    if (this.order.installments?.length) {
+      this.dialog.open(CustomDialogComponent, {
+        width: '250px',
+        data: {
+          title: "Refazer parcelas",
+          content: `Deseja refazer as parcelas?`,
+          onConfirmAction: () => this.generateInstallmentsAndSaveOrder(event.value),
+          onCancelAction: () => this.installmentsAmount = this.order.installments!.length
+        }
+      });
+      return;
+    }
+
+    this.generateInstallmentsAndSaveOrder(event.value);
   }
 }

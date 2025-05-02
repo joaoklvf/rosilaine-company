@@ -4,11 +4,11 @@
   }
 
   .snackbar-error {
-    background-color: red;
-  } 
+    --mdc-snackbar-container-color: red;
+  }
 
   .snackbar-info {
-    background-color: blue;
+    --mdc-snackbar-container-color: blue;
   }
 }
 

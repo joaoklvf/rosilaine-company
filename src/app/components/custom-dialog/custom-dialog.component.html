@@ -1,7 +1,7 @@
 <h2 mat-dialog-title>{{ data.title }}</h2>
 <mat-dialog-content class="text-dark">{{ data.content }}</mat-dialog-content>
 <mat-dialog-actions class="justify-content-between">
-  <button mat-dialog-close class="btn btn-danger">{{ cancelButtonTitle }}</button>
+  <button mat-dialog-close class="btn btn-danger" (click)="onCancelAction()">{{ cancelButtonTitle }}</button>
   <button
     mat-dialog-close
     cdkFocusInitial

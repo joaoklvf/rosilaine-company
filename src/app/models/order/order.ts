@@ -12,5 +12,5 @@ export class Order extends BaseEntity {
   deliveryDate: Date | null = null;
   firstInstallmentDate: Date | null = null;
   orderItems: OrderItem[] = [];
-  installments: OrderInstallment[] = [];
+  installments?: OrderInstallment[];
 }
