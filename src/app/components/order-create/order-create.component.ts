@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Customer } from '../../models/customer/customer';
 import { Order } from '../../models/order/order';
 import { OrderItem } from '../../models/order/order-item/order-item';
@@ -18,6 +18,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { InstallmentManagementComponent } from './installment-management/installment-management.component';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 import { CustomDialogComponent } from '../custom-dialog/custom-dialog.component';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-order-create',
@@ -34,7 +35,7 @@ export class OrderCreateComponent implements OnInit {
   orderStatus: OrderStatus[] = [];
   orderItemStatus: OrderItemStatus[] = [];
   title = 'Cadastrar pedido';
-  installmentsAmount = 0;
+  myControl = new FormControl(0);
   readonly dialog = inject(MatDialog);
 
   constructor(private orderService: OrderService, private customerService: CustomerService, private productService: ProductService, private orderStatusService: OrderStatusService, private route: ActivatedRoute, private orderItemStatusService: OrderItemStatusService, private orderItemService: OrderItemService, private snackBarService: SnackBarService, private router: Router) { }
@@ -49,7 +50,7 @@ export class OrderCreateComponent implements OnInit {
             this.router.navigate(['orders']);
           }
           this.updateOrder(order);
-          this.installmentsAmount = order.installments?.length ?? 0;
+          this.myControl.setValue(order.installments?.length ?? 0);
         });
 
       this.title = 'Editar pedido';
@@ -196,7 +197,7 @@ export class OrderCreateComponent implements OnInit {
     this.orderService.update(orderWithInstallments).subscribe(order => {
       this.snackBarService.success(`Parcelas geradas com sucesso!`);
       this.order = { ...order };
-      this.installmentsAmount = order.installments!.length;
+      this.myControl.setValue(order.installments!.length);
     });
   }
 
@@ -208,7 +209,7 @@ export class OrderCreateComponent implements OnInit {
           title: "Refazer parcelas",
           content: `Deseja refazer as parcelas?`,
           onConfirmAction: () => this.generateInstallmentsAndSaveOrder(event.value),
-          onCancelAction: () => this.installmentsAmount = this.order.installments!.length
+          onCancelAction: () => this.myControl.setValue(this.order.installments!.length)
         }
       });
       return;

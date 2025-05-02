@@ -31,7 +31,7 @@ export class CustomDialogComponent {
   readonly cancelButtonTitle = this.data.cancelButtonTitle ?? "Cancelar";
   readonly confirmButtonTitle = this.data.confirmButtonTitle ?? "Confirmar";
 
-  onCancelAction(){
-    this.onCancelAction && this.onCancelAction();
+  onCancelButtonClick() {
+    this.data.onCancelAction && this.data.onCancelAction();
   }
 }
