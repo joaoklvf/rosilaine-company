@@ -1,14 +1,16 @@
 import { Component, Input, input, OnChanges, output } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
+import { AsyncPipe } from '@angular/common';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-custom-autocomplete',
   templateUrl: './custom-autocomplete.component.html',
   styleUrls: ['./custom-autocomplete.component.scss'],
-  standalone: false
+  imports: [MatAutocompleteModule, ReactiveFormsModule, AsyncPipe, MatInputModule]
 })
 
 export class CustomAutocompleteComponent<T> implements OnChanges {
@@ -17,13 +19,13 @@ export class CustomAutocompleteComponent<T> implements OnChanges {
   readonly data = input.required<T[]>();
   readonly creatable = input(false);
   readonly handleOnChange = output<T>();
-  @Input() value: T | null = null;
+  readonly value = input<T | null>(null);
 
   myControl = new FormControl<T | null>(null);
   filteredData: Observable<T[]> = new Observable<T[]>();
 
   ngOnChanges() {
-    this.myControl.setValue(this.value, { emitEvent: false });
+    this.myControl.setValue(this.value(), { emitEvent: false });
 
     this.filteredData = this.myControl.valueChanges.pipe(
       startWith(''),

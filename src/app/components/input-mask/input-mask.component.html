@@ -1,4 +1,4 @@
 <div>
-  <label>{{label}}</label>
+  <label *ngIf="label" >{{ label }}</label>
   <input class="form-control" [(ngModel)]="displayValue" (change)="update()" />
 </div>

@@ -1,5 +1,6 @@
 <h1>{{ title }}</h1>
-<div class="card mb-3" *ngIf="order.orderItems.length > 0">
+@if(order.orderItems.length > 0){
+<div class="card mb-3">
   <div class="card-body">
     <div class="d-flex gap-2">
       <div>
@@ -9,7 +10,10 @@
         </div>
       </div>
       <div>
-        <app-installments-select [order]="order" (saveOrderAction)="saveOrder($event)"/>
+        <app-installments-select
+          [order]="order"
+          (saveOrderAction)="saveOrder($event)"
+        />
       </div>
       <div>
         <label for="first-installment-date">Data da primeira parcela</label>
@@ -36,6 +40,7 @@
     </div>
   </div>
 </div>
+}
 <div class="card mb-3">
   <div class="card-body">
     <div class="row">
@@ -120,7 +125,9 @@
     </div>
   </div>
 </div>
-<div class="card mb-3" *ngIf="order.orderItems.length > 0">
+
+@if (order.orderItems.length > 0) {
+<div class="card mb-3">
   <div class="card-body table-responsive">
     <table class="table">
       <thead>
@@ -135,7 +142,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let orderItem of order.orderItems; index as index">
+        @for(orderItem of order.orderItems; track orderItem){
+        <tr>
           <td>{{ orderItem.product.description }}</td>
           <td>
             <mat-form-field>
@@ -145,9 +153,9 @@
                 [(value)]="orderItem.itemStatus.id"
               >
                 @for (status of orderItemStatus; track status) {
-                <mat-option [value]="status.id">{{
-                  status.description
-                }}</mat-option>
+                <mat-option [value]="status.id">
+                  {{ status.description }}
+                </mat-option>
                 }
               </mat-select>
             </mat-form-field>
@@ -183,7 +191,9 @@
             </button>
           </td>
         </tr>
+        }
       </tbody>
     </table>
   </div>
 </div>
+}

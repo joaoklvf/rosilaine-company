@@ -1,22 +1,21 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { provideNgxMask } from 'ngx-mask';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { Customer } from 'src/app/models/customer/customer';
 import { CustomerTag } from 'src/app/models/customer/customer-tag';
 import { CustomerTagService } from 'src/app/services/customer/customer-tag/customer-tag.service';
 import { CustomerService } from 'src/app/services/customer/customer.service';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 import { ViaCepService } from 'src/app/services/via-cep/via-cep.service';
+import { CustomChipsAutocompleteComponent } from '../custom-chips-autocomplete/custom-chips-autocomplete.component';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-customer-create',
   templateUrl: './customer-create.component.html',
   styleUrl: './customer-create.component.scss',
-  providers: [
-    provideNgxMask(),
-  ],
-  standalone: false
+  imports: [FormsModule, NgxMaskDirective, ReactiveFormsModule, CustomChipsAutocompleteComponent, MatInputModule]
 })
 
 export class CustomerCreateComponent implements OnInit {

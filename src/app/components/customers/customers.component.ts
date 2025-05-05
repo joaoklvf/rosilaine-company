@@ -1,4 +1,3 @@
-import { NgFor, NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
@@ -10,7 +9,7 @@ import { getDateStrBr } from 'src/app/utils/text-format';
   selector: 'app-customers',
   templateUrl: './customers.component.html',
   styleUrls: ['./customers.component.scss'],
-  imports: [MatIconModule, NgFor, RouterModule, NgIf]
+  imports: [MatIconModule, RouterModule]
 })
 
 export class CustomersComponent implements OnInit {

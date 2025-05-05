@@ -4,12 +4,14 @@ import { OrderService } from 'src/app/services/order/order.service';
 import { getDateStrBr } from 'src/app/utils/text-format';
 import { CustomDialogComponent } from '../custom-dialog/custom-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-order',
   templateUrl: './order.component.html',
   styleUrls: ['./order.component.scss'],
-  standalone: false
+  imports: [MatIconModule, RouterModule]
 })
 export class OrderComponent implements OnInit {
   orders: Order[] = [];

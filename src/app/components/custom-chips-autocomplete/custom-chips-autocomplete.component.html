@@ -1,7 +1,7 @@
 <mat-form-field class="w-100">
   <mat-label>{{ label() }}</mat-label>
   <mat-chip-grid #chipGrid aria-label="Escolher opção">
-    @for (item of selectedOptions(); track $index) {
+    @for (item of selectedOptions(); track item) {
     <mat-chip-row (removed)="remove(item)">
       {{ item }}
       <button matChipRemove [attr.aria-label]="'remove ' + item">
@@ -24,8 +24,8 @@
     #auto="matAutocomplete"
     (optionSelected)="selected($event); autoInput.value = ''"
   >
-    <mat-option *ngFor="let item of filteredData()" [value]="item"
-      >{{ item }}
-    </mat-option>
+    @for (item of filteredData(); track item) {
+    <mat-option [value]="item">{{ item }}</mat-option>
+    }
   </mat-autocomplete>
 </mat-form-field>

@@ -1,16 +1,21 @@
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject, input, model, OnChanges, output, signal } from '@angular/core';
-import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { MatChipInputEvent } from '@angular/material/chips';
+import { FormsModule } from '@angular/forms';
+import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-custom-chips-autocomplete',
   templateUrl: './custom-chips-autocomplete.component.html',
   styleUrl: './custom-chips-autocomplete.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+  imports: [MatFormFieldModule, MatChipsModule, FormsModule, MatAutocompleteModule, MatIconModule]
 })
+
 export class CustomChipsAutocompleteComponent<T> implements OnChanges {
   readonly displayValue = input.required<keyof T>();
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];

@@ -6,12 +6,16 @@ import { getCurrencyStrBr } from 'src/app/utils/text-format';
 import { ProductCategoryService } from 'src/app/services/product/product-category/product-category.service';
 import { CustomDialogComponent } from '../custom-dialog/custom-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { InputMaskComponent } from '../input-mask/input-mask.component';
+import { CustomAutocompleteComponent } from '../custom-autocomplete/custom-autocomplete.component';
+import { FormsModule } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-products',
   templateUrl: './products.component.html',
-  standalone: false,
-  styleUrl: './products.component.scss'
+  styleUrl: './products.component.scss',
+  imports: [InputMaskComponent, CustomAutocompleteComponent, FormsModule, MatIconModule]
 })
 
 export class ProductsComponent implements OnInit {

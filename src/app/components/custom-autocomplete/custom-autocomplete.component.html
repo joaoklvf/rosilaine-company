@@ -9,12 +9,15 @@
     class="form-control"
     (blur)="onBlur()"
   />
-  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="update($event)">
-    <mat-option
-      *ngFor="let item of filteredData | async"
-      [value]="item"
-    >
+  <mat-autocomplete
+    #auto="matAutocomplete"
+    [displayWith]="displayFn"
+    (optionSelected)="update($event)"
+  >
+    @for (item of filteredData | async; track item) {
+    <mat-option [value]="item">
       {{ item[displayValue()] }}
     </mat-option>
+    }
   </mat-autocomplete>
 </form>

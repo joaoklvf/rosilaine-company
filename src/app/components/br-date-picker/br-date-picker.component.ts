@@ -1,7 +1,10 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
-import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { MatDatepickerInputEvent, MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { Moment } from 'moment';
 
 export const MY_FORMATS = {
@@ -28,7 +31,7 @@ export const MY_FORMATS = {
         },
         { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
     ],
-    standalone: false
+    imports: [MatDatepickerModule, MatFormFieldModule, FormsModule, MatInputModule]
 })
 export class BrDatePickerComponent {
   @Input() label = '';

@@ -1,5 +1,6 @@
 <h1>Pedidos</h1>
-<div class="card mt-3" *ngIf="orders.length > 0">
+@if(orders.length > 0){
+<div class="card mt-3">
   <div class="card-body table-responsive">
     <table class="table">
       <thead>
@@ -11,7 +12,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let order of orders; index as index">
+        @for (order of orders; track order){
+        <tr>
           <td>{{ order.customer.name }}</td>
           <td>{{ getBrDate(order.orderDate) }}</td>
           <td>{{ order.status.description }}</td>
@@ -28,13 +30,15 @@
               type="button"
               class="btn btn-outline-success"
               title="Editar produto"
-              routerLink="/order/{{order.id}}"
+              routerLink="/order/{{ order.id }}"
             >
               <mat-icon fontIcon="edit" />
             </button>
           </td>
         </tr>
+        }
       </tbody>
     </table>
   </div>
 </div>
+}

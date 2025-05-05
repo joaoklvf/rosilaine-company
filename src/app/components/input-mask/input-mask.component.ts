@@ -1,11 +1,13 @@
+import { NgIf } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { getCurrencyStrBr } from 'src/app/utils/text-format';
 
 @Component({
     selector: 'app-input-mask',
     templateUrl: './input-mask.component.html',
     styleUrls: ['./input-mask.component.scss'],
-    standalone: false
+    imports: [FormsModule, NgIf]
 })
 export class InputMaskComponent {
   @Input() label = '';
