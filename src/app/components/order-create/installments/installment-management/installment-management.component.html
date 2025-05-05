@@ -6,29 +6,48 @@
       (saveOrderAction)="data.saveOrder($event)"
     />
   </div>
-</mat-dialog-content>
-<div class="card mt-3">
-  <div class="card-body table-responsive">
-    <table class="table">
-      <thead>
-        <tr>
-          <th scope="col">Data</th>
-          <th scope="col">Valor</th>
-          <th scope="col">Data de pagamento</th>
-          <th scope="col">Valor pago</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let installment of data.order.installments; index as index">
-          <td>{{ getBrDate(installment.debitDate) }}</td>
-          <td>{{ getCurrencyValue(installment.amount) }}</td>
-          <td>{{ getBrDate(installment.paymentDate) }}</td>
-          <td>{{ getCurrencyValue(installment.amountPaid) }}</td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="card mt-3">
+    <div class="card-body table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Data</th>
+            <th scope="col">Valor</th>
+            <th scope="col">Data de pagamento</th>
+            <th scope="col">Valor pago</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (installment of data.order.installments; track installment) {
+          <tr>
+            <td>{{ getBrDate(installment.debitDate) }}</td>
+            <td>{{ getCurrencyValue(installment.amount) }}</td>
+            <td>
+              <input
+                class="form-control"
+                id="first-installment-date"
+                placeholder="dd/mm/aaaa"
+                name="birth-date"
+                mask="00/00/0000"
+                matInput
+                [dropSpecialCharacters]="false"
+                [(ngModel)]="installment.paymentDate"
+              />
+            </td>
+            <td>
+              <app-input-mask
+                [value]="installment.amountPaid || 0"
+                (handleOnChange)="setInstallmentAmountPaid($event, installment)"
+              >
+              </app-input-mask>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
   </div>
-</div>
+</mat-dialog-content>
 <mat-dialog-actions class="justify-content-between">
   <button mat-dialog-close class="btn btn-danger">Cancelar</button>
   <button mat-dialog-close cdkFocusInitial class="btn btn-success">

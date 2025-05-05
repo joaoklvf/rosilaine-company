@@ -5,6 +5,8 @@ import { Order } from 'src/app/models/order/order';
 import { getCurrencyStrBr, getDateStrBr } from 'src/app/utils/text-format';
 import { InputMaskComponent } from 'src/app/components/input-mask/input-mask.component';
 import { OrderInstallment } from 'src/app/models/order/order-installment';
+import { FormsModule } from '@angular/forms';
+import { NgxMaskDirective } from 'ngx-mask';
 
 interface ModalProps {
   order: Order;
@@ -13,7 +15,7 @@ interface ModalProps {
 
 @Component({
   selector: 'app-installment-management',
-  imports: [MatDialogActions, MatDialogClose, MatDialogTitle, MatDialogContent, InstallmentsSelectComponent, InputMaskComponent],
+  imports: [MatDialogActions, MatDialogClose, MatDialogTitle, MatDialogContent, InstallmentsSelectComponent, InputMaskComponent, FormsModule, NgxMaskDirective],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './installment-management.component.html',
   styleUrl: './installment-management.component.scss'
@@ -28,7 +30,7 @@ export class InstallmentManagementComponent {
   getCurrencyValue = (value: number | null) =>
     value && getCurrencyStrBr(value);
 
-  setInstallmentAmountPaid(value: number, installment: OrderInstallment){
+  setInstallmentAmountPaid(value: number, installment: OrderInstallment) {
     installment.amountPaid = value;
   }
 }
