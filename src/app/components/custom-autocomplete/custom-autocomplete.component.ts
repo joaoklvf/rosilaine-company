@@ -1,7 +1,6 @@
 import { Component, Input, input, OnChanges, output } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { MatOptionSelectionChange } from '@angular/material/core';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 

@@ -30,6 +30,7 @@ import { CustomerCreateComponent } from './components/customer-create/customer-c
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 import { CustomChipsAutocompleteComponent } from "./components/custom-chips-autocomplete/custom-chips-autocomplete.component";
 import { MatChipsModule } from '@angular/material/chips';
+import { InstallmentsSelectComponent } from "./components/order-create/installments/installments-select/installments-select.component";
 
 @NgModule({
     declarations: [
@@ -49,23 +50,24 @@ import { MatChipsModule } from '@angular/material/chips';
         AppComponent
     ],
     imports: [
-        BrowserModule,
-        FormsModule,
-        AppRoutingModule,
-        MatSlideToggleModule,
-        MatIconModule,
-        MatDatepickerModule,
-        MatFormFieldModule,
-        MatNativeDateModule,
-        MatInputModule,
-        BrowserAnimationsModule,
-        MatAutocompleteModule,
-        ReactiveFormsModule,
-        NgxMaskDirective,
-        NgxMaskPipe,
-        MatSelectModule,
-        MatChipsModule
-    ],
+    BrowserModule,
+    FormsModule,
+    AppRoutingModule,
+    MatSlideToggleModule,
+    MatIconModule,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    MatNativeDateModule,
+    MatInputModule,
+    BrowserAnimationsModule,
+    MatAutocompleteModule,
+    ReactiveFormsModule,
+    NgxMaskDirective,
+    NgxMaskPipe,
+    MatSelectModule,
+    MatChipsModule,
+    InstallmentsSelectComponent
+],
     providers: [
         provideEnvironmentNgxMask(),
         provideHttpClient(withInterceptorsFromDi()),

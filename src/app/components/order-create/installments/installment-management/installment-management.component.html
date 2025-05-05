@@ -1,0 +1,37 @@
+<h2 mat-dialog-title>Parcelas</h2>
+<mat-dialog-content class="text-dark">
+  <div>
+    <app-installments-select
+      [order]="data.order"
+      (saveOrderAction)="data.saveOrder($event)"
+    />
+  </div>
+</mat-dialog-content>
+<div class="card mt-3">
+  <div class="card-body table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Data</th>
+          <th scope="col">Valor</th>
+          <th scope="col">Data de pagamento</th>
+          <th scope="col">Valor pago</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let installment of data.order.installments; index as index">
+          <td>{{ getBrDate(installment.debitDate) }}</td>
+          <td>{{ getCurrencyValue(installment.amount) }}</td>
+          <td>{{ getBrDate(installment.paymentDate) }}</td>
+          <td>{{ getCurrencyValue(installment.amountPaid) }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<mat-dialog-actions class="justify-content-between">
+  <button mat-dialog-close class="btn btn-danger">Cancelar</button>
+  <button mat-dialog-close cdkFocusInitial class="btn btn-success">
+    Confirmar
+  </button>
+</mat-dialog-actions>
