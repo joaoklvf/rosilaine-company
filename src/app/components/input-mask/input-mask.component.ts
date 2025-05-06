@@ -1,4 +1,3 @@
-import { NgIf } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { getCurrencyStrBr } from 'src/app/utils/text-format';
@@ -7,7 +6,7 @@ import { getCurrencyStrBr } from 'src/app/utils/text-format';
     selector: 'app-input-mask',
     templateUrl: './input-mask.component.html',
     styleUrls: ['./input-mask.component.scss'],
-    imports: [FormsModule, NgIf]
+    imports: [FormsModule]
 })
 export class InputMaskComponent {
   @Input() label = '';

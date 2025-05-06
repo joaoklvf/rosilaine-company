@@ -1,10 +1,10 @@
-import { Component, Input, input, OnChanges, output } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
+import { Component, input, OnChanges, output } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { MatInputModule } from '@angular/material/input';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-import { AsyncPipe } from '@angular/common';
-import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-custom-autocomplete',

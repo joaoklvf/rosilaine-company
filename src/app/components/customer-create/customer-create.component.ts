@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
+import { NgxMaskDirective } from 'ngx-mask';
 import { Customer } from 'src/app/models/customer/customer';
 import { CustomerTag } from 'src/app/models/customer/customer-tag';
 import { CustomerTagService } from 'src/app/services/customer/customer-tag/customer-tag.service';
@@ -9,7 +10,6 @@ import { CustomerService } from 'src/app/services/customer/customer.service';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 import { ViaCepService } from 'src/app/services/via-cep/via-cep.service';
 import { CustomChipsAutocompleteComponent } from '../custom-chips-autocomplete/custom-chips-autocomplete.component';
-import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-customer-create',
