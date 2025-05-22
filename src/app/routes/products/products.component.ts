@@ -1,15 +1,15 @@
-import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
-import { ProductCategory } from 'src/app/models/product/product-category';
-import { ProductService } from 'src/app/services/product/product.service';
-import { Product } from 'src/app/models/product/product';
-import { getBrCurrencyStr } from 'src/app/utils/text-format';
-import { ProductCategoryService } from 'src/app/services/product/product-category/product-category.service';
-import { CustomDialogComponent } from '../custom-dialog/custom-dialog.component';
-import { MatDialog } from '@angular/material/dialog';
-import { InputMaskComponent } from '../input-mask/input-mask.component';
-import { CustomAutocompleteComponent } from '../custom-autocomplete/custom-autocomplete.component';
-import { FormsModule } from '@angular/forms';
-import { MatIconModule } from '@angular/material/icon';
+import { Component, OnInit, ViewChild, ElementRef, inject } from "@angular/core";
+import { FormsModule } from "@angular/forms";
+import { MatDialog } from "@angular/material/dialog";
+import { MatIconModule } from "@angular/material/icon";
+import { CustomAutocompleteComponent } from "src/app/components/custom-autocomplete/custom-autocomplete.component";
+import { CustomDialogComponent } from "src/app/components/custom-dialog/custom-dialog.component";
+import { InputMaskComponent } from "src/app/components/input-mask/input-mask.component";
+import { Product } from "src/app/models/product/product";
+import { ProductCategory } from "src/app/models/product/product-category";
+import { ProductCategoryService } from "src/app/services/product/product-category/product-category.service";
+import { ProductService } from "src/app/services/product/product.service";
+import { getBrCurrencyStr } from "src/app/utils/text-format";
 
 @Component({
   selector: 'app-products',

@@ -2,10 +2,10 @@ import { Component, inject, OnInit } from '@angular/core';
 import { Order } from 'src/app/models/order/order';
 import { OrderService } from 'src/app/services/order/order.service';
 import { getBrDateStr } from 'src/app/utils/text-format';
-import { CustomDialogComponent } from '../custom-dialog/custom-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
+import { CustomDialogComponent } from 'src/app/components/custom-dialog/custom-dialog.component';
 
 @Component({
   selector: 'app-order',

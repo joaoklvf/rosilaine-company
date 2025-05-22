@@ -1,31 +1,31 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatSelectChange, MatSelectModule } from '@angular/material/select';
-import { ActivatedRoute, Router } from '@angular/router';
-import { NgxMaskDirective } from 'ngx-mask';
-import { OrderItemStatus } from 'src/app/models/order/order-item/order-item-status';
-import { OrderItemStatusService } from 'src/app/services/order/order-item-status/order-item-status.service';
-import { OrderItemService } from 'src/app/services/order/order-item/order-item.service';
-import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
-import { getBrCurrencyStr, getBrDateStr } from 'src/app/utils/text-format';
-import { Customer } from '../../models/customer/customer';
-import { Order } from '../../models/order/order';
-import { OrderItem } from '../../models/order/order-item/order-item';
-import { OrderStatus } from '../../models/order/order-status';
-import { Product } from '../../models/product/product';
-import { CustomerService } from '../../services/customer/customer.service';
-import { OrderStatusService } from '../../services/order/order-status/order-status.service';
-import { OrderService } from '../../services/order/order.service';
-import { ProductService } from '../../services/product/product.service';
-import { BrDatePickerComponent } from '../br-date-picker/br-date-picker.component';
-import { CustomAutocompleteComponent } from '../custom-autocomplete/custom-autocomplete.component';
-import { InputMaskComponent } from '../input-mask/input-mask.component';
-import { InstallmentManagementComponent } from './installments/installment-management/installment-management.component';
-import { InstallmentsSelectComponent } from './installments/installments-select/installments-select.component';
-import { MatInputModule } from '@angular/material/input';
+import { Component, OnInit, inject } from "@angular/core";
+import { FormsModule } from "@angular/forms";
+import { MatDialog } from "@angular/material/dialog";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatIconModule } from "@angular/material/icon";
+import { MatInputModule } from "@angular/material/input";
+import { MatSelectModule, MatSelectChange } from "@angular/material/select";
+import { ActivatedRoute, Router } from "@angular/router";
+import { NgxMaskDirective } from "ngx-mask";
+import { BrDatePickerComponent } from "src/app/components/br-date-picker/br-date-picker.component";
+import { CustomAutocompleteComponent } from "src/app/components/custom-autocomplete/custom-autocomplete.component";
+import { InputMaskComponent } from "src/app/components/input-mask/input-mask.component";
+import { Customer } from "src/app/models/customer/customer";
+import { Order } from "src/app/models/order/order";
+import { OrderItem } from "src/app/models/order/order-item/order-item";
+import { OrderItemStatus } from "src/app/models/order/order-item/order-item-status";
+import { OrderStatus } from "src/app/models/order/order-status";
+import { Product } from "src/app/models/product/product";
+import { CustomerService } from "src/app/services/customer/customer.service";
+import { OrderItemStatusService } from "src/app/services/order/order-item-status/order-item-status.service";
+import { OrderItemService } from "src/app/services/order/order-item/order-item.service";
+import { OrderStatusService } from "src/app/services/order/order-status/order-status.service";
+import { OrderService } from "src/app/services/order/order.service";
+import { ProductService } from "src/app/services/product/product.service";
+import { SnackBarService } from "src/app/services/snack-bar/snack-bar.service";
+import { getBrCurrencyStr, getBrDateStr } from "src/app/utils/text-format";
+import { InstallmentManagementComponent } from "./installments/installment-management/installment-management.component";
+import { InstallmentsSelectComponent } from "./installments/installments-select/installments-select.component";
 
 @Component({
   selector: 'app-order-create',
@@ -33,6 +33,7 @@ import { MatInputModule } from '@angular/material/input';
   styleUrl: './order-create.component.scss',
   imports: [InputMaskComponent, CustomAutocompleteComponent, FormsModule, BrDatePickerComponent, MatSelectModule, MatFormFieldModule, MatIconModule, InstallmentsSelectComponent, NgxMaskDirective, MatInputModule],
 })
+
 export class OrderCreateComponent implements OnInit {
   order = new Order();
   orderItem = new OrderItem();
