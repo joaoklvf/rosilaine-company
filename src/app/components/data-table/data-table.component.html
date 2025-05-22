@@ -1,0 +1,45 @@
+@if(data().length > 0){
+<div class="card">
+  <div class="card-body table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          @for(column of columns(); track column){
+          <th scope="col">{{ column.description }}</th>
+          }
+          <th scope="col">Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for(row of data(); track row){
+        <tr>
+          @for(column of columns(); track column){
+          <td width="{{ getColumnWidth(column) }}">
+            {{ getCellValue(row, column) }}
+          </td>
+          }
+          <td class="td-icons">
+            <button
+              type="button"
+              class="btn btn-outline-danger me-2"
+              title="Remover produto"
+              (click)="remove()"
+            >
+              <mat-icon fontIcon="delete" />
+            </button>
+            <button
+              type="button"
+              class="btn btn-outline-success"
+              title="Editar cliente"
+              (click)="edit(row)"
+            >
+              <mat-icon fontIcon="edit" />
+            </button>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
+}
