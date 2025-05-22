@@ -1,19 +1,19 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { Order } from 'src/app/models/order/order';
-import { OrderService } from 'src/app/services/order/order.service';
-import { getBrDateStr } from 'src/app/utils/text-format';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
 import { CustomDialogComponent } from 'src/app/components/custom-dialog/custom-dialog.component';
+import { Order } from 'src/app/models/order/order';
+import { OrderService } from 'src/app/services/order/order.service';
+import { getBrDateStr } from 'src/app/utils/text-format';
 
 @Component({
-  selector: 'app-order',
-  templateUrl: './order.component.html',
-  styleUrls: ['./order.component.scss'],
-  imports: [MatIconModule, RouterModule]
+  selector: 'app-orders-page',
+  imports: [MatIconModule, RouterModule],
+  templateUrl: './orders-page.component.html',
+  styleUrl: './orders-page.component.scss'
 })
-export class OrderComponent implements OnInit {
+export class OrdersPageComponent implements OnInit {
   orders: Order[] = [];
   readonly dialog = inject(MatDialog);
 
