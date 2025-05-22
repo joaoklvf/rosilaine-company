@@ -2,7 +2,7 @@ import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core'
 import { ProductCategory } from 'src/app/models/product/product-category';
 import { ProductService } from 'src/app/services/product/product.service';
 import { Product } from 'src/app/models/product/product';
-import { getCurrencyStrBr } from 'src/app/utils/text-format';
+import { getBrCurrencyStr } from 'src/app/utils/text-format';
 import { ProductCategoryService } from 'src/app/services/product/product-category/product-category.service';
 import { CustomDialogComponent } from '../custom-dialog/custom-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -80,7 +80,7 @@ export class ProductsComponent implements OnInit {
   }
 
   getCurrencyValue = (value: number) =>
-    getCurrencyStrBr(value);
+    getBrCurrencyStr(value);
 
   deleteProduct(product: Product) {
     this.productService.update({ ...product, isDeleted: true })

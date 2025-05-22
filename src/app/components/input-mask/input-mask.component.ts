@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { getCurrencyStrBr } from 'src/app/utils/text-format';
+import { getBrCurrencyStr } from 'src/app/utils/text-format';
 
 @Component({
     selector: 'app-input-mask',
@@ -14,7 +14,7 @@ export class InputMaskComponent {
   @Output() handleOnChange = new EventEmitter<number>();
 
   getCurrencyValue = (value: number) =>
-    getCurrencyStrBr(value);
+    getBrCurrencyStr(value);
 
   update() {
     this.handleOnChange.emit(this.value);

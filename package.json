@@ -23,7 +23,6 @@
     "@angular/router": "^19.2.1",
     "angular-tour-of-heroes": "file:",
     "bootstrap": "^5.3.3",
-    "moment": "^2.29.4",
     "ngx-mask": "^15.0.2",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",

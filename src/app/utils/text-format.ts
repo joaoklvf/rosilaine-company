@@ -1,7 +1,8 @@
-import * as moment from "moment";
+export const getBrCurrencyStr = (value: number) =>
+  value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
-export const getDateStrBr = (date: Date) =>
-  moment(date).format('DD/MM/YYYY');
+export const getBrDateStr = (value: Date) =>
+  value.toLocaleDateString('pt-BR');
 
-export const getCurrencyStrBr = (value: number | string) =>
-  Number(value).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+export const getAmountStr = (value: number) =>
+  String(value).padStart(2, "0");

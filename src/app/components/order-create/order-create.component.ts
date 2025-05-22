@@ -10,7 +10,7 @@ import { OrderItemStatus } from 'src/app/models/order/order-item/order-item-stat
 import { OrderItemStatusService } from 'src/app/services/order/order-item-status/order-item-status.service';
 import { OrderItemService } from 'src/app/services/order/order-item/order-item.service';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
-import { getCurrencyStrBr, getDateStrBr } from 'src/app/utils/text-format';
+import { getBrCurrencyStr, getBrDateStr } from 'src/app/utils/text-format';
 import { Customer } from '../../models/customer/customer';
 import { Order } from '../../models/order/order';
 import { OrderItem } from '../../models/order/order-item/order-item';
@@ -117,7 +117,7 @@ export class OrderCreateComponent implements OnInit {
   }
 
   getCurrencyValue = (value: number) =>
-    getCurrencyStrBr(value);
+    getBrCurrencyStr(value);
 
   setPrice(value: number) {
     this.orderItem.itemSellingPrice = value;
@@ -177,13 +177,13 @@ export class OrderCreateComponent implements OnInit {
   }
 
   getBrDate(value: Date | null) {
-    return value && getDateStrBr(value);
+    return value && getBrDateStr(value);
   }
 
   updateOrder(order: Order) {
     this.orderItem = new OrderItem();
     this.order = { ...order };
-    this.orderTotal = getCurrencyStrBr(order.orderItems.reduce((prev, acc) => prev + Number(acc.itemSellingTotal), 0));
+    this.orderTotal = getBrCurrencyStr(order.orderItems.reduce((prev, acc) => prev + Number(acc.itemSellingTotal), 0));
   }
 
   saveOrder(order: Order) {

@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MatDialogActions, MatDialogClose, MatDialogTitle, MatDialogContent, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { InstallmentsSelectComponent } from "../installments-select/installments-select.component";
 import { Order } from 'src/app/models/order/order';
-import { getCurrencyStrBr, getDateStrBr } from 'src/app/utils/text-format';
+import { getBrCurrencyStr, getBrDateStr } from 'src/app/utils/text-format';
 import { InputMaskComponent } from 'src/app/components/input-mask/input-mask.component';
 import { OrderInstallment } from 'src/app/models/order/order-installment';
 import { FormsModule } from '@angular/forms';
@@ -25,10 +25,10 @@ export class InstallmentManagementComponent {
   readonly dialogRef = inject(MatDialogRef<InstallmentManagementComponent>);
 
   getBrDate = (value: Date | null) =>
-    value && getDateStrBr(value);
+    value && getBrDateStr(value);
 
   getCurrencyValue = (value: number | null) =>
-    value && getCurrencyStrBr(value);
+    value && getBrCurrencyStr(value);
 
   setInstallmentAmountPaid(value: number, installment: OrderInstallment) {
     installment.amountPaid = value;

@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Order } from 'src/app/models/order/order';
 import { OrderService } from 'src/app/services/order/order.service';
-import { getDateStrBr } from 'src/app/utils/text-format';
+import { getBrDateStr } from 'src/app/utils/text-format';
 import { CustomDialogComponent } from '../custom-dialog/custom-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -32,7 +32,7 @@ export class OrderComponent implements OnInit {
   }
 
   getBrDate(value: Date) {
-    return getDateStrBr(value);
+    return getBrDateStr(value);
   }
 
   openDialog(order: Order): void {
