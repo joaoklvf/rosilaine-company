@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { MatIconModule } from '@angular/material/icon';
 import { Router, RouterModule } from '@angular/router';
 import { Customer } from 'src/app/models/customer/customer';
 import { CustomerService } from 'src/app/services/customer/customer.service';
-import { getBrDateStr } from 'src/app/utils/text-format';
 import { DataTableComponent } from "../data-table/data-table.component";
 import { ColumnProp, FormatValueOptions } from 'src/app/interfaces/data-table';
 
@@ -11,7 +9,7 @@ import { ColumnProp, FormatValueOptions } from 'src/app/interfaces/data-table';
   selector: 'app-customers',
   templateUrl: './customers.component.html',
   styleUrls: ['./customers.component.scss'],
-  imports: [MatIconModule, RouterModule, DataTableComponent]
+  imports: [RouterModule, DataTableComponent]
 })
 
 export class CustomersComponent implements OnInit {
@@ -25,17 +23,13 @@ export class CustomersComponent implements OnInit {
   constructor(private customerService: CustomerService, private router: Router) { }
 
   ngOnInit(): void {
-    this.getHeroes();
+    this.getCustomers();
   }
 
-  getHeroes(): void {
+  getCustomers(): void {
     this.customerService.get()
       .subscribe(customers => this.customers = customers);
-  }
-
-  getFormatDate(date: Date) {
-    return getBrDateStr(date);
-  }
+  }  
 
   remove() {
     console.log('teste')
