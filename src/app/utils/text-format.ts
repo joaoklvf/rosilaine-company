@@ -1,5 +1,5 @@
-export const getBrCurrencyStr = (value: number) =>
-  value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+export const getBrCurrencyStr = (value: number | string) =>
+  Number(value).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
 export const getBrDateStr = (value: Date) =>
   value.toLocaleDateString('pt-BR');
