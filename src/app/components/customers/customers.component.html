@@ -1,44 +1,7 @@
 <h1>Clientes</h1>
-@if(customers.length > 0){
-<div class="card">
-  <div class="card-body table-responsive">
-    <table class="table">
-      <thead>
-        <tr>
-          <th scope="col">Nome</th>
-          <th scope="col">Telefone</th>
-          <th scope="col">Data de nascimento</th>
-          <th scope="col">Ações</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for(customer of customers; track customer){
-        <tr>
-          <td>{{ customer.name }}</td>
-          <td>{{ customer.phone }}</td>
-          <td>{{ getFormatDate(customer.birthDate) }}</td>
-          <td class="td-icons">
-            <button
-              type="button"
-              class="btn btn-outline-danger me-2"
-              title="Remover produto"
-              (click)="remove()"
-            >
-              <mat-icon fontIcon="delete" />
-            </button>
-            <button
-              type="button"
-              class="btn btn-outline-success"
-              title="Editar cliente"
-              routerLink="/customer/{{ customer.id }}"
-            >
-              <mat-icon fontIcon="edit" />
-            </button>
-          </td>
-        </tr>
-        }
-      </tbody>
-    </table>
-  </div>
-</div>
-}
+<app-data-table
+  [columns]="columns"
+  [data]="customers"
+  (removeAction)="remove()"
+  (editAction)="edit($event)"
+/>
