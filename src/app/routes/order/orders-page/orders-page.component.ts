@@ -1,23 +1,30 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatIconModule } from '@angular/material/icon';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { CustomDialogComponent } from 'src/app/components/custom-dialog/custom-dialog.component';
 import { Order } from 'src/app/models/order/order';
 import { OrderService } from 'src/app/services/order/order.service';
 import { getBrDateStr } from 'src/app/utils/text-format';
+import { DataTableComponent } from "../../../components/data-table/data-table.component";
+import { ColumnProp, FormatValueOptions } from 'src/app/interfaces/data-table';
 
 @Component({
   selector: 'app-orders-page',
-  imports: [MatIconModule, RouterModule],
+  imports: [RouterModule, DataTableComponent],
   templateUrl: './orders-page.component.html',
   styleUrl: './orders-page.component.scss'
 })
+
 export class OrdersPageComponent implements OnInit {
   orders: Order[] = [];
   readonly dialog = inject(MatDialog);
+  columns: ColumnProp<Order>[] = [
+    { description: "Cliente", fieldName: "customer.name", width: '50%' },
+    { description: "Data do pedido", fieldName: "orderDate", formatValue: FormatValueOptions.Date },
+    { description: "Status", fieldName: "status.description" },
+  ]
 
-  constructor(private orderService: OrderService) { }
+  constructor(private orderService: OrderService, private router: Router) { }
 
   ngOnInit() {
     this.orderService.get()
@@ -36,13 +43,17 @@ export class OrdersPageComponent implements OnInit {
   }
 
   openDialog(order: Order): void {
-      this.dialog.open(CustomDialogComponent, {
-        width: '500px',
-        data: {
-          title: "Deletar pedido",
-          content: `Deseja deletar o pedido?`,
-          onConfirmAction: () => this.deleteOrder(order.id!)
-        }
-      });
-    }
+    this.dialog.open(CustomDialogComponent, {
+      width: '500px',
+      data: {
+        title: "Deletar pedido",
+        content: `Deseja deletar o pedido?`,
+        onConfirmAction: () => this.deleteOrder(order.id!)
+      }
+    });
+  }
+
+  edit(value: Order) {
+    this.router.navigate([`/order/${value.id}`])
+  }
 }
