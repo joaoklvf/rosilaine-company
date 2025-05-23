@@ -1,4 +1,9 @@
-<h1>Clientes</h1>
+<div class="d-flex justify-content-between">
+  <h1>Clientes</h1>
+  <button type="button" class="btn btn-primary h-100" (click)="addPageNavigate()">
+    Adicionar
+  </button>
+</div>
 <app-data-table
   [columns]="columns"
   [data]="customers"

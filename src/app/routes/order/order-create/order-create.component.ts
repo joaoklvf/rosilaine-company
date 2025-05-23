@@ -99,7 +99,8 @@ export class OrderCreateComponent implements OnInit {
     else {
       this.orderService.add(order)
         .subscribe(orderResponse => {
-          this.updateOrder(orderResponse);
+          this.router.navigate([`/order/${orderResponse.id}`])
+          // this.updateOrder(orderResponse);
         });
     }
   }

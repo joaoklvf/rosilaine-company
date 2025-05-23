@@ -1,7 +1,12 @@
-<h1>Pedidos</h1>
-<app-data-table 
-[data]="orders"
-[columns]="columns"
-(editAction)="edit($event)"
-(removeAction)="openDialog($event)"
+<div class="d-flex justify-content-between">
+  <h1>Pedidos</h1>
+  <button type="button" class="btn btn-primary h-100" (click)="addPageNavigate()">
+    Adicionar
+  </button>
+</div>
+<app-data-table
+  [data]="orders"
+  [columns]="columns"
+  (editAction)="edit($event)"
+  (removeAction)="openDialog($event)"
 />

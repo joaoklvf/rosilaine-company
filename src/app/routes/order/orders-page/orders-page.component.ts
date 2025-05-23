@@ -56,4 +56,8 @@ export class OrdersPageComponent implements OnInit {
   edit(value: Order) {
     this.router.navigate([`/order/${value.id}`])
   }
+
+  addPageNavigate() {
+    this.router.navigate(["/orders/create"])
+  }
 }
