@@ -1,4 +1,25 @@
 @if(data().length > 0){
+<div class="card mb-3">
+  <div class="card-body">
+    <label for="Pesquisar">Pesquisar</label>
+    <div class="d-flex">
+      <mat-form-field>
+        <mat-label>Busca por</mat-label>
+        <mat-select
+          [formControl]="searchParameterControl"
+        >
+          @for (column of columns(); track column) {
+          <mat-option [value]="column.fieldName">
+            {{ column.description }}
+          </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <input type="text" name="Pesquisar" id="Pesquisar" class="form-control" />
+    </div>
+  </div>
+</div>
+
 <div class="card">
   <div class="card-body table-responsive">
     <table class="table">

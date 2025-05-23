@@ -147,7 +147,6 @@
           <td>{{ orderItem.product.description }}</td>
           <td>
             <mat-form-field>
-              <mat-label>Status</mat-label>
               <mat-select
                 (selectionChange)="changeItemStatus($event, orderItem)"
                 [(value)]="orderItem.itemStatus.id"
