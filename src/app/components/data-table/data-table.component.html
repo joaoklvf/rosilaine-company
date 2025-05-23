@@ -15,7 +15,7 @@
         <tr>
           @for(column of columns(); track column){
           <td width="{{ getColumnWidth(column) }}">
-            {{ getCellValue(row, column) }}
+            {{ displayCell(row, column) }}
           </td>
           }
           <td class="td-icons">
@@ -23,7 +23,7 @@
               type="button"
               class="btn btn-outline-danger me-2"
               title="Remover produto"
-              (click)="remove()"
+              (click)="remove(row)"
             >
               <mat-icon fontIcon="delete" />
             </button>

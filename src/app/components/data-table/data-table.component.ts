@@ -1,7 +1,7 @@
 import { Component, input, output } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import { ColumnProp, FormatValueOptions } from 'src/app/interfaces/data-table';
-import { getCellFormattedValue } from 'src/app/utils/data-table-format';
+import { ColumnProp, } from 'src/app/interfaces/data-table';
+import { getCellValue } from 'src/app/utils/data-table-format';
 
 @Component({
   selector: 'app-data-table',
@@ -11,13 +11,13 @@ import { getCellFormattedValue } from 'src/app/utils/data-table-format';
 })
 
 export class DataTableComponent<T> {
-  columns = input.required<ColumnProp<T>[]>();
-  data = input.required<T[]>();
-  removeAction = output<void>();
-  editAction = output<T>();
+  readonly columns = input.required<ColumnProp<T>[]>();
+  readonly data = input.required<T[]>();
+  readonly removeAction = output<T>();
+  readonly editAction = output<T>();
 
-  remove() {
-    this.removeAction.emit();
+  remove(value: T) {
+    this.removeAction.emit(value);
   }
 
   edit(value: T) {
@@ -28,7 +28,7 @@ export class DataTableComponent<T> {
     return columnProp.width ?? ''
   }
 
-  getCellValue(value: T, columnProp: ColumnProp<T>) {
-    return getCellFormattedValue(value[columnProp.fieldName] as string | number, columnProp.formatValue)
+  displayCell(value: T, columnProp: ColumnProp<T>) {
+    return getCellValue(value, columnProp)
   }
 }
