@@ -49,49 +49,9 @@
     </div>
   </div>
 </div>
-
-@if (products.length> 0) {
-<div class="card mt-3">
-  <div class="card-body table-responsive">
-    <table class="table">
-      <thead>
-        <tr>
-          <th scope="col">Produto</th>
-          <th scope="col">Código</th>
-          <th scope="col">Preço</th>
-          <th scope="col">Categoria</th>
-          <th scope="col">Ações</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (product of products; track product) {
-        <tr>
-          <td>{{ product.description }}</td>
-          <td>{{ product.productCode }}</td>
-          <td>{{ getCurrencyValue(product.productPrice) }}</td>
-          <td>{{ product.category.description }}</td>
-          <td class="td-icons">
-            <button
-              type="button"
-              class="btn btn-outline-danger me-2"
-              title="Remover produto"
-              (click)="openDialog(product)"
-            >
-              <mat-icon fontIcon="delete" />
-            </button>
-            <button
-              type="button"
-              class="btn btn-outline-success"
-              title="Editar produto"
-              (click)="edit(product)"
-            >
-              <mat-icon fontIcon="edit" />
-            </button>
-          </td>
-        </tr>
-        }
-      </tbody>
-    </table>
-  </div>
-</div>
-}
+<app-data-table
+  [columns]="columns"
+  [data]="products"
+  (editAction)="edit($event)"
+  (removeAction)="deleteProduct($event)"
+/>

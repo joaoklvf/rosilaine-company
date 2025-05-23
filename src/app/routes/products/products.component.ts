@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, inject } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
-import { MatIconModule } from "@angular/material/icon";
 import { CustomAutocompleteComponent } from "src/app/components/custom-autocomplete/custom-autocomplete.component";
 import { CustomDialogComponent } from "src/app/components/custom-dialog/custom-dialog.component";
 import { InputMaskComponent } from "src/app/components/input-mask/input-mask.component";
@@ -10,18 +9,26 @@ import { ProductCategory } from "src/app/models/product/product-category";
 import { ProductCategoryService } from "src/app/services/product/product-category/product-category.service";
 import { ProductService } from "src/app/services/product/product.service";
 import { getBrCurrencyStr } from "src/app/utils/text-format";
+import { DataTableComponent } from "../../components/data-table/data-table.component";
+import { ColumnProp, FormatValueOptions } from "src/app/interfaces/data-table";
 
 @Component({
   selector: 'app-products',
   templateUrl: './products.component.html',
   styleUrl: './products.component.scss',
-  imports: [InputMaskComponent, CustomAutocompleteComponent, FormsModule, MatIconModule]
+  imports: [InputMaskComponent, CustomAutocompleteComponent, FormsModule, DataTableComponent]
 })
 
 export class ProductsComponent implements OnInit {
   categories: ProductCategory[] = [];
   products: Product[] = [];
   product = new Product();
+  readonly columns: ColumnProp<Product>[] = [
+    { description: "Produto", fieldName: "description", width: '50%' },
+    { description: "Código", fieldName: "productCode" },
+    { description: "Preço", fieldName: "productPrice", formatValue: FormatValueOptions.Currency },
+    { description: "Categoria", fieldName: "category.description" },
+  ]
 
   @ViewChild("productDescription") productDescriptionField: ElementRef = new ElementRef(null);
 
