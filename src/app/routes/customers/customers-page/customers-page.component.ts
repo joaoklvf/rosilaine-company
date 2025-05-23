@@ -13,7 +13,7 @@ import { CustomerService } from 'src/app/services/customer/customer.service';
 })
 export class CustomersPageComponent implements OnInit {
   customers: Customer[] = [];
-  columns: ColumnProp<Customer>[] = [
+  readonly columns: ColumnProp<Customer>[] = [
     { description: "Nome", fieldName: "name", width: '50%' },
     { description: "Telefone", fieldName: "phone" },
     { description: "Data de nascimento", fieldName: "birthDate", formatValue: FormatValueOptions.Date },

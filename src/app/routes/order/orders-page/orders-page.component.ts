@@ -18,7 +18,7 @@ import { ColumnProp, FormatValueOptions } from 'src/app/interfaces/data-table';
 export class OrdersPageComponent implements OnInit {
   orders: Order[] = [];
   readonly dialog = inject(MatDialog);
-  columns: ColumnProp<Order>[] = [
+  readonly columns: ColumnProp<Order>[] = [
     { description: "Cliente", fieldName: "customer.name", width: '50%' },
     { description: "Data do pedido", fieldName: "orderDate", formatValue: FormatValueOptions.Date },
     { description: "Status", fieldName: "status.description" },
