@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { CustomDialogComponent } from 'src/app/components/custom-dialog/custom-dialog.component';
@@ -8,12 +8,12 @@ import { OrderStatus } from 'src/app/models/order/order-status';
 import { OrderStatusService } from 'src/app/services/order/order-status/order-status.service';
 
 @Component({
-  selector: 'app-order-status-page',
+  selector: 'app-order-status',
   imports: [DataTableComponent, FormsModule],
-  templateUrl: './order-status-page.component.html',
-  styleUrl: './order-status-page.component.scss'
+  templateUrl: './order-status.component.html',
+  styleUrl: './order-status.component.scss'
 })
-export class OrderStatusPageComponent implements OnInit {
+export class OrderStatusComponent {
   readonly columns: DataTableColumnProp<OrderStatus>[] = [
     { description: "Status", fieldName: "description", width: '85%' },
   ]
