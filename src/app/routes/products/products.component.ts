@@ -47,8 +47,9 @@ export class ProductsComponent implements OnInit {
     this.product = value;
   }
 
-  setCategory(value: ProductCategory) {
-    this.product.category = value;
+  setCategory(value: ProductCategory | null) {
+    if (value)
+      this.product.category = value;
   }
 
   setPrice(value: number) {

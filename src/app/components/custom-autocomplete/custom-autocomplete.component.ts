@@ -13,12 +13,12 @@ import { map, startWith } from 'rxjs/operators';
   imports: [MatAutocompleteModule, ReactiveFormsModule, AsyncPipe, MatInputModule]
 })
 
-export class CustomAutocompleteComponent<T> implements OnChanges {
+export class CustomAutocompleteComponent<T extends object> implements OnChanges {
   readonly label = input('');
   readonly displayValue = input.required<keyof T>();
   readonly data = input.required<T[]>();
   readonly creatable = input(false);
-  readonly handleOnChange = output<T>();
+  readonly handleOnChange = output<T | null>();
   readonly value = input<T | null>(null);
 
   myControl = new FormControl<T | null>(null);
@@ -69,11 +69,10 @@ export class CustomAutocompleteComponent<T> implements OnChanges {
 
   onBlur() {
     const currentValue = this.myControl.value;
-    if (currentValue)
-      this.emitOnChange(currentValue);
+    this.emitOnChange(currentValue);
   }
 
-  emitOnChange(value: T | string) {
+  emitOnChange(value: T | string | null) {
     const currentKey = this.displayValue();
 
     if (typeof value === "string") {
@@ -81,7 +80,7 @@ export class CustomAutocompleteComponent<T> implements OnChanges {
       return;
     }
 
-    if (typeof value[currentKey] === 'string') {
+    if (value && typeof value[currentKey] === 'string') {
       value[currentKey] = value[currentKey].replace("Criar ", "") as T[keyof T];
     }
 

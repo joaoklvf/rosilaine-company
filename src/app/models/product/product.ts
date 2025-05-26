@@ -5,5 +5,5 @@ export class Product extends BaseEntity {
   description = '';
   productPrice = 0;
   productCode? = '';
-  category = new ProductCategory();
+  category: ProductCategory = new ProductCategory();
 }

@@ -133,21 +133,27 @@ export class OrderCreateComponent implements OnInit {
     this.order.firstInstallmentDate = value;
   }
 
-  setCustomer(value: Customer) {
-    this.order.customer = value;
+  setCustomer(value: Customer | null) {
+    if (value)
+      this.order.customer = value;
   }
 
-  setProduct(value: Product) {
+  setProduct(value: Product | null) {
+    if (!value)
+      return;
+
     this.orderItem.product = value;
     this.orderItem.itemSellingPrice = value.productPrice;
   }
 
-  setOrderStatus(value: OrderStatus) {
-    this.order.status = value;
+  setOrderStatus(value: OrderStatus | null) {
+    if (value)
+      this.order.status = value;
   }
 
-  setOrderItemStatus(value: OrderItemStatus) {
-    this.orderItem.itemStatus = value;
+  setOrderItemStatus(value: OrderItemStatus | null) {
+    if (value)
+      this.orderItem.itemStatus = value;
   }
 
   changeItemStatus(selectEvent: MatSelectChange<string>, orderItemSelected: OrderItem) {
