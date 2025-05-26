@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { DataTableComponent } from 'src/app/components/data-table/data-table.component';
-import { ColumnProp, FormatValueOptions } from 'src/app/interfaces/data-table';
+import { DataTableColumnProp, FormatValueOptions } from 'src/app/interfaces/data-table';
 import { Customer } from 'src/app/models/customer/customer';
 import { CustomerService } from 'src/app/services/customer/customer.service';
 
@@ -13,7 +13,7 @@ import { CustomerService } from 'src/app/services/customer/customer.service';
 })
 export class CustomersPageComponent implements OnInit {
   customers: Customer[] = [];
-  readonly columns: ColumnProp<Customer>[] = [
+  readonly columns: DataTableColumnProp<Customer>[] = [
     { description: "Nome", fieldName: "name", width: '50%' },
     { description: "Telefone", fieldName: "phone" },
     { description: "Data de nascimento", fieldName: "birthDate", formatValue: FormatValueOptions.Date },

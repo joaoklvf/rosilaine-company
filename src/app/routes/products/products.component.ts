@@ -10,7 +10,7 @@ import { ProductCategoryService } from "src/app/services/product/product-categor
 import { ProductService } from "src/app/services/product/product.service";
 import { getBrCurrencyStr } from "src/app/utils/text-format";
 import { DataTableComponent } from "../../components/data-table/data-table.component";
-import { ColumnProp, FormatValueOptions } from "src/app/interfaces/data-table";
+import { DataTableColumnProp, FormatValueOptions } from "src/app/interfaces/data-table";
 
 @Component({
   selector: 'app-products',
@@ -23,7 +23,7 @@ export class ProductsComponent implements OnInit {
   categories: ProductCategory[] = [];
   products: Product[] = [];
   product = new Product();
-  readonly columns: ColumnProp<Product>[] = [
+  readonly columns: DataTableColumnProp<Product>[] = [
     { description: "Produto", fieldName: "description", width: '50%' },
     { description: "Código", fieldName: "productCode" },
     { description: "Preço", fieldName: "productPrice", formatValue: FormatValueOptions.Currency },

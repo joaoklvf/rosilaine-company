@@ -6,5 +6,4 @@ export class Product extends BaseEntity {
   productPrice = 0;
   productCode? = '';
   category = new ProductCategory();
-  isDeleted = false;
 }

@@ -9,7 +9,7 @@ export type KeyOf<T> = {
   [K in keyof T & (string | number)]: T[K] extends object ? `${K}` | `${K}.${KeyOf<T[K]>}` : `${K}`;
 }[keyof T & (string | number)];
 
-export interface ColumnProp<T> {
+export interface DataTableColumnProp<T> {
   description: string;
   fieldName: KeyOf<T>;
   width?: string;

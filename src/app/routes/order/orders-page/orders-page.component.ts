@@ -6,7 +6,7 @@ import { Order } from 'src/app/models/order/order';
 import { OrderService } from 'src/app/services/order/order.service';
 import { getBrDateStr } from 'src/app/utils/text-format';
 import { DataTableComponent } from "../../../components/data-table/data-table.component";
-import { ColumnProp, FormatValueOptions } from 'src/app/interfaces/data-table';
+import { DataTableColumnProp, FormatValueOptions } from 'src/app/interfaces/data-table';
 
 @Component({
   selector: 'app-orders-page',
@@ -18,7 +18,7 @@ import { ColumnProp, FormatValueOptions } from 'src/app/interfaces/data-table';
 export class OrdersPageComponent implements OnInit {
   orders: Order[] = [];
   readonly dialog = inject(MatDialog);
-  readonly columns: ColumnProp<Order>[] = [
+  readonly columns: DataTableColumnProp<Order>[] = [
     { description: "Cliente", fieldName: "customer.name", width: '50%' },
     { description: "Data do pedido", fieldName: "orderDate", formatValue: FormatValueOptions.Date },
     { description: "Status", fieldName: "status.description" },

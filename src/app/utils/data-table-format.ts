@@ -1,4 +1,4 @@
-import { ColumnProp, FormatValueOptions, getValue } from "../interfaces/data-table";
+import { DataTableColumnProp, FormatValueOptions, getValue } from "../interfaces/data-table";
 import { getAmountStr, getBrCurrencyStr, getBrDateStr } from "./text-format";
 
 export const TableFormatMap = {
@@ -12,6 +12,6 @@ function getCellFormattedValue<T>(value: T[keyof T], formatLabel: FormatValueOpt
   return TableFormatMap[formatLabel](String(value));
 }
 
-export function getCellValue<T>(value: T, columnProp: ColumnProp<T>) {
+export function getCellValue<T>(value: T, columnProp: DataTableColumnProp<T>) {
   return getCellFormattedValue(getValue(value, columnProp.fieldName), columnProp.formatValue)
 }
