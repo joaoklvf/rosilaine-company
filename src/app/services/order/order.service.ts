@@ -29,8 +29,11 @@ export class OrderService extends BaseApiService<Order> {
     const installmentPrice = Math.round((order.total / installmentsAmount) * 100) / 100;
     const installments: OrderInstallment[] = [];
     const now = new Date();
+
     let currentDebitDate = order.firstInstallmentDate ?
       new Date(order.firstInstallmentDate) : this.getNextMonthDate(now);
+
+    order.firstInstallmentDate = new Date(currentDebitDate);
 
     for (let index = 0; index < installmentsAmount; index++) {
       const price = index === installmentsAmount - 1 ?
@@ -49,7 +52,6 @@ export class OrderService extends BaseApiService<Order> {
     }
 
     order.installments = [...installments];
-    console.log('order.installments', order.installments)
     return order;
   }
 }

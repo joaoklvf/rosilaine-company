@@ -28,7 +28,7 @@ export class InstallmentsSelectComponent implements OnInit {
   public generateInstallmentsAndSaveOrder(amount: number) {
     const orderWithInstallments = { ...this.orderService.generateInstallments(this.order(), amount) };
     this.orderService.update(orderWithInstallments).subscribe(order => {
-      this.snackBarService.success(`Parcelas geradas com sucesso!`);
+      this.snackBarService.success('Parcelas geradas com sucesso!');
       this.saveOrderAction.emit({ ...order });
       this.myControl.setValue(order.installments!.length);
     });

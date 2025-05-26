@@ -212,6 +212,4 @@ export class OrderCreateComponent implements OnInit {
       }
     });
   }
-
-
 }

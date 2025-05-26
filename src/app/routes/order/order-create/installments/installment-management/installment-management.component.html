@@ -1,10 +1,19 @@
 <h2 mat-dialog-title>Parcelas</h2>
 <mat-dialog-content class="text-dark">
-  <div>
-    <app-installments-select
-      [order]="data.order"
-      (saveOrderAction)="data.saveOrder($event)"
-    />
+  <div class="d-flex gap-2">
+    <div class="">
+      <app-installments-select
+        [order]="data.order"
+        (saveOrderAction)="data.saveOrder($event)"
+      />
+    </div>
+    <div class="">
+      <app-br-date-picker
+        [label]="'Data da primeira parcela'"
+        [value]="data.order.firstInstallmentDate"
+        (handleOnChange)="setFirstInstallmentDate($event)"
+      ></app-br-date-picker>
+    </div>
   </div>
   <div class="card mt-3">
     <div class="card-body table-responsive">
