@@ -55,7 +55,7 @@
       <app-custom-autocomplete
         [label]="'Status'"
         (handleOnChange)="setOrderStatus($event)"
-        [data]="orderStatus"
+        [data]="orderStatuses"
         [creatable]="true"
         displayValue="description"
         [value]="order.status"
@@ -88,7 +88,7 @@
             <app-custom-autocomplete
               [label]="'Status'"
               (handleOnChange)="setOrderItemStatus($event)"
-              [data]="orderItemStatus"
+              [data]="orderItemStatuses"
               [creatable]="true"
               displayValue="description"
               [value]="orderItem.itemStatus"
@@ -151,7 +151,7 @@
                 (selectionChange)="changeItemStatus($event, orderItem)"
                 [(value)]="orderItem.itemStatus.id"
               >
-                @for (status of orderItemStatus; track status) {
+                @for (status of orderItemStatuses; track status) {
                 <mat-option [value]="status.id">
                   {{ status.description }}
                 </mat-option>

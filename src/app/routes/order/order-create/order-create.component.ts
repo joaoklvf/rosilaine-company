@@ -40,8 +40,8 @@ export class OrderCreateComponent implements OnInit {
   orderTotal = '';
   customers: Customer[] = [];
   products: Product[] = [];
-  orderStatus: OrderStatus[] = [];
-  orderItemStatus: OrderItemStatus[] = [];
+  orderStatuses: OrderStatus[] = [];
+  orderItemStatuses: OrderItemStatus[] = [];
   title = 'Cadastrar pedido';
   readonly dialog = inject(MatDialog);
 
@@ -56,7 +56,9 @@ export class OrderCreateComponent implements OnInit {
             this.snackBarService.error('Pedido não encontrado');
             this.router.navigate(['orders']);
           }
-          this.updateOrder(order);
+
+          this.order = { ...order }
+          this.orderTotal = getBrCurrencyStr(order.total);
         });
 
       this.title = 'Editar pedido';
@@ -69,10 +71,10 @@ export class OrderCreateComponent implements OnInit {
       .subscribe(products => this.products = products);
 
     this.orderStatusService.get()
-      .subscribe(status => this.orderStatus = status);
+      .subscribe(status => this.orderStatuses = status);
 
     this.orderItemStatusService.get()
-      .subscribe(itemStatus => this.orderItemStatus = itemStatus);
+      .subscribe(itemStatus => this.orderItemStatuses = itemStatus);
   }
 
   add(): void {
@@ -100,7 +102,6 @@ export class OrderCreateComponent implements OnInit {
       this.orderService.add(order)
         .subscribe(orderResponse => {
           this.router.navigate([`/order/${orderResponse.id}`])
-          // this.updateOrder(orderResponse);
         });
     }
   }
@@ -151,7 +152,7 @@ export class OrderCreateComponent implements OnInit {
   }
 
   changeItemStatus(selectEvent: MatSelectChange<string>, orderItemSelected: OrderItem) {
-    const optionSelected = this.orderItemStatus.find(x => x.id === selectEvent.value);
+    const optionSelected = this.orderItemStatuses.find(x => x.id === selectEvent.value);
     if (!optionSelected)
       return;
 
@@ -183,9 +184,20 @@ export class OrderCreateComponent implements OnInit {
   }
 
   updateOrder(order: Order) {
+    this.updateStatusesByOrder(order);
     this.orderItem = new OrderItem();
     this.order = { ...order };
-    this.orderTotal = getBrCurrencyStr(order.orderItems.reduce((prev, acc) => prev + Number(acc.itemSellingTotal), 0));
+    this.orderTotal = getBrCurrencyStr(order.total);
+  }
+
+  updateStatusesByOrder(order: Order) {
+    if (!this.orderStatuses.find(x => x.id === order.status.id))
+      this.orderStatuses = [...this.orderStatuses, order.status]
+
+    const currentOrderItemStatuses = order.orderItems.map(x => x.itemStatus);
+    const newOrderItemStatuses = currentOrderItemStatuses.filter(x => !this.orderItemStatuses.find(y => y.id === x.id));
+    if (newOrderItemStatuses.length)
+      this.orderItemStatuses = [...this.orderItemStatuses, ...newOrderItemStatuses];
   }
 
   saveOrder(order: Order) {
