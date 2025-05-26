@@ -13,15 +13,27 @@ export class OrderService extends BaseApiService<Order> {
     super(http, messageService, 'orders');
   }
 
-  public generateInstallments(order: Order, amount: number) {
-    const installmentPrice = Math.round((order.total / amount) * 100) / 100;
-    const installments: OrderInstallment[] = [];
+  private getNextMonthDate(date: Date) {
+    const currentMonth = date.getMonth();
+    if (currentMonth === 11) {
+      date.setMonth(0)
+      date.setFullYear(date.getFullYear() + 1);
+    }
+    else {
+      date.setMonth(currentMonth + +1)
+    }
+    return new Date(date);
+  }
 
-    for (let index = 0; index < amount; index++) {
-      const now = new Date();
-      const debitDate = order.firstInstallmentDate || now;
-      debitDate?.setMonth(debitDate.getMonth() + index);
-      const price = index === amount - 1 ?
+  public generateInstallments(order: Order, installmentsAmount: number) {
+    const installmentPrice = Math.round((order.total / installmentsAmount) * 100) / 100;
+    const installments: OrderInstallment[] = [];
+    const now = new Date();
+    let currentDebitDate = order.firstInstallmentDate ?
+      new Date(order.firstInstallmentDate) : this.getNextMonthDate(now);
+
+    for (let index = 0; index < installmentsAmount; index++) {
+      const price = index === installmentsAmount - 1 ?
         order.total - installments.reduce((prev, acc) => prev + acc.amount, 0) : installmentPrice;
 
       installments.push({
@@ -29,13 +41,15 @@ export class OrderService extends BaseApiService<Order> {
         amountPaid: null,
         createdDate: now,
         updatedDate: now,
-        debitDate,
+        debitDate: new Date(currentDebitDate),
         paymentDate: null
       });
 
-      order.installments = [...installments];
+      currentDebitDate = this.getNextMonthDate(currentDebitDate);
     }
 
+    order.installments = [...installments];
+    console.log('order.installments', order.installments)
     return order;
   }
 }

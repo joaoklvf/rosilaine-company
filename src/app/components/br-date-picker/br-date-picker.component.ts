@@ -20,22 +20,22 @@ export const MY_FORMATS = {
 };
 
 @Component({
-    selector: 'app-br-date-picker',
-    templateUrl: './br-date-picker.component.html',
-    styleUrls: ['./br-date-picker.component.scss'],
-    providers: [
-        {
-            provide: DateAdapter,
-            useClass: MomentDateAdapter,
-            deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
-        },
-        { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
-    ],
-    imports: [MatDatepickerModule, MatFormFieldModule, FormsModule, MatInputModule]
+  selector: 'app-br-date-picker',
+  templateUrl: './br-date-picker.component.html',
+  styleUrls: ['./br-date-picker.component.scss'],
+  providers: [
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
+    },
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+  ],
+  imports: [MatDatepickerModule, MatFormFieldModule, FormsModule, MatInputModule]
 })
 export class BrDatePickerComponent {
   @Input() label = '';
-  @Input() value = new Date();
+  @Input() value: Date | null = new Date();
   @Output() handleOnChange = new EventEmitter<Date>();
 
   update(event: MatDatepickerInputEvent<Moment>) {

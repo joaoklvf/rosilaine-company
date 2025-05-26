@@ -16,17 +16,12 @@
         />
       </div>
       <div>
-        <label for="first-installment-date">Data da primeira parcela</label>
-        <input
-          class="form-control"
-          id="first-installment-date"
-          placeholder="dd/mm/aaaa"
-          name="birth-date"
-          mask="00/00/0000"
-          matInput
-          [dropSpecialCharacters]="false"
-          [(ngModel)]="order.firstInstallmentDate"
-        />
+        <app-br-date-picker
+          [label]="'Data da primeira parcela'"
+          [value]="order.firstInstallmentDate"
+          (handleOnChange)="setFirstInstallmentDate($event)"
+          class="col-md-3"
+        ></app-br-date-picker>
       </div>
       <div class="align-content-end text-end">
         <button

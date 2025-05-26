@@ -6,7 +6,6 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule, MatSelectChange } from "@angular/material/select";
 import { ActivatedRoute, Router } from "@angular/router";
-import { NgxMaskDirective } from "ngx-mask";
 import { BrDatePickerComponent } from "src/app/components/br-date-picker/br-date-picker.component";
 import { CustomAutocompleteComponent } from "src/app/components/custom-autocomplete/custom-autocomplete.component";
 import { InputMaskComponent } from "src/app/components/input-mask/input-mask.component";
@@ -31,7 +30,7 @@ import { InstallmentsSelectComponent } from "./installments/installments-select/
   selector: 'app-order-create',
   templateUrl: './order-create.component.html',
   styleUrl: './order-create.component.scss',
-  imports: [InputMaskComponent, CustomAutocompleteComponent, FormsModule, BrDatePickerComponent, MatSelectModule, MatFormFieldModule, MatIconModule, InstallmentsSelectComponent, NgxMaskDirective, MatInputModule],
+  imports: [InputMaskComponent, CustomAutocompleteComponent, FormsModule, BrDatePickerComponent, MatSelectModule, MatFormFieldModule, MatIconModule, InstallmentsSelectComponent, MatInputModule],
 })
 
 export class OrderCreateComponent implements OnInit {
@@ -131,7 +130,7 @@ export class OrderCreateComponent implements OnInit {
   }
 
   setFirstInstallmentDate(value: Date) {
-    this.order.orderDate = value;
+    this.order.firstInstallmentDate = value;
   }
 
   setCustomer(value: Customer) {
