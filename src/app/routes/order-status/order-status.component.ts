@@ -74,8 +74,8 @@ export class OrderStatusComponent {
     this.dialog.open(CustomDialogComponent, {
       width: '500px',
       data: {
-        title: "Deletar produto",
-        content: `Deseja deletar o produto ${orderStatus.description}?`,
+        title: "Deletar status",
+        content: `Deseja deletar o status ${orderStatus.description}?`,
         onConfirmAction: () => this.deleteOrderStatus(orderStatus)
       }
     });
