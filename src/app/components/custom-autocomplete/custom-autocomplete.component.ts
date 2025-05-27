@@ -86,4 +86,8 @@ export class CustomAutocompleteComponent<T extends object> implements OnChanges 
 
     this.handleOnChange.emit(value);
   }
+
+  onFocus(event: FocusEvent) {
+    (event.target as HTMLInputElement).select();
+  }
 }

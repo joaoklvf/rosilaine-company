@@ -42,6 +42,8 @@ export class OrderCreateComponent implements OnInit {
   orderStatuses: OrderStatus[] = [];
   orderItemStatuses: OrderItemStatus[] = [];
   title = 'Cadastrar pedido';
+  addUpdateItemButtonText = 'Adicionar';
+
   readonly dialog = inject(MatDialog);
 
   constructor(private orderService: OrderService, private customerService: CustomerService, private productService: ProductService, private orderStatusService: OrderStatusService, private route: ActivatedRoute, private orderItemStatusService: OrderItemStatusService, private orderItemService: OrderItemService, private snackBarService: SnackBarService, private router: Router) { }
@@ -76,7 +78,7 @@ export class OrderCreateComponent implements OnInit {
       .subscribe(itemStatus => this.orderItemStatuses = itemStatus);
   }
 
-  add(): void {
+  addUpdateItem(): void {
     const orderItem = { ...this.orderItem };
     if (!orderItem.product.id || orderItem.itemAmount <= 0)
       return;
@@ -112,6 +114,7 @@ export class OrderCreateComponent implements OnInit {
   edit(orderItem: OrderItem): void {
     this.orderItem = { ...orderItem };
     this.orderItem.itemStatus = orderItem.itemStatus;
+    this.addUpdateItemButtonText = 'Atualizar';
   }
 
   update(orderItem: OrderItem, index: number): void {
@@ -139,10 +142,14 @@ export class OrderCreateComponent implements OnInit {
   }
 
   setProduct(value: Product | null) {
-    if (!value)
+    if (!(value && value.id)) {
+      if (this.orderItem.product.id) {
+        this.clearItem();
+      }
       return;
+    }
 
-    this.orderItem.product = value;
+    this.orderItem.product = { ...value };
     this.orderItem.itemSellingPrice = value.productPrice;
   }
 
@@ -193,6 +200,7 @@ export class OrderCreateComponent implements OnInit {
     this.orderItem = new OrderItem();
     this.order = { ...order };
     this.orderTotal = getBrCurrencyStr(order.total);
+    this.addUpdateItemButtonText = 'Adicionar';
   }
 
   updateStatusesByOrder(order: Order) {
@@ -217,5 +225,10 @@ export class OrderCreateComponent implements OnInit {
         saveOrder: (order: Order) => this.saveOrder(order)
       }
     });
+  }
+
+  clearItem() {
+    this.orderItem = new OrderItem();
+    this.addUpdateItemButtonText = 'Adicionar';
   }
 }
