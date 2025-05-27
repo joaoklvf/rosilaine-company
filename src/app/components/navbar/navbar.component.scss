@@ -12,4 +12,9 @@
     color: white;
     font-weight: 500;
   }
+
+  .dropdown-item {
+    color: var(--bs-dropdown-link-color);
+    font-weight: 400;
+  }
 }

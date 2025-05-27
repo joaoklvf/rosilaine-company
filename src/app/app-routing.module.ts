@@ -7,6 +7,7 @@ import { CustomersPageComponent } from "./routes/customers/customers-page/custom
 import { OrdersPageComponent } from "./routes/order/orders-page/orders-page.component";
 import { OrderStatusComponent } from "./routes/order-status/order-status.component";
 import { OrderItemStatusComponent } from "./routes/order-item-status/order-item-status.component";
+import { CustomerTagsComponent } from "./routes/customer-tags/customer-tags.component";
 
 const routes: Routes = [
   { path: '', redirectTo: '/orders', pathMatch: 'full' },
@@ -19,6 +20,7 @@ const routes: Routes = [
   { path: 'products', component: ProductsComponent },
   { path: 'order-status', component: OrderStatusComponent },
   { path: 'order-item-status', component: OrderItemStatusComponent },
+  { path: 'customer-tags', component: CustomerTagsComponent },
 ];
 
 @NgModule({
