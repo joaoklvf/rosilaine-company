@@ -3,3 +3,13 @@
     display: block;
   }
 }
+
+.navbar {
+  background: darkviolet;
+  color: white;
+
+  & a {
+    color: white;
+    font-weight: 500;
+  }
+}
