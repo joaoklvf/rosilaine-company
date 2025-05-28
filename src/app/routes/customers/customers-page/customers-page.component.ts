@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { debounceTime, distinctUntilChanged, Observable, Subject, switchMap } from 'rxjs';
+import { debounceTime, distinctUntilChanged, Observable, startWith, Subject, switchMap } from 'rxjs';
 import { DataTableComponent } from 'src/app/components/data-table/data-table.component';
 import { DataTableColumnProp, FormatValueOptions } from 'src/app/interfaces/data-table';
 import { Customer } from 'src/app/models/customer/customer';
@@ -19,33 +19,23 @@ export class CustomersPageComponent implements OnInit {
     { description: "Telefone", fieldName: "phone" },
     { description: "Data de nascimento", fieldName: "birthDate", formatValue: FormatValueOptions.Date },
   ]
-  packages$!: Observable<Customer[]>;
+  customers$!: Observable<Customer[]>;
   private searchText$ = new Subject<string>();
   withRefresh = false;
-  search(packageName: string) {
-    this.searchText$.next(packageName);
-  }
 
   constructor(private customerService: CustomerService, private router: Router) { }
 
   ngOnInit() {
-    this.packages$ = this.searchText$.pipe(
+    console.log('ngOnInit')
+    this.customers$ = this.searchText$.pipe(
+      startWith(''),
       debounceTime(500),
       distinctUntilChanged(),
-      switchMap(packageName =>
-        this.customerService.get(packageName, /* this.withRefresh */))
+      switchMap((customerName) => {
+        console.log('switch map')
+        return this.customerService.get({ name: customerName }, /* this.withRefresh */)
+      }),
     );
-
-    this.getCustomers()
-  }
-
-  // ngOnInit(): void {
-  //   this.getC  ustomers();
-  // }
-
-  getCustomers(): void {
-    this.customerService.get()
-      .subscribe(customers => this.customers = customers);
   }
 
   remove() {
@@ -60,8 +50,9 @@ export class CustomersPageComponent implements OnInit {
     this.router.navigate(["/customers/create"])
   }
 
-  filterData(packageName: string) {
-    this.searchText$.next(packageName);
+  filterData(customerName: string) {
+    console.log('entrou filter data')
+    this.searchText$.next(customerName);
   }
 }
 

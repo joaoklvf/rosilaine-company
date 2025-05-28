@@ -1,15 +1,21 @@
 <div class="d-flex justify-content-between">
   <h1>Clientes</h1>
-  <button type="button" class="btn btn-primary h-100" (click)="addPageNavigate()">
+  <button
+    type="button"
+    class="btn btn-primary h-100"
+    (click)="addPageNavigate()"
+  >
     Criar
   </button>
 </div>
+
 <app-data-table
   [columns]="columns"
-  [data]="customers"
+  [data2]="customers$"
   (removeAction)="remove()"
   (editAction)="edit($event)"
   [showSearchField]="true"
   searchPlaceHolder="Nome"
   (searchAction)="filterData($event)"
+  [data]="[]"
 />
