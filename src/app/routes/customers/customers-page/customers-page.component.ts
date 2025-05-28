@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
+import { debounceTime, distinctUntilChanged, Observable, Subject, switchMap } from 'rxjs';
 import { DataTableComponent } from 'src/app/components/data-table/data-table.component';
 import { DataTableColumnProp, FormatValueOptions } from 'src/app/interfaces/data-table';
 import { Customer } from 'src/app/models/customer/customer';
@@ -18,12 +19,29 @@ export class CustomersPageComponent implements OnInit {
     { description: "Telefone", fieldName: "phone" },
     { description: "Data de nascimento", fieldName: "birthDate", formatValue: FormatValueOptions.Date },
   ]
+  packages$!: Observable<Customer[]>;
+  private searchText$ = new Subject<string>();
+  withRefresh = false;
+  search(packageName: string) {
+    this.searchText$.next(packageName);
+  }
 
   constructor(private customerService: CustomerService, private router: Router) { }
 
-  ngOnInit(): void {
-    this.getCustomers();
+  ngOnInit() {
+    this.packages$ = this.searchText$.pipe(
+      debounceTime(500),
+      distinctUntilChanged(),
+      switchMap(packageName =>
+        this.customerService.get(packageName, /* this.withRefresh */))
+    );
+
+    this.getCustomers()
   }
+
+  // ngOnInit(): void {
+  //   this.getC  ustomers();
+  // }
 
   getCustomers(): void {
     this.customerService.get()
@@ -40,6 +58,10 @@ export class CustomersPageComponent implements OnInit {
 
   addPageNavigate() {
     this.router.navigate(["/customers/create"])
+  }
+
+  filterData(packageName: string) {
+    this.searchText$.next(packageName);
   }
 }
 

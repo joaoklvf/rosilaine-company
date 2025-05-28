@@ -9,4 +9,7 @@
   [data]="customers"
   (removeAction)="remove()"
   (editAction)="edit($event)"
+  [showSearchField]="true"
+  searchPlaceHolder="Nome"
+  (searchAction)="filterData($event)"
 />
