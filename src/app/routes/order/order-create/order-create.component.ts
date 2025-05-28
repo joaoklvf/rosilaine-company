@@ -114,7 +114,7 @@ export class OrderCreateComponent implements OnInit {
   edit(orderItem: OrderItem): void {
     this.orderItem = { ...orderItem };
     this.orderItem.itemStatus = orderItem.itemStatus;
-    this.addUpdateItemButtonText = 'Atualizar';
+    this.changeAddUpdateItemButtonText();
   }
 
   update(orderItem: OrderItem, index: number): void {
@@ -200,7 +200,7 @@ export class OrderCreateComponent implements OnInit {
     this.orderItem = new OrderItem();
     this.order = { ...order };
     this.orderTotal = getBrCurrencyStr(order.total);
-    this.addUpdateItemButtonText = 'Adicionar';
+    this.changeAddUpdateItemButtonText();
   }
 
   updateStatusesByOrder(order: Order) {
@@ -229,6 +229,11 @@ export class OrderCreateComponent implements OnInit {
 
   clearItem() {
     this.orderItem = new OrderItem();
-    this.addUpdateItemButtonText = 'Adicionar';
+    this.changeAddUpdateItemButtonText();
+  }
+
+  changeAddUpdateItemButtonText() {
+    this.addUpdateItemButtonText = this.orderItem.id ?
+      'Atualizar' : 'Adicionar';
   }
 }
