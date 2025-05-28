@@ -61,9 +61,12 @@ export class OrdersPageComponent implements OnInit {
   }
 
   clearFilters() {
+    const hasAnyFilter = this.customer?.id || this.status?.id;
     this.setCustomer(null);
     this.setOrderStatus(null);
-    this.getOrders();
+    
+    if (hasAnyFilter)
+      this.getOrders();
   }
 
   deleteOrder(id: string) {
