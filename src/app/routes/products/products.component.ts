@@ -11,6 +11,7 @@ import { ProductService } from "src/app/services/product/product.service";
 import { getBrCurrencyStr } from "src/app/utils/text-format";
 import { DataTableComponent } from "../../components/data-table/data-table.component";
 import { DataTableColumnProp, FormatValueOptions } from "src/app/interfaces/data-table";
+import { startWith, debounceTime, distinctUntilChanged, switchMap, Subject } from "rxjs";
 
 @Component({
   selector: 'app-products',
@@ -23,6 +24,8 @@ export class ProductsComponent implements OnInit {
   categories: ProductCategory[] = [];
   products: Product[] = [];
   product = new Product();
+  private searchText$ = new Subject<string>();
+
   readonly columns: DataTableColumnProp<Product>[] = [
     { description: "Produto", fieldName: "description", width: '50%' },
     { description: "Código", fieldName: "productCode" },
@@ -39,8 +42,14 @@ export class ProductsComponent implements OnInit {
     this.productCategoryService.get()
       .subscribe(categories => this.categories = categories);
 
-    this.productService.get()
-      .subscribe(products => this.products = products);
+    this.searchText$.pipe(
+      startWith(''),
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap((productDescription) => {
+        return this.productService.get({ description: productDescription })
+      }),
+    ).subscribe(products => this.products = products);
   }
 
   setProduct(value: Product) {
@@ -110,5 +119,9 @@ export class ProductsComponent implements OnInit {
         onConfirmAction: () => this.deleteProduct(product)
       }
     });
+  }
+
+  filterData(customerName: string) {
+    this.searchText$.next(customerName);
   }
 }

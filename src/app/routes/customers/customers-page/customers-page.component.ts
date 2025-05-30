@@ -14,28 +14,24 @@ import { CustomerService } from 'src/app/services/customer/customer.service';
 })
 export class CustomersPageComponent implements OnInit {
   customers: Customer[] = [];
+  private searchText$ = new Subject<string>();
   readonly columns: DataTableColumnProp<Customer>[] = [
     { description: "Nome", fieldName: "name", width: '50%' },
     { description: "Telefone", fieldName: "phone" },
     { description: "Data de nascimento", fieldName: "birthDate", formatValue: FormatValueOptions.Date },
   ]
-  customers$!: Observable<Customer[]>;
-  private searchText$ = new Subject<string>();
-  withRefresh = false;
 
   constructor(private customerService: CustomerService, private router: Router) { }
 
   ngOnInit() {
-    console.log('ngOnInit')
-    this.customers$ = this.searchText$.pipe(
+    this.searchText$.pipe(
       startWith(''),
-      debounceTime(500),
+      debounceTime(300),
       distinctUntilChanged(),
       switchMap((customerName) => {
-        console.log('switch map')
         return this.customerService.get({ name: customerName }, /* this.withRefresh */)
       }),
-    );
+    ).subscribe(customers => this.customers = customers);
   }
 
   remove() {
@@ -51,7 +47,6 @@ export class CustomersPageComponent implements OnInit {
   }
 
   filterData(customerName: string) {
-    console.log('entrou filter data')
     this.searchText$.next(customerName);
   }
 }

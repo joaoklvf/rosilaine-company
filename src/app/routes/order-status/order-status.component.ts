@@ -1,6 +1,7 @@
-import { Component, ElementRef, inject, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { Subject, startWith, debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
 import { CustomDialogComponent } from 'src/app/components/custom-dialog/custom-dialog.component';
 import { DataTableComponent } from 'src/app/components/data-table/data-table.component';
 import { DataTableColumnProp } from 'src/app/interfaces/data-table';
@@ -13,19 +14,28 @@ import { OrderStatusService } from 'src/app/services/order/order-status/order-st
   templateUrl: './order-status.component.html',
   styleUrl: './order-status.component.scss'
 })
-export class OrderStatusComponent {
+export class OrderStatusComponent implements OnInit {
   readonly columns: DataTableColumnProp<OrderStatus>[] = [
     { description: "Status", fieldName: "description", width: '85%' },
   ]
   readonly dialog = inject(MatDialog);
   orderStatus: OrderStatus = new OrderStatus();
   orderStatuses: OrderStatus[] = [];
+  private searchText$ = new Subject<string>();
+
   @ViewChild("orderStatusDescription") orderStatusDescriptionField: ElementRef = new ElementRef(null);
 
   constructor(private orderStatusService: OrderStatusService) { }
+  
   ngOnInit(): void {
-    this.orderStatusService.get()
-      .subscribe(statuses => this.orderStatuses = [...statuses]);
+    this.searchText$.pipe(
+      startWith(''),
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap((statusDescription) => {
+        return this.orderStatusService.get({ description: statusDescription })
+      }),
+    ).subscribe(orderStatuses => this.orderStatuses = orderStatuses);
   }
 
   edit(orderStatus: OrderStatus): void {
@@ -79,5 +89,9 @@ export class OrderStatusComponent {
         onConfirmAction: () => this.deleteOrderStatus(orderStatus)
       }
     });
+  }
+
+  filterData(customerName: string) {
+    this.searchText$.next(customerName);
   }
 }

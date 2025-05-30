@@ -1,4 +1,4 @@
-<!-- @if(data2.length > 0) { @if(showSearchField()) { -->
+@if(data().length > 0) { @if(showSearchField()) {
 <div class="card mb-3">
   <div class="card-body">
     <label for="Pesquisar">Pesquisar</label>
@@ -12,7 +12,7 @@
     />
   </div>
 </div>
-<!-- } -->
+}
 
 <div class="card">
   <div class="card-body">
@@ -28,8 +28,8 @@
         </tr>
       </thead>
       <tbody>
-        <!-- @for(row of data | async; track row){ -->
-        <tr *ngFor="let row of data2() | async">
+        @for(row of data(); track row){
+        <tr>
           @for(column of columns(); track column){
           <td width="{{ getColumnWidth(column) }}">
             {{ displayCell(row, column) }}
@@ -54,9 +54,9 @@
             </button>
           </td>
         </tr>
-        <!-- } -->
+        }
       </tbody>
     </table>
   </div>
 </div>
-<!-- } -->
+}

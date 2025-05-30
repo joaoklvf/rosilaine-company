@@ -1,6 +1,7 @@
 import { Component, ElementRef, inject, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { startWith, debounceTime, distinctUntilChanged, switchMap, Subject } from 'rxjs';
 import { CustomDialogComponent } from 'src/app/components/custom-dialog/custom-dialog.component';
 import { DataTableComponent } from 'src/app/components/data-table/data-table.component';
 import { DataTableColumnProp } from 'src/app/interfaces/data-table';
@@ -20,12 +21,20 @@ export class CustomerTagsComponent {
   readonly dialog = inject(MatDialog);
   customerTag: CustomerTag = new CustomerTag();
   customerTags: CustomerTag[] = [];
+  private searchText$ = new Subject<string>();
+
   @ViewChild("customerTagDescription") customerTagDescriptionField: ElementRef = new ElementRef(null);
 
   constructor(private customerTagService: CustomerTagService) { }
   ngOnInit(): void {
-    this.customerTagService.get()
-      .subscribe(tags => this.customerTags = [...tags]);
+    this.searchText$.pipe(
+      startWith(''),
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap((tagName) => {
+        return this.customerTagService.get({ description: tagName }, /* this.withRefresh */)
+      }),
+    ).subscribe(customerTags => this.customerTags = customerTags);
   }
 
   edit(customerTag: CustomerTag): void {
@@ -79,5 +88,9 @@ export class CustomerTagsComponent {
         onConfirmAction: () => this.deleteCustomerTag(customerTag)
       }
     });
+  }
+
+  filterData(customerName: string) {
+    this.searchText$.next(customerName);
   }
 }
