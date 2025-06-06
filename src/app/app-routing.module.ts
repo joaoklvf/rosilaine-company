@@ -4,14 +4,13 @@ import { CustomerCreateComponent } from "./routes/customers/customer-create/cust
 import { OrderCreateComponent } from "./routes/order/order-create/order-create.component";
 import { ProductsComponent } from "./routes/products/products.component";
 import { CustomersPageComponent } from "./routes/customers/customers-page/customers-page.component";
-import { OrdersPageComponent } from "./routes/order/orders-page/orders-page.component";
 import { OrderStatusComponent } from "./routes/order-status/order-status.component";
 import { OrderItemStatusComponent } from "./routes/order-item-status/order-item-status.component";
 import { CustomerTagsComponent } from "./routes/customer-tags/customer-tags.component";
 
 const routes: Routes = [
-  { path: '', redirectTo: '/customer-tags', pathMatch: 'full' },
-  { path: 'orders', component: OrdersPageComponent },
+  { path: '', redirectTo: '/orders', pathMatch: 'full' },
+  { path: 'orders', loadChildren: () => import('./routes/order/orders-page/orders-page.component').then(x => x.OrdersPageComponent) },
   { path: 'orders/create', component: OrderCreateComponent },
   { path: 'order/:id', component: OrderCreateComponent },
   { path: 'customers', component: CustomersPageComponent },
@@ -24,7 +23,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, {})],
   exports: [RouterModule],
 })
 export class AppRoutingModule { }
