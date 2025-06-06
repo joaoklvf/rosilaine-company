@@ -10,7 +10,7 @@ import { OrderItemStatusComponent } from "./routes/order-item-status/order-item-
 import { CustomerTagsComponent } from "./routes/customer-tags/customer-tags.component";
 
 const routes: Routes = [
-  { path: '', redirectTo: '/orders', pathMatch: 'full' },
+  { path: '', redirectTo: '/customer-tags', pathMatch: 'full' },
   { path: 'orders', component: OrdersPageComponent },
   { path: 'orders/create', component: OrderCreateComponent },
   { path: 'order/:id', component: OrderCreateComponent },
