@@ -27,7 +27,7 @@
           </tr>
         </thead>
         <tbody>
-          @for (installment of data.order.installments; track installment) {
+          @for (installment of installments; track installment) {
           <tr>
             <td>{{ getBrDate(installment.debitDate) }}</td>
             <td>{{ getCurrencyValue(installment.amount) }}</td>
@@ -35,7 +35,9 @@
               <app-br-date-picker
                 [label]="'Data de pagamento'"
                 [value]="installment.paymentDate"
-                (handleOnChange)="setInstallmentPaymentDate($event, installment)"
+                (handleOnChange)="
+                  setInstallmentPaymentDate($event, installment)
+                "
                 (handleDoubleClick)="setInstallmentPaidDate(installment)"
                 class="col-md-3"
               ></app-br-date-picker>
