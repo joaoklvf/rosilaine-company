@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from "@angular/core";
-import { FormsModule } from "@angular/forms";
+import { FormControl, FormsModule } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
@@ -34,7 +34,7 @@ import { InstallmentsSelectComponent } from "./installments/installments-select/
 })
 
 export class OrderCreateComponent implements OnInit {
-  order = new Order();
+  order = new FormControl<Order>(new Order());
   orderItem = new OrderItem();
   orderTotal = '';
   customers: Customer[] = [];
@@ -58,7 +58,7 @@ export class OrderCreateComponent implements OnInit {
             this.router.navigate(['orders']);
           }
 
-          this.order = { ...order }
+          this.order.setValue({ ...order })
           this.orderTotal = getBrCurrencyStr(order.total);
         });
 
@@ -83,13 +83,13 @@ export class OrderCreateComponent implements OnInit {
     if (!orderItem.product.id || orderItem.itemAmount <= 0)
       return;
 
-    const prevItems = [...this.order.orderItems];
+    const prevItems = [...this.order.value!.orderItems];
     const orderItems = orderItem.id
       ? prevItems.map(item => item.id === orderItem.id ? { ...orderItem } : item)
       : [...prevItems, orderItem];
 
     const order: Order = {
-      ...this.order,
+      ...this.order.value!,
       orderItems: orderItems,
     }
 
@@ -108,7 +108,7 @@ export class OrderCreateComponent implements OnInit {
   }
 
   remove(orderItem: OrderItem): void {
-    this.order.orderItems = this.order.orderItems.filter(p => p !== orderItem);
+    this.order.value!.orderItems = this.order.value!.orderItems.filter(p => p !== orderItem);
   }
 
   edit(orderItem: OrderItem): void {
@@ -118,7 +118,7 @@ export class OrderCreateComponent implements OnInit {
   }
 
   update(orderItem: OrderItem, index: number): void {
-    this.order.orderItems[index] = orderItem;
+    this.order.value!.orderItems[index] = orderItem;
   }
 
   getCurrencyValue = (value: number) =>
@@ -129,16 +129,16 @@ export class OrderCreateComponent implements OnInit {
   }
 
   setOrderDate(value: Date) {
-    this.order.orderDate = value;
+    this.order.value!.orderDate = value;
   }
 
   setFirstInstallmentDate(value: Date) {
-    this.order.firstInstallmentDate = value;
+    this.order.value!.firstInstallmentDate = value;
   }
 
   setCustomer(value: Customer | null) {
     if (value)
-      this.order.customer = value;
+      this.order.value!.customer = value;
   }
 
   setProduct(value: Product | null) {
@@ -155,7 +155,7 @@ export class OrderCreateComponent implements OnInit {
 
   setOrderStatus(value: OrderStatus | null) {
     if (value)
-      this.order.status = value;
+      this.order.value!.status = value;
   }
 
   setOrderItemStatus(value: OrderItemStatus | null) {
@@ -170,24 +170,24 @@ export class OrderCreateComponent implements OnInit {
 
     const orderItemChanged = { ...orderItemSelected, itemStatus: optionSelected };
     this.orderItemService.update(orderItemChanged).subscribe(orderItem => {
-      const prevItems = [...this.order.orderItems];
+      const prevItems = [...this.order.value!.orderItems];
       const orderItems = orderItem.id
         ? prevItems.map(item => item.id === orderItem.id ? { ...orderItem } : item)
         : [...prevItems, orderItem];
 
-      this.order.orderItems = orderItems;
+      this.order.value!.orderItems = orderItems;
     })
   }
 
   deliveryItem(orderItem: OrderItem) {
     const orderItemChanged = { ...orderItem, deliveryDate: new Date() };
     this.orderItemService.update(orderItemChanged).subscribe(orderItem => {
-      const prevItems = [...this.order.orderItems];
+      const prevItems = [...this.order.value!.orderItems];
       const orderItems = orderItem.id
         ? prevItems.map(item => item.id === orderItem.id ? { ...orderItem } : item)
         : [...prevItems, orderItem];
 
-      this.order.orderItems = orderItems;
+      this.order.value!.orderItems = orderItems;
     })
   }
 
@@ -198,7 +198,7 @@ export class OrderCreateComponent implements OnInit {
   updateOrder(order: Order) {
     this.updateStatusesByOrder(order);
     this.orderItem = new OrderItem();
-    this.order = { ...order };
+    this.order.setValue({ ...order });
     this.orderTotal = getBrCurrencyStr(order.total);
     this.changeAddUpdateItemButtonText();
   }
@@ -214,14 +214,15 @@ export class OrderCreateComponent implements OnInit {
   }
 
   saveOrder(order: Order) {
-    this.order = { ...order };
+    this.order.setValue({ ...order });
   }
 
   installmentsManagement() {
     this.dialog.open(InstallmentManagementComponent, {
       width: '1000px',
       data: {
-        order: { ...this.order }
+        order: { ...this.order.value },
+        saveOrder: (order: Order) => this.saveOrder(order)
       }
     });
   }

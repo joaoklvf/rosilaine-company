@@ -1,5 +1,5 @@
 <h1>{{ title }}</h1>
-@if(order.orderItems.length > 0){
+@if(order.value!.orderItems.length > 0){
 <div class="card mb-3">
   <div class="card-body">
     <div class="d-flex gap-2">
@@ -11,14 +11,14 @@
       </div>
       <div>
         <app-installments-select
-          [order]="order"
+          [order]="order.value!"
           (saveOrderAction)="saveOrder($event)"
         />
       </div>
       <div>
         <app-br-date-picker
           [label]="'Data da primeira parcela'"
-          [value]="order.firstInstallmentDate"
+          [value]="order.value!.firstInstallmentDate"
           (handleOnChange)="setFirstInstallmentDate($event)"
           class="col-md-3"
         ></app-br-date-picker>
@@ -44,7 +44,7 @@
         (handleOnChange)="setCustomer($event)"
         [data]="customers"
         [displayValue]="'name'"
-        [value]="order.customer"
+        [value]="order.value!.customer"
         class="col-md-6 mb-md-0 mb-2"
       ></app-custom-autocomplete>
       <app-custom-autocomplete
@@ -53,12 +53,12 @@
         [data]="orderStatuses"
         [creatable]="true"
         displayValue="description"
-        [value]="order.status"
+        [value]="order.value!.status"
         class="col-md-3 mb-md-0 mb-2"
       ></app-custom-autocomplete>
       <app-br-date-picker
         [label]="'Data do pedido'"
-        [value]="order.orderDate"
+        [value]="order.value!.orderDate"
         (handleOnChange)="setOrderDate($event)"
         class="col-md-3"
       ></app-br-date-picker>
@@ -121,7 +121,7 @@
   </div>
 </div>
 
-@if (order.orderItems.length > 0) {
+@if (order.value!.orderItems.length > 0) {
 <div class="card mb-3">
   <div class="card-body table-responsive">
     <table class="table">
@@ -137,7 +137,7 @@
         </tr>
       </thead>
       <tbody>
-        @for(orderItem of order.orderItems; track orderItem){
+        @for(orderItem of order.value!.orderItems; track orderItem){
         <tr>
           <td>{{ orderItem.product.description }}</td>
           <td>

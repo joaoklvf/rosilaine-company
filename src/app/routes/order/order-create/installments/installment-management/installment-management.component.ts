@@ -31,7 +31,9 @@ export class InstallmentManagementComponent implements OnInit {
   constructor(private orderInstallmentService: OrderInstallmentService, private snackBarService: SnackBarService) { }
 
   ngOnInit(): void {
-    this.data.order.firstInstallmentDate = this.data.order.firstInstallmentDate ?? this.data.order.installments![0].debitDate;
+    if (!this.data.order.firstInstallmentDate)
+      this.data.saveOrder({ ...this.data.order, firstInstallmentDate: this.data.order.installments![0].debitDate })
+
     this.installments = this.data.order.installments!.map(x => ({ ...x }));
   }
 
@@ -66,7 +68,7 @@ export class InstallmentManagementComponent implements OnInit {
       .pipe(
         tap(_ => {
           const installments = this.installments.map(x => ({ ...x }));
-          this.data.saveOrder({ ...this.data.order, installments })
+          this.data.saveOrder({ ...this.data.order, installments, firstInstallmentDate: installments[0].debitDate })
           this.snackBarService.success('Parcelas atualizadas com sucesso');
           this.dialogRef.close();
         }),
