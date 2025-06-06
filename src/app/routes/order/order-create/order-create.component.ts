@@ -221,8 +221,7 @@ export class OrderCreateComponent implements OnInit {
     this.dialog.open(InstallmentManagementComponent, {
       width: '1000px',
       data: {
-        order: this.order,
-        saveOrder: (order: Order) => this.saveOrder(order)
+        order: { ...this.order }
       }
     });
   }

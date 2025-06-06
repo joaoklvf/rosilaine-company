@@ -37,8 +37,13 @@ export class BrDatePickerComponent {
   @Input() label = '';
   @Input() value: Date | null = new Date();
   @Output() handleOnChange = new EventEmitter<Date>();
+  @Output() handleDoubleClick = new EventEmitter();
 
   update(event: MatDatepickerInputEvent<Moment>) {
     this.handleOnChange.emit(event.value?.toDate());
+  }
+
+  doubleClickAction() {
+    this.handleDoubleClick && this.handleDoubleClick.emit();
   }
 }

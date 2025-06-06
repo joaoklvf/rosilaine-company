@@ -9,8 +9,8 @@ import { DeleteResult } from './delete-result';
   providedIn: 'root'
 })
 export class BaseApiService<T extends { id?: string }> {
-  constructor(private http: HttpClient, private messageService: MessageService, @Inject('collection') private collection: string) { }
-  private apiUrl = `${environment.apiUrl}/${this.collection}`;// URL to web api
+  constructor(public http: HttpClient, public messageService: MessageService, @Inject('collection') public collection: string) { }
+  public apiUrl = `${environment.apiUrl}/${this.collection}`;// URL to web api
 
   /** GET orders from the server */
   get(params?: any): Observable<T[]> {
@@ -93,7 +93,7 @@ export class BaseApiService<T extends { id?: string }> {
    * @param operation - name of the operation that failed
    * @param result - optional value to return as the observable result
    */
-  private handleError<T>(operation = 'operation', result?: T) {
+  public handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
 
       // TODO: send the error to remote logging infrastructure
@@ -108,7 +108,7 @@ export class BaseApiService<T extends { id?: string }> {
   }
 
   /** Log a TService message with the MessageService */
-  private log(message: string) {
+  public log(message: string) {
     this.messageService.add(`TService: ${message}`);
   }
 

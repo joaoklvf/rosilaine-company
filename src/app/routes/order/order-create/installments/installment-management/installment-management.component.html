@@ -32,21 +32,19 @@
             <td>{{ getBrDate(installment.debitDate) }}</td>
             <td>{{ getCurrencyValue(installment.amount) }}</td>
             <td>
-              <input
-                class="form-control"
-                id="first-installment-date"
-                placeholder="dd/mm/aaaa"
-                name="birth-date"
-                mask="00/00/0000"
-                matInput
-                [dropSpecialCharacters]="false"
-                [(ngModel)]="installment.paymentDate"
-              />
+              <app-br-date-picker
+                [label]="'Data de pagamento'"
+                [value]="installment.paymentDate"
+                (handleOnChange)="setInstallmentPaymentDate($event, installment)"
+                (handleDoubleClick)="setInstallmentPaidDate(installment)"
+                class="col-md-3"
+              ></app-br-date-picker>
             </td>
             <td>
               <app-input-mask
                 [value]="installment.amountPaid || 0"
                 (handleOnChange)="setInstallmentAmountPaid($event, installment)"
+                (handleDoubleClick)="setInstallmentPaidAmount(installment)"
               >
               </app-input-mask>
             </td>
@@ -59,7 +57,7 @@
 </mat-dialog-content>
 <mat-dialog-actions class="justify-content-between">
   <button mat-dialog-close class="btn btn-danger">Cancelar</button>
-  <button mat-dialog-close cdkFocusInitial class="btn btn-success">
+  <button cdkFocusInitial class="btn btn-success" (click)="saveInstallments()">
     Confirmar
   </button>
 </mat-dialog-actions>
