@@ -1,13 +1,14 @@
 import { Component, input, output } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
-import { Observable } from 'rxjs';
 import { DataTableColumnProp, } from 'src/app/interfaces/data-table';
 import { getCellValue } from 'src/app/utils/data-table-format';
+import { DataTablePaginationComponent } from './data-table-pagination/data-table-pagination.component';
+import { DataTableFilter } from './data-table-interfaces';
 
 @Component({
   selector: 'app-data-table',
-  imports: [MatIconModule, ReactiveFormsModule],
+  imports: [MatIconModule, ReactiveFormsModule, DataTablePaginationComponent],
   templateUrl: './data-table.component.html',
   styleUrl: './data-table.component.scss'
 })
@@ -15,12 +16,24 @@ import { getCellValue } from 'src/app/utils/data-table-format';
 export class DataTableComponent<T> {
   readonly columns = input.required<DataTableColumnProp<T>[]>();
   readonly data = input.required<T[]>();
-
   readonly removeAction = output<T>();
   readonly editAction = output<T>();
   readonly showSearchField = input(false);
   readonly searchPlaceHolder = input('');
-  readonly searchAction = output<string>();
+  readonly searchAction = output<DataTableFilter>();
+  readonly dataPerPage = input(15);
+
+  get hasMoreData() {
+    return false;
+  }
+
+  get pagesCount() {
+    return this.data().length / this.dataPerPage();
+  }
+
+  get readyData() {
+    return this.data()
+  }
 
   remove(value: T) {
     this.removeAction.emit(value);
@@ -39,6 +52,10 @@ export class DataTableComponent<T> {
   }
 
   filterData(event: Event) {
-    this.searchAction.emit((event.target as HTMLInputElement).value);
+    this.searchAction.emit({ filter: (event.target as HTMLInputElement).value, offset: 0, take: this.dataPerPage() });
+  }
+
+  changePageAction(skip: number) {
+    this.searchAction.emit({ filter: '', offset: skip, take: this.dataPerPage() })
   }
 }

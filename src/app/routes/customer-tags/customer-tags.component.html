@@ -26,6 +26,6 @@
   [data]="customerTags"
   (editAction)="edit($event)"
   (removeAction)="openDialog($event)"
-  (searchAction)="filterData($event)"
+  (searchAction)="filterData($event.filter)"
   [showSearchField]="true"
 />

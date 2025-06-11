@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { debounceTime, distinctUntilChanged, Observable, startWith, Subject, switchMap } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, Observable, skip, startWith, Subject, switchMap } from 'rxjs';
+import { DataTableFilter } from 'src/app/components/data-table/data-table-interfaces';
 import { DataTableComponent } from 'src/app/components/data-table/data-table.component';
 import { DataTableColumnProp, FormatValueOptions } from 'src/app/interfaces/data-table';
 import { Customer } from 'src/app/models/customer/customer';
@@ -14,7 +15,7 @@ import { CustomerService } from 'src/app/services/customer/customer.service';
 })
 export class CustomersPageComponent implements OnInit {
   customers: Customer[] = [];
-  private searchText$ = new Subject<string>();
+  private searchText$ = new Subject<DataTableFilter>();
   readonly columns: DataTableColumnProp<Customer>[] = [
     { description: "Nome", fieldName: "name", width: '50%' },
     { description: "Telefone", fieldName: "phone" },
@@ -28,8 +29,10 @@ export class CustomersPageComponent implements OnInit {
       startWith(''),
       debounceTime(300),
       distinctUntilChanged(),
-      switchMap((customerName) => {
-        return this.customerService.get({ name: customerName }, /* this.withRefresh */)
+      switchMap((filters) => {
+        if (typeof filters === 'string')
+          return this.customerService.get({ name: filters, offset: 0, take: 1 }, /* this.withRefresh */)
+        return this.customerService.get({ name: filters.filter, offset: filters.offset, take: filters.take })
       }),
     ).subscribe(customers => this.customers = customers);
   }
@@ -46,8 +49,8 @@ export class CustomersPageComponent implements OnInit {
     this.router.navigate(["/customers/create"])
   }
 
-  filterData(customerName: string) {
-    this.searchText$.next(customerName);
+  filterData(filters: DataTableFilter) {
+    this.searchText$.next(filters);
   }
 }
 

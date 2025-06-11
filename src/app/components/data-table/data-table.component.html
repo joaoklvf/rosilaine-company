@@ -28,7 +28,7 @@
         </tr>
       </thead>
       <tbody>
-        @for(row of data(); track row){
+        @for(row of readyData; track row){
         <tr>
           @for(column of columns(); track column){
           <td width="{{ getColumnWidth(column) }}">
@@ -57,5 +57,10 @@
         }
       </tbody>
     </table>
+    <app-data-table-pagination 
+      (searchAction)="changePageAction($event)"
+      [hasMoreData]="hasMoreData"
+      [totalPages]="pagesCount"
+    />
   </div>
 </div>

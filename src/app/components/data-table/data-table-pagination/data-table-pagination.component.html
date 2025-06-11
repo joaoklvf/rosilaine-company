@@ -1,0 +1,31 @@
+<nav aria-label="Page navigation example">
+  <ul class="pagination">
+    <li class="page-item">
+      <button
+        type="button"
+        class="page-link"
+        aria-label="Previous"
+        [disabled]="!hasMoreData"
+        (click)="onPrevButtonClick()"
+      >
+        <span aria-hidden="true">&laquo;</span>
+      </button>
+    </li>
+    @for (page of pagesCount; track $index) {
+    <li class="page-item">
+      <button type="button" class="page-link" href="#">{{ page + 1 }}</button>
+    </li>
+    }
+    <li class="page-item">
+      <button
+        type="button"
+        class="page-link"
+        aria-label="Next"
+        [disabled]="!hasMoreData"
+        (click)="onNextButtonClick()"
+      >
+        <span aria-hidden="true">&raquo;</span>
+      </button>
+    </li>
+  </ul>
+</nav>

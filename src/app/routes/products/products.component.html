@@ -55,5 +55,5 @@
   (editAction)="edit($event)"
   (removeAction)="openDialog($event)"
   [showSearchField]="true"
-  (searchAction)="filterData($event)"
+  (searchAction)="filterData($event.filter)"
 />
