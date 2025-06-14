@@ -14,6 +14,7 @@ const routes: Routes = [
   { path: 'order-status', loadComponent: () => import('./routes/order-status/order-status.component').then(x => x.OrderStatusComponent) },
   { path: 'order-item-status', loadComponent: () => import('./routes/order-item-status/order-item-status.component').then(x => x.OrderItemStatusComponent) },
   { path: 'customer-tags', loadComponent: () => import('./routes/customer-tags/customer-tags.component').then(x => x.CustomerTagsComponent) },
+  { path: 'product-category', loadComponent: () => import('./routes/product-category/product-category.component').then(x => x.ProductCategoryComponent) },
 ];
 
 @NgModule({
