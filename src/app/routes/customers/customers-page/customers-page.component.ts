@@ -31,7 +31,7 @@ export class CustomersPageComponent implements OnInit {
       distinctUntilChanged(),
       switchMap((filters) => {
         if (typeof filters === 'string')
-          return this.customerService.get({ name: filters, skip: 0, take: 15 })
+          return this.customerService.get({ name: filters })
 
         return this.customerService.get({ name: filters.filter, skip: filters.skip, take: filters.take })
       }),
