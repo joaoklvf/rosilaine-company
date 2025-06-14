@@ -10,26 +10,33 @@ import { fillArrayFromNumber } from 'src/app/utils/arrays';
 export class DataTablePaginationComponent {
   readonly searchAction = output<number>();
   readonly totalPages = input(1);
-  readonly hasMoreData = input(false);
-  currentPage = 1;
+  currentSkip = 0;
 
-  get pagesCount(){
+  get pagesCount() {
     return fillArrayFromNumber(this.totalPages())
   }
 
-  onPrevButtonClick() {
-    if (this.currentPage > 1)
-      this.currentPage = this.currentPage - 1;
+  get hasMoreData (){
+    return this.totalPages() > 1
+  }
 
+  onPrevButtonClick() {
+    if (this.currentSkip === 0)
+      return;
+
+    this.currentSkip = this.currentSkip - 1;
     this.getData();
   }
 
   onNextButtonClick() {
-    this.currentPage++;
+    if (this.currentSkip === this.totalPages() - 1)
+      return;
+
+    this.currentSkip++;
     this.getData();
   }
 
   getData() {
-    this.searchAction.emit(this.currentPage)
+    this.searchAction.emit(this.currentSkip)
   }
 }

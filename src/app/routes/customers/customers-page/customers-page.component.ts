@@ -21,7 +21,7 @@ export class CustomersPageComponent implements OnInit {
     { description: "Telefone", fieldName: "phone" },
     { description: "Data de nascimento", fieldName: "birthDate", formatValue: FormatValueOptions.Date },
   ]
-
+  dataCount = 0;
   constructor(private customerService: CustomerService, private router: Router) { }
 
   ngOnInit() {
@@ -31,10 +31,15 @@ export class CustomersPageComponent implements OnInit {
       distinctUntilChanged(),
       switchMap((filters) => {
         if (typeof filters === 'string')
-          return this.customerService.get({ name: filters, offset: 0, take: 1 }, /* this.withRefresh */)
-        return this.customerService.get({ name: filters.filter, offset: filters.offset, take: filters.take })
+          return this.customerService.get({ name: filters, skip: 0, take: 15 })
+
+        return this.customerService.get({ name: filters.filter, skip: filters.skip, take: filters.take })
       }),
-    ).subscribe(customers => this.customers = customers);
+    ).subscribe(customers => {
+      const finalCustomers = customers as any;
+      this.customers = finalCustomers[0];
+      this.dataCount = finalCustomers[1]
+    });
   }
 
   remove() {

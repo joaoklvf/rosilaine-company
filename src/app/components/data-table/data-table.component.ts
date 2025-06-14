@@ -22,13 +22,14 @@ export class DataTableComponent<T> {
   readonly searchPlaceHolder = input('');
   readonly searchAction = output<DataTableFilter>();
   readonly dataPerPage = input(15);
+  readonly dataCount = input(0);
 
   get hasMoreData() {
     return false;
   }
 
   get pagesCount() {
-    return this.data().length / this.dataPerPage();
+    return this.dataCount() / this.dataPerPage();
   }
 
   get readyData() {
@@ -52,10 +53,10 @@ export class DataTableComponent<T> {
   }
 
   filterData(event: Event) {
-    this.searchAction.emit({ filter: (event.target as HTMLInputElement).value, offset: 0, take: this.dataPerPage() });
+    this.searchAction.emit({ filter: (event.target as HTMLInputElement).value, skip: 0, take: this.dataPerPage() });
   }
 
   changePageAction(skip: number) {
-    this.searchAction.emit({ filter: '', offset: skip, take: this.dataPerPage() })
+    this.searchAction.emit({ filter: '', skip: skip, take: this.dataPerPage() })
   }
 }
