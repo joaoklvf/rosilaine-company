@@ -34,7 +34,7 @@ export class CustomerCreateComponent implements OnInit {
   constructor(private customerService: CustomerService, private viaCepService: ViaCepService, private route: ActivatedRoute, private snackBarService: SnackBarService, private router: Router, private customerTagService: CustomerTagService) { }
 
   ngOnInit(): void {
-    this.customerTagService.get().subscribe(tags => this.tags = [...tags]);
+    this.customerTagService.get().subscribe(tags => this.tags = [...tags[0]]);
 
     const id = this.route.snapshot.paramMap.get('id')!;
     if (!id)

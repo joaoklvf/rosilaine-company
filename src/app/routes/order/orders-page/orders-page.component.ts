@@ -10,7 +10,6 @@ import { DataTableColumnProp, FormatValueOptions } from 'src/app/interfaces/data
 import { CustomAutocompleteComponent } from 'src/app/components/custom-autocomplete/custom-autocomplete.component';
 import { Customer } from 'src/app/models/customer/customer';
 import { OrderStatus } from 'src/app/models/order/order-status';
-import { OrderSearchFilter } from 'src/app/interfaces/order-filter';
 import { CustomerService } from 'src/app/services/customer/customer.service';
 import { OrderStatusService } from 'src/app/services/order/order-status/order-status.service';
 import { HttpParams } from '@angular/common/http';
@@ -34,6 +33,7 @@ export class OrdersPageComponent implements OnInit {
   orderStatuses: OrderStatus[] = [];
   customer: Customer | null = null;
   status: OrderStatus | null = null;
+  dataCount = 0;
 
   constructor(private orderService: OrderService, private customerService: CustomerService, private orderStatusService: OrderStatusService, private router: Router) { }
 
@@ -41,10 +41,10 @@ export class OrdersPageComponent implements OnInit {
     this.getOrders();
 
     this.orderStatusService.get()
-      .subscribe(status => this.orderStatuses = status);
+      .subscribe(status => this.orderStatuses = status[0]);
 
     this.customerService.get()
-      .subscribe(customers => this.customers = customers);
+      .subscribe(customers => this.customers = customers[0]);
   }
 
   getOrders() {
@@ -57,14 +57,17 @@ export class OrdersPageComponent implements OnInit {
       params = params.set('statusId', this.status.id)
 
     this.orderService.get(params)
-      .subscribe(orders => this.orders = orders);
+      .subscribe(orders => {
+        this.orders = orders[0];
+        this.dataCount = orders[1];
+      });
   }
 
   clearFilters() {
     const hasAnyFilter = this.customer?.id || this.status?.id;
     this.setCustomer(null);
     this.setOrderStatus(null);
-    
+
     if (hasAnyFilter)
       this.getOrders();
   }

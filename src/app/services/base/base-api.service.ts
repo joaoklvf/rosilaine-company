@@ -13,11 +13,11 @@ export class BaseApiService<T extends { id?: string }> {
   public apiUrl = `${environment.apiUrl}/${this.collection}`;// URL to web api
 
   /** GET orders from the server */
-  get(params?: any): Observable<T[]> {
-    return this.http.get<T[]>(this.apiUrl, { params })
+  get(params?: any): Observable<[T[], number]> {
+    return this.http.get<[T[], number]>(this.apiUrl, { params })
       .pipe(
         tap(_ => this.log('fetched orders')),
-        catchError(this.handleError<T[]>('getTs', []))
+        catchError(this.handleError<[T[], number]>('getTs', [[], 0]))
       );
   }
 

@@ -66,16 +66,16 @@ export class OrderCreateComponent implements OnInit {
     }
 
     this.customerService.get()
-      .subscribe(customers => this.customers = customers);
+      .subscribe(customers => this.customers = customers[0]);
 
     this.productService.get()
-      .subscribe(products => this.products = products);
+      .subscribe(products => this.products = products[0]);
 
     this.orderStatusService.get()
-      .subscribe(status => this.orderStatuses = status);
+      .subscribe(status => this.orderStatuses = status[0]);
 
     this.orderItemStatusService.get()
-      .subscribe(itemStatus => this.orderItemStatuses = itemStatus);
+      .subscribe(itemStatus => this.orderItemStatuses = itemStatus[0]);
   }
 
   addUpdateItem(): void {

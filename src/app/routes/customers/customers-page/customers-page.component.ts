@@ -14,14 +14,15 @@ import { CustomerService } from 'src/app/services/customer/customer.service';
   styleUrl: './customers-page.component.scss'
 })
 export class CustomersPageComponent implements OnInit {
-  customers: Customer[] = [];
   private searchText$ = new Subject<DataTableFilter>();
   readonly columns: DataTableColumnProp<Customer>[] = [
     { description: "Nome", fieldName: "name", width: '50%' },
     { description: "Telefone", fieldName: "phone" },
     { description: "Data de nascimento", fieldName: "birthDate", formatValue: FormatValueOptions.Date },
   ]
+  customers: Customer[] = [];
   dataCount = 0;
+  
   constructor(private customerService: CustomerService, private router: Router) { }
 
   ngOnInit() {
@@ -36,9 +37,8 @@ export class CustomersPageComponent implements OnInit {
         return this.customerService.get({ name: filters.filter, skip: filters.skip, take: filters.take })
       }),
     ).subscribe(customers => {
-      const finalCustomers = customers as any;
-      this.customers = finalCustomers[0];
-      this.dataCount = finalCustomers[1]
+      this.customers = customers[0];
+      this.dataCount = customers[1]
     });
   }
 

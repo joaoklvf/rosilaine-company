@@ -12,6 +12,7 @@ import { getBrCurrencyStr } from "src/app/utils/text-format";
 import { DataTableComponent } from "../../components/data-table/data-table.component";
 import { DataTableColumnProp, FormatValueOptions } from "src/app/interfaces/data-table";
 import { startWith, debounceTime, distinctUntilChanged, switchMap, Subject } from "rxjs";
+import { DataTableFilter } from "src/app/components/data-table/data-table-interfaces";
 
 @Component({
   selector: 'app-products',
@@ -21,10 +22,11 @@ import { startWith, debounceTime, distinctUntilChanged, switchMap, Subject } fro
 })
 
 export class ProductsComponent implements OnInit {
+  private searchText$ = new Subject<DataTableFilter>();
   categories: ProductCategory[] = [];
   products: Product[] = [];
   product = new Product();
-  private searchText$ = new Subject<string>();
+  dataCount = 0;
 
   readonly columns: DataTableColumnProp<Product>[] = [
     { description: "Produto", fieldName: "description", width: '50%' },
@@ -40,16 +42,22 @@ export class ProductsComponent implements OnInit {
 
   ngOnInit() {
     this.productCategoryService.get()
-      .subscribe(categories => this.categories = categories);
+      .subscribe(categories => this.categories = categories[0]);
 
     this.searchText$.pipe(
       startWith(''),
       debounceTime(300),
       distinctUntilChanged(),
-      switchMap((productDescription) => {
-        return this.productService.get({ description: productDescription })
+      switchMap((filters) => {
+        if (typeof filters === 'string')
+          return this.productService.get({ description: filters })
+
+        return this.productService.get({ description: filters.filter, skip: filters.skip, take: filters.take })
       }),
-    ).subscribe(products => this.products = products);
+    ).subscribe(products => {
+      this.products = products[0];
+      this.dataCount = products[1]
+    });
   }
 
   setProduct(value: Product) {
@@ -121,7 +129,7 @@ export class ProductsComponent implements OnInit {
     });
   }
 
-  filterData(customerName: string) {
-    this.searchText$.next(customerName);
+  filterData(filters: DataTableFilter) {
+    this.searchText$.next(filters);
   }
 }

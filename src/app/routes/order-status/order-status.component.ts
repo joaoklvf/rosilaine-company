@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Subject, startWith, debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
 import { CustomDialogComponent } from 'src/app/components/custom-dialog/custom-dialog.component';
+import { DataTableFilter } from 'src/app/components/data-table/data-table-interfaces';
 import { DataTableComponent } from 'src/app/components/data-table/data-table.component';
 import { DataTableColumnProp } from 'src/app/interfaces/data-table';
 import { OrderStatus } from 'src/app/models/order/order-status';
@@ -15,27 +16,34 @@ import { OrderStatusService } from 'src/app/services/order/order-status/order-st
   styleUrl: './order-status.component.scss'
 })
 export class OrderStatusComponent implements OnInit {
+  private searchText$ = new Subject<DataTableFilter>();
   readonly columns: DataTableColumnProp<OrderStatus>[] = [
     { description: "Status", fieldName: "description", width: '85%' },
   ]
   readonly dialog = inject(MatDialog);
   orderStatus: OrderStatus = new OrderStatus();
   orderStatuses: OrderStatus[] = [];
-  private searchText$ = new Subject<string>();
+  dataCount = 0;
 
   @ViewChild("orderStatusDescription") orderStatusDescriptionField: ElementRef = new ElementRef(null);
 
   constructor(private orderStatusService: OrderStatusService) { }
   
-  ngOnInit(): void {
+  ngOnInit() {
     this.searchText$.pipe(
       startWith(''),
       debounceTime(300),
       distinctUntilChanged(),
-      switchMap((statusDescription) => {
-        return this.orderStatusService.get({ description: statusDescription })
+      switchMap((filters) => {
+        if (typeof filters === 'string')
+          return this.orderStatusService.get({ description: filters })
+
+        return this.orderStatusService.get({ description: filters.filter, skip: filters.skip, take: filters.take })
       }),
-    ).subscribe(orderStatuses => this.orderStatuses = orderStatuses);
+    ).subscribe(orderStatuses => {
+      this.orderStatuses = orderStatuses[0];
+      this.dataCount = orderStatuses[1]
+    });
   }
 
   edit(orderStatus: OrderStatus): void {
@@ -91,7 +99,7 @@ export class OrderStatusComponent implements OnInit {
     });
   }
 
-  filterData(customerName: string) {
+  filterData(customerName: DataTableFilter) {
     this.searchText$.next(customerName);
   }
 }

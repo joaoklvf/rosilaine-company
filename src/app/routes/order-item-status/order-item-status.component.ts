@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Subject, startWith, debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
 import { CustomDialogComponent } from 'src/app/components/custom-dialog/custom-dialog.component';
+import { DataTableFilter } from 'src/app/components/data-table/data-table-interfaces';
 import { DataTableComponent } from 'src/app/components/data-table/data-table.component';
 import { DataTableColumnProp } from 'src/app/interfaces/data-table';
 import { OrderItemStatus } from 'src/app/models/order/order-item/order-item-status';
@@ -15,28 +16,34 @@ import { OrderItemStatusService } from 'src/app/services/order/order-item-status
   styleUrl: './order-item-status.component.scss'
 })
 export class OrderItemStatusComponent {
+  private searchText$ = new Subject<DataTableFilter>();
   readonly columns: DataTableColumnProp<OrderItemStatus>[] = [
     { description: "Status", fieldName: "description", width: '85%' },
   ]
   readonly dialog = inject(MatDialog);
   orderItemStatus: OrderItemStatus = new OrderItemStatus();
   orderItemStatuses: OrderItemStatus[] = [];
-  private searchText$ = new Subject<string>();
+  dataCount = 0;
 
   @ViewChild("orderItemStatusDescription") orderItemStatusDescriptionField: ElementRef = new ElementRef(null);
 
   constructor(private orderItemStatusService: OrderItemStatusService) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.searchText$.pipe(
       startWith(''),
       debounceTime(300),
       distinctUntilChanged(),
-      switchMap((statusDescription) => {
-        return this.orderItemStatusService.get({ description: statusDescription })
-      }),
-    ).subscribe(orderItemStatuses => this.orderItemStatuses = orderItemStatuses);
+      switchMap((filters) => {
+        if (typeof filters === 'string')
+          return this.orderItemStatusService.get({ description: filters })
 
+        return this.orderItemStatusService.get({ description: filters.filter, skip: filters.skip, take: filters.take })
+      }),
+    ).subscribe(orderItems => {
+      this.orderItemStatuses = orderItems[0];
+      this.dataCount = orderItems[1]
+    });
   }
 
   edit(orderItemStatus: OrderItemStatus): void {
@@ -92,7 +99,7 @@ export class OrderItemStatusComponent {
     });
   }
 
-  filterData(customerName: string) {
+  filterData(customerName: DataTableFilter) {
     this.searchText$.next(customerName);
   }
 }

@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { startWith, debounceTime, distinctUntilChanged, switchMap, Subject } from 'rxjs';
 import { CustomDialogComponent } from 'src/app/components/custom-dialog/custom-dialog.component';
+import { DataTableFilter } from 'src/app/components/data-table/data-table-interfaces';
 import { DataTableComponent } from 'src/app/components/data-table/data-table.component';
 import { DataTableColumnProp } from 'src/app/interfaces/data-table';
 import { CustomerTag } from 'src/app/models/customer/customer-tag';
@@ -21,9 +22,9 @@ export class CustomerTagsComponent {
   readonly dialog = inject(MatDialog);
   customerTag: CustomerTag = new CustomerTag();
   customerTags: CustomerTag[] = [];
-  private searchText$ = new Subject<string>();
-
+  dataCount = 0;
   @ViewChild("customerTagDescription") customerTagDescriptionField: ElementRef = new ElementRef(null);
+  private searchText$ = new Subject<DataTableFilter>();
 
   constructor(private customerTagService: CustomerTagService) { }
   ngOnInit(): void {
@@ -31,10 +32,16 @@ export class CustomerTagsComponent {
       startWith(''),
       debounceTime(300),
       distinctUntilChanged(),
-      switchMap((tagName) => {
-        return this.customerTagService.get({ description: tagName }, /* this.withRefresh */)
+      switchMap((filters) => {
+        if (typeof filters === 'string')
+          return this.customerTagService.get({ description: filters })
+
+        return this.customerTagService.get({ description: filters.filter, skip: filters.skip, take: filters.take })
       }),
-    ).subscribe(customerTags => this.customerTags = customerTags);
+    ).subscribe(customerTags => {
+      this.customerTags = customerTags[0]
+      this.dataCount = customerTags[1]
+    });
   }
 
   edit(customerTag: CustomerTag): void {
@@ -90,7 +97,7 @@ export class CustomerTagsComponent {
     });
   }
 
-  filterData(customerName: string) {
-    this.searchText$.next(customerName);
+  filterData(filters: DataTableFilter) {
+    this.searchText$.next(filters);
   }
 }
