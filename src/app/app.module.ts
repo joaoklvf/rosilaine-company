@@ -10,8 +10,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 import { provideEnvironmentNgxMask } from 'ngx-mask';
 import { NavbarComponent } from './components/navbar/navbar.component';
-import { BaseApiInterceptor } from './services/base/interceptors/base-api.interceptor';
 import { LoaderComponent } from "./components/loader/loader.component";
+import { LoaderInterceptor } from './services/interceptors/loader-interceptor.interceptor';
 
 @NgModule({
     declarations: [
@@ -33,7 +33,7 @@ import { LoaderComponent } from "./components/loader/loader.component";
         { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 3000 } },
         {
             provide: HTTP_INTERCEPTORS,
-            useClass: BaseApiInterceptor,
+            useClass: LoaderInterceptor,
             multi: true
         }
     ]
