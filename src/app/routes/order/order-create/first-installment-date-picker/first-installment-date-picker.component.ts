@@ -28,12 +28,8 @@ export class FirstInstallmentDatePickerComponent implements OnInit {
     this.firstInstallmentDate = this._order.firstInstallmentDate ?? this._order.installments?.at(0)?.paymentDate ?? null;
   }
 
-  public generateInstallmentsAndSaveOrder(value: Date) {
-    let order: Order = { ...this._order, firstInstallmentDate: value };
-    const firstInstallmentDate = order.installments![0].paymentDate;
-
-    if (firstInstallmentDate && new Date(value) > new Date(firstInstallmentDate))
-      order = { ...this.orderService.generateInstallments(order, order.installments!.length) };
+  public generateInstallmentsAndSaveOrder(firstInstallmentDate: Date) {
+    const order = this.orderService.generateInstallments({ ...this._order, firstInstallmentDate }, this._order.installments!.length);
 
     this.orderService.update(order).subscribe(order => {
       this.snackBarService.success('Mudança(s) salva(s) com sucesso!');
