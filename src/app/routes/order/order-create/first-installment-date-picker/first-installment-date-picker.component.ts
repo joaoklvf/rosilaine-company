@@ -29,7 +29,9 @@ export class FirstInstallmentDatePickerComponent implements OnInit {
   }
 
   setDefaultFirstInstallmentDate() {
-    this.firstInstallmentDate = this._order.installments?.at(0)?.paymentDate ?? this._order.firstInstallmentDate ?? null;
+    const date = this._order.installments?.at(0)?.paymentDate ?? this._order.firstInstallmentDate ?? null;
+    if (date)
+      this.firstInstallmentDate = new Date(date.toString())
   }
 
   public generateInstallmentsAndSaveOrder(firstInstallmentDate: Date) {
