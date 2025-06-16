@@ -25,6 +25,7 @@ import { SnackBarService } from "src/app/services/snack-bar/snack-bar.service";
 import { getBrCurrencyStr, getBrDateStr } from "src/app/utils/text-format";
 import { InstallmentManagementComponent } from "./installments/installment-management/installment-management.component";
 import { InstallmentsSelectComponent } from "./installments/installments-select/installments-select.component";
+import { tap, catchError, of } from "rxjs";
 
 @Component({
   selector: 'app-order-create',
@@ -34,7 +35,7 @@ import { InstallmentsSelectComponent } from "./installments/installments-select/
 })
 
 export class OrderCreateComponent implements OnInit {
-  order = new FormControl<Order>(new Order());
+  order = new FormControl(new Order());
   orderItem = new OrderItem();
   orderTotal = '';
   customers: Customer[] = [];
@@ -179,18 +180,6 @@ export class OrderCreateComponent implements OnInit {
     })
   }
 
-  deliveryItem(orderItem: OrderItem) {
-    const orderItemChanged = { ...orderItem, deliveryDate: new Date() };
-    this.orderItemService.update(orderItemChanged).subscribe(orderItem => {
-      const prevItems = [...this.order.value!.orderItems];
-      const orderItems = orderItem.id
-        ? prevItems.map(item => item.id === orderItem.id ? { ...orderItem } : item)
-        : [...prevItems, orderItem];
-
-      this.order.value!.orderItems = orderItems;
-    })
-  }
-
   getBrDate(value: Date | null) {
     return value && getBrDateStr(value);
   }
@@ -235,5 +224,25 @@ export class OrderCreateComponent implements OnInit {
   changeAddUpdateItemButtonText() {
     this.addUpdateItemButtonText = this.orderItem.id ?
       'Atualizar' : 'Adicionar';
+  }
+
+  setOrderItemDeliveryDate(value: Date, item: OrderItem) {
+    this.updateDeliveryDate(value, item);
+  }
+
+  setOrderItemDeliveryToday(item: OrderItem) {
+    this.updateDeliveryDate(new Date(), item);
+  }
+
+  updateDeliveryDate(deliveryDate: Date, orderItem: OrderItem) {
+    this.orderItemService.update({ ...orderItem, deliveryDate })
+      .pipe(
+        tap(_ => {
+          orderItem.deliveryDate = deliveryDate;
+          this.snackBarService.success('Data de entrega atualizada com sucesso');
+        }),
+        catchError(() => of(this.snackBarService.error('Falha ao data de entrega')))
+      )
+      .subscribe();
   }
 }

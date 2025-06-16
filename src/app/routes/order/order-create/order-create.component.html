@@ -111,7 +111,11 @@
             />
           </div>
           <div class="col-xl-3 mb-xl-0 mb-2 align-content-end text-end">
-            <button type="button" class="btn btn-primary" (click)="addUpdateItem()">
+            <button
+              type="button"
+              class="btn btn-primary"
+              (click)="addUpdateItem()"
+            >
               {{ addUpdateItemButtonText }}
             </button>
           </div>
@@ -154,7 +158,14 @@
               </mat-select>
             </mat-form-field>
           </td>
-          <td>{{ getBrDate(orderItem.deliveryDate) }}</td>
+          <td>
+            <app-br-date-picker
+              [label]="'Data de pagamento'"
+              [value]="orderItem.deliveryDate"
+              (handleOnChange)="setOrderItemDeliveryDate($event, orderItem)"
+              (handleDoubleClick)="setOrderItemDeliveryToday(orderItem)"
+            ></app-br-date-picker>
+          </td>
           <td>{{ orderItem.itemAmount }}</td>
           <td>{{ getCurrencyValue(orderItem.itemSellingPrice) }}</td>
           <td>{{ getCurrencyValue(orderItem.itemSellingTotal) }}</td>
@@ -174,14 +185,6 @@
               (click)="edit(orderItem)"
             >
               <mat-icon fontIcon="edit" />
-            </button>
-            <button
-              type="button"
-              class="btn btn-outline-primary"
-              title="Marcar como entregue"
-              (click)="deliveryItem(orderItem)"
-            >
-              <mat-icon fontIcon="local_shipping" />
             </button>
           </td>
         </tr>
