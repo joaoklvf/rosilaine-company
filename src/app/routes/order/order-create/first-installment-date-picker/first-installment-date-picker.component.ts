@@ -25,7 +25,11 @@ export class FirstInstallmentDatePickerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.firstInstallmentDate = this._order.firstInstallmentDate ?? this._order.installments?.at(0)?.paymentDate ?? null;
+    this.setDefaultFirstInstallmentDate();
+  }
+
+  setDefaultFirstInstallmentDate() {
+    this.firstInstallmentDate = this._order.installments?.at(0)?.paymentDate ?? this._order.firstInstallmentDate ?? null;
   }
 
   public generateInstallmentsAndSaveOrder(firstInstallmentDate: Date) {
@@ -49,7 +53,7 @@ export class FirstInstallmentDatePickerComponent implements OnInit {
         title: "Refazer parcelas",
         content: `Deseja refazer as parcelas?`,
         onConfirmAction: () => this.generateInstallmentsAndSaveOrder(value),
-        onCancelAction: () => { }
+        onCancelAction: () => this.setDefaultFirstInstallmentDate()
       }
     });
   }
