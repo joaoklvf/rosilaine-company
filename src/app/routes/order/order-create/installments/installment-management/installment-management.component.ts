@@ -10,6 +10,7 @@ import { BrDatePickerComponent } from 'src/app/components/br-date-picker/br-date
 import { OrderInstallmentService } from 'src/app/services/order/order-installment/order-installment.service';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 import { tap, catchError, of } from 'rxjs';
+import { FirstInstallmentDatePickerComponent } from '../../first-installment-date-picker/first-installment-date-picker.component';
 
 interface ModalProps {
   order: Order;
@@ -18,7 +19,7 @@ interface ModalProps {
 
 @Component({
   selector: 'app-installment-management',
-  imports: [MatDialogActions, MatDialogClose, MatDialogTitle, MatDialogContent, InstallmentsSelectComponent, InputMaskComponent, FormsModule, BrDatePickerComponent],
+  imports: [MatDialogActions, MatDialogClose, MatDialogTitle, MatDialogContent, InstallmentsSelectComponent, InputMaskComponent, FormsModule, BrDatePickerComponent, FirstInstallmentDatePickerComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './installment-management.component.html',
   styleUrl: './installment-management.component.scss'
@@ -26,15 +27,13 @@ interface ModalProps {
 export class InstallmentManagementComponent implements OnInit {
   data: ModalProps = inject(MAT_DIALOG_DATA);
   readonly dialogRef = inject(MatDialogRef<InstallmentManagementComponent>);
-  installments!: OrderInstallment[];
+  installments: OrderInstallment[] = [];
 
   constructor(private orderInstallmentService: OrderInstallmentService, private snackBarService: SnackBarService) { }
 
   ngOnInit(): void {
-    if (!this.data.order.firstInstallmentDate)
-      this.data.saveOrder({ ...this.data.order, firstInstallmentDate: this.data.order.installments![0].debitDate })
-
-    this.installments = this.data.order.installments!.map(x => ({ ...x }));
+    if (this.data.order.installments)
+      this.installments = this.data.order.installments?.map(x => ({ ...x }));
   }
 
   getBrDate = (value: Date | null) =>
@@ -75,5 +74,21 @@ export class InstallmentManagementComponent implements OnInit {
         catchError(() => of(this.snackBarService.error('Falha ao atualizar parcelas')))
       )
       .subscribe();
+  }
+
+  saveOrder(order: Order) {
+    if (!order.installments)
+      return;
+
+    this.data.saveOrder(order);
+    this.installments = [...order.installments];
+  }
+
+  changeInstallments(order: Order) {
+    if (!order.installments)
+      return;
+
+    this.installments = order.installments.map(x => ({ ...x }));
+    this.data.saveOrder(order);
   }
 }

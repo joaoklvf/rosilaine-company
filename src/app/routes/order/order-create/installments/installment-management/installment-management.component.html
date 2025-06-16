@@ -4,15 +4,15 @@
     <div class="">
       <app-installments-select
         [order]="data.order"
-        (saveOrderAction)="data.saveOrder($event)"
+        (saveOrderAction)="changeInstallments($event)"
       />
     </div>
     <div class="">
-      <app-br-date-picker
-        [label]="'Data da primeira parcela'"
-        [value]="data.order.firstInstallmentDate"
-        (handleOnChange)="setFirstInstallmentDate($event)"
-      ></app-br-date-picker>
+      <app-first-installment-date-picker
+        [order]="data.order"
+        (saveOrderAction)="changeInstallments($event)"
+        class="col-md-3"
+      ></app-first-installment-date-picker>
     </div>
   </div>
   <div class="card mt-3">
