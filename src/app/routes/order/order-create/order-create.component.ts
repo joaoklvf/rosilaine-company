@@ -26,12 +26,13 @@ import { getBrCurrencyStr, getBrDateStr } from "src/app/utils/text-format";
 import { InstallmentManagementComponent } from "./installments/installment-management/installment-management.component";
 import { InstallmentsSelectComponent } from "./installments/installments-select/installments-select.component";
 import { tap, catchError, of } from "rxjs";
+import { FirstInstallmentDatePickerComponent } from "./first-installment-date-picker/first-installment-date-picker.component";
 
 @Component({
   selector: 'app-order-create',
   templateUrl: './order-create.component.html',
   styleUrl: './order-create.component.scss',
-  imports: [InputMaskComponent, CustomAutocompleteComponent, FormsModule, BrDatePickerComponent, MatSelectModule, MatFormFieldModule, MatIconModule, InstallmentsSelectComponent, MatInputModule],
+  imports: [InputMaskComponent, CustomAutocompleteComponent, FormsModule, BrDatePickerComponent, MatSelectModule, MatFormFieldModule, MatIconModule, InstallmentsSelectComponent, MatInputModule, FirstInstallmentDatePickerComponent],
 })
 
 export class OrderCreateComponent implements OnInit {
@@ -50,21 +51,9 @@ export class OrderCreateComponent implements OnInit {
   constructor(private orderService: OrderService, private customerService: CustomerService, private productService: ProductService, private orderStatusService: OrderStatusService, private route: ActivatedRoute, private orderItemStatusService: OrderItemStatusService, private orderItemService: OrderItemService, private snackBarService: SnackBarService, private router: Router) { }
 
   ngOnInit() {
-    const id = this.route.snapshot.paramMap.get('id')!;
-    if (id) {
-      this.orderService.getById(id)
-        .subscribe(order => {
-          if (!order) {
-            this.snackBarService.error('Pedido não encontrado');
-            this.router.navigate(['orders']);
-          }
-
-          this.order.setValue({ ...order })
-          this.orderTotal = getBrCurrencyStr(order.total);
-        });
-
-      this.title = 'Editar pedido';
-    }
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id)
+      this.loadOrder(id);
 
     this.customerService.get()
       .subscribe(customers => this.customers = customers[0]);
@@ -77,6 +66,21 @@ export class OrderCreateComponent implements OnInit {
 
     this.orderItemStatusService.get()
       .subscribe(itemStatus => this.orderItemStatuses = itemStatus[0]);
+  }
+
+  loadOrder(id: string) {
+    this.orderService.getById(id)
+      .subscribe(order => {
+        if (!order) {
+          this.snackBarService.error('Pedido não encontrado');
+          this.router.navigate(['orders']);
+        }
+
+        this.order.setValue({ ...order })
+        this.orderTotal = getBrCurrencyStr(order.total);
+      });
+
+    this.title = 'Editar pedido';
   }
 
   addUpdateItem(): void {

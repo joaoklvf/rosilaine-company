@@ -16,12 +16,11 @@
         />
       </div>
       <div>
-        <app-br-date-picker
-          [label]="'Data da primeira parcela'"
-          [value]="order.value!.firstInstallmentDate"
-          (handleOnChange)="setFirstInstallmentDate($event)"
+        <app-first-installment-date-picker
           class="col-md-3"
-        ></app-br-date-picker>
+          [order]="order.value!"
+          (saveOrderAction)="saveOrder($event)"
+        ></app-first-installment-date-picker>
       </div>
       <div class="align-content-end text-end">
         <button
