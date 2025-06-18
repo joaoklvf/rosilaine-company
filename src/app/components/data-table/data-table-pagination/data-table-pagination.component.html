@@ -1,5 +1,5 @@
 <nav aria-label="Page navigation example">
-  <ul class="pagination float-end">
+  <ul class="pagination float-end mb-0">
     <li class="page-item">
       <button
         type="button"
@@ -13,7 +13,14 @@
     </li>
     @for (page of pagesCount; track $index) {
     <li class="page-item">
-      <button type="button" class="page-link" href="#">{{ page + 1 }}</button>
+      <button
+        type="button"
+        class="{{ getClassName(page) }}"
+        href="#"
+        (click)="onPageButtonClick(page)"
+      >
+        {{ page + 1 }}
+      </button>
     </li>
     }
     <li class="page-item">

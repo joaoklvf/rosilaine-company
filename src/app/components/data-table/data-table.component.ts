@@ -23,13 +23,18 @@ export class DataTableComponent<T> {
   readonly searchAction = output<DataTableFilter>();
   readonly dataPerPage = input(15);
   readonly dataCount = input(0);
+  readonly showActionsColumn = input(true);
+
+  get showActions() {
+    return this.showActionsColumn()
+  }
 
   get hasMoreData() {
     return false;
   }
 
   get pagesCount() {
-    return this.dataCount() / this.dataPerPage();
+    return Math.ceil(this.dataCount() / this.dataPerPage());
   }
 
   get readyData() {

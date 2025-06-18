@@ -12,12 +12,16 @@ export class DataTablePaginationComponent {
   readonly totalPages = input(1);
   currentSkip = 0;
 
-  get pagesCount() {
-    return fillArrayFromNumber(this.totalPages())
+  get _totalPages() {
+    return this.totalPages();
   }
 
-  get hasMoreData (){
-    return this.totalPages() > 1
+  get pagesCount() {
+    return fillArrayFromNumber(this._totalPages)
+  }
+
+  get hasMoreData() {
+    return this._totalPages > 1
   }
 
   onPrevButtonClick() {
@@ -29,14 +33,23 @@ export class DataTablePaginationComponent {
   }
 
   onNextButtonClick() {
-    if (this.currentSkip === this.totalPages() - 1)
+    if (this.currentSkip === this._totalPages - 1)
       return;
 
     this.currentSkip++;
     this.getData();
   }
 
+  onPageButtonClick(index: number) {
+    this.currentSkip = index;
+    this.getData();
+  }
+
   getData() {
     this.searchAction.emit(this.currentSkip)
+  }
+
+  getClassName(index: number) {
+    return `page-link ${index === this.currentSkip ? 'active' : ''}`;
   }
 }

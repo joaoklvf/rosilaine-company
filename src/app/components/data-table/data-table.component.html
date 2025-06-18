@@ -21,10 +21,11 @@
     >
       <thead>
         <tr>
-          @for(column of columns(); track column){
+          @for(column of columns(); track column) {
           <th scope="col">{{ column.description }}</th>
-          }
+          } @if(showActions) {
           <th scope="col">Ações</th>
+          }
         </tr>
       </thead>
       <tbody>
@@ -34,7 +35,7 @@
           <td width="{{ getColumnWidth(column) }}">
             {{ displayCell(row, column) }}
           </td>
-          }
+          } @if (showActions) {
           <td class="td-icons">
             <button
               type="button"
@@ -53,11 +54,12 @@
               <mat-icon fontIcon="edit" />
             </button>
           </td>
+          }
         </tr>
         }
       </tbody>
     </table>
-    <app-data-table-pagination 
+    <app-data-table-pagination
       (searchAction)="changePageAction($event)"
       [totalPages]="pagesCount"
     />

@@ -1,5 +1,5 @@
 export interface DataTableFilter {
-  filter: string,
+  filter?: string,
   skip: number,
   take: number
 }
