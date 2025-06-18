@@ -1,1 +1,8 @@
-<p>home works!</p>
+<h1>Parcelas próximas</h1>
+<app-data-table
+  [columns]="columns"
+  [data]="homeData"
+  [showActionsColumn]="false"
+  [dataCount]="dataCount"
+  (searchAction)="getHomeData($event)"
+/>
