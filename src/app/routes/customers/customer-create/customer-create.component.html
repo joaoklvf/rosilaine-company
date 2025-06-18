@@ -9,6 +9,7 @@
           id="customer-name"
           placeholder="Nome"
           [(ngModel)]="customer.name"
+          [maxLength]="60"
           name="name"
         />
       </div>
@@ -23,6 +24,7 @@
           matInput
           [dropSpecialCharacters]="false"
           [(ngModel)]="customer.birthDate"
+          [maxLength]="60"
         />
       </div>
       <div class="col-md-4">
@@ -36,6 +38,7 @@
           placeholder="(99) 99999-9999"
           [dropSpecialCharacters]="false"
           [(ngModel)]="customer.phone"
+          [maxLength]="60"
         />
       </div>
     </div>
@@ -53,6 +56,7 @@
           [dropSpecialCharacters]="false"
           (blur)="getAddressByZipCode()"
           formControlName="zipCode"
+          [maxLength]="10"
         />
       </div>
       <div class="col-md-4">
@@ -71,6 +75,7 @@
         <label for="customer-city">Cidade</label>
         <input
           class="form-control"
+          [maxLength]="60"
           id="customer-city"
           placeholder="Cidade"
           name="city"
@@ -81,6 +86,7 @@
         <label for="customer-neighborhood">Bairro</label>
         <input
           class="form-control"
+          [maxLength]="60"
           id="customer-neighborhood"
           placeholder="Bairro"
           name="neighborhood"
@@ -91,6 +97,7 @@
         <label for="customer-street">Rua</label>
         <input
           class="form-control"
+          [maxLength]="60"
           id="customer-street"
           placeholder="Rua"
           name="street"
@@ -101,6 +108,7 @@
         <label for="customer-house-number">Número</label>
         <input
           class="form-control"
+          [maxLength]="60"
           id="customer-house-number"
           placeholder="Número"
           [(ngModel)]="customer.houseNumber"
@@ -116,6 +124,7 @@
           placeholder="Complemento"
           name="complemento"
           [(ngModel)]="customer.complemento"
+          [maxLength]="60"
           [ngModelOptions]="{ standalone: true }"
         />
       </div>
@@ -126,6 +135,7 @@
           id="customer-address-observation"
           placeholder="Observação"
           [(ngModel)]="customer.addressObservation"
+          [maxLength]="60"
           name="address-observation"
           [ngModelOptions]="{ standalone: true }"
         />
