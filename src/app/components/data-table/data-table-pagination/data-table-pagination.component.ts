@@ -10,7 +10,7 @@ import { fillArrayFromNumber } from 'src/app/utils/arrays';
 export class DataTablePaginationComponent {
   readonly searchAction = output<number>();
   readonly totalPages = input(1);
-  currentSkip = 0;
+  currentOffset = 0;
 
   get _totalPages() {
     return this.totalPages();
@@ -25,31 +25,31 @@ export class DataTablePaginationComponent {
   }
 
   onPrevButtonClick() {
-    if (this.currentSkip === 0)
+    if (this.currentOffset === 0)
       return;
 
-    this.currentSkip = this.currentSkip - 1;
+    this.currentOffset = this.currentOffset - 1;
     this.getData();
   }
 
   onNextButtonClick() {
-    if (this.currentSkip === this._totalPages - 1)
+    if (this.currentOffset === this._totalPages - 1)
       return;
 
-    this.currentSkip++;
+    this.currentOffset++;
     this.getData();
   }
 
   onPageButtonClick(index: number) {
-    this.currentSkip = index;
+    this.currentOffset = index;
     this.getData();
   }
 
   getData() {
-    this.searchAction.emit(this.currentSkip)
+    this.searchAction.emit(this.currentOffset)
   }
 
   getClassName(index: number) {
-    return `page-link ${index === this.currentSkip ? 'active' : ''}`;
+    return `page-link ${index === this.currentOffset ? 'active' : ''}`;
   }
 }

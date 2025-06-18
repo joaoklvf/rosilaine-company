@@ -34,7 +34,7 @@ export class CustomersPageComponent implements OnInit {
         if (typeof filters === 'string')
           return this.customerService.get({ name: filters })
 
-        return this.customerService.get({ name: filters.filter, skip: filters.skip, take: filters.take })
+        return this.customerService.get({ name: filters.filter, offset: filters.offset, take: filters.take })
       }),
     ).subscribe(customers => {
       this.customers = customers[0];

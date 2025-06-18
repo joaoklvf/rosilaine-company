@@ -38,7 +38,7 @@ export class OrderStatusComponent implements OnInit {
         if (typeof filters === 'string')
           return this.orderStatusService.get({ description: filters })
 
-        return this.orderStatusService.get({ description: filters.filter, skip: filters.skip, take: filters.take })
+        return this.orderStatusService.get({ description: filters.filter, offset: filters.offset, take: filters.take })
       }),
     ).subscribe(orderStatuses => {
       this.orderStatuses = orderStatuses[0];

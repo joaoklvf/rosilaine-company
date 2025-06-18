@@ -58,10 +58,10 @@ export class DataTableComponent<T> {
   }
 
   filterData(event: Event) {
-    this.searchAction.emit({ filter: (event.target as HTMLInputElement).value, skip: 0, take: this.dataPerPage() });
+    this.searchAction.emit({ filter: (event.target as HTMLInputElement).value, offset: 0, take: this.dataPerPage() });
   }
 
   changePageAction(skip: number) {
-    this.searchAction.emit({ filter: '', skip: skip, take: this.dataPerPage() })
+    this.searchAction.emit({ filter: '', offset: skip, take: this.dataPerPage() })
   }
 }

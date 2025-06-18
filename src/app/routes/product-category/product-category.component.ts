@@ -38,7 +38,7 @@ export class ProductCategoryComponent {
         if (typeof filters === 'string')
           return this.productCategoryService.get({ description: filters })
 
-        return this.productCategoryService.get({ description: filters.filter, skip: filters.skip, take: filters.take })
+        return this.productCategoryService.get({ description: filters.filter, offset: filters.offset, take: filters.take })
       }),
     ).subscribe(productCategories => {
       this.productCategories = productCategories[0];

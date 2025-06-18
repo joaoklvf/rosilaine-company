@@ -36,7 +36,7 @@ export class CustomerTagsComponent {
         if (typeof filters === 'string')
           return this.customerTagService.get({ description: filters })
 
-        return this.customerTagService.get({ description: filters.filter, skip: filters.skip, take: filters.take })
+        return this.customerTagService.get({ description: filters.filter, offset: filters.offset, take: filters.take })
       }),
     ).subscribe(customerTags => {
       this.customerTags = customerTags[0]

@@ -25,7 +25,7 @@ export class HomeComponent implements OnInit {
   constructor(private homeService: HomeService) { }
 
   ngOnInit() {
-    this.getHomeData({ take: 15, skip: 0 });
+    this.getHomeData({ take: 15, offset: 0 });
   }
 
   getHomeData(params?: DataTableFilter) {

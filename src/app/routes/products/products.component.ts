@@ -52,7 +52,7 @@ export class ProductsComponent implements OnInit {
         if (typeof filters === 'string')
           return this.productService.get({ description: filters })
 
-        return this.productService.get({ description: filters.filter, skip: filters.skip, take: filters.take })
+        return this.productService.get({ description: filters.filter, offset: filters.offset, take: filters.take })
       }),
     ).subscribe(products => {
       this.products = products[0];

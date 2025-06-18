@@ -38,7 +38,7 @@ export class OrderItemStatusComponent {
         if (typeof filters === 'string')
           return this.orderItemStatusService.get({ description: filters })
 
-        return this.orderItemStatusService.get({ description: filters.filter, skip: filters.skip, take: filters.take })
+        return this.orderItemStatusService.get({ description: filters.filter, offset: filters.offset, take: filters.take })
       }),
     ).subscribe(orderItems => {
       this.orderItemStatuses = orderItems[0];
