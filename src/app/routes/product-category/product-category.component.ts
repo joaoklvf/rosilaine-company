@@ -36,7 +36,7 @@ export class ProductCategoryComponent {
       distinctUntilChanged(),
       switchMap((filters) => {
         if (typeof filters === 'string')
-          return this.productCategoryService.get({ description: filters })
+          return this.productCategoryService.get({ description: filters, offset: 0, take: 15 })
 
         return this.productCategoryService.get({ description: filters.filter, offset: filters.offset, take: filters.take })
       }),

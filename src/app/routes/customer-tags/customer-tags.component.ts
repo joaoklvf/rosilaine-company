@@ -34,7 +34,7 @@ export class CustomerTagsComponent {
       distinctUntilChanged(),
       switchMap((filters) => {
         if (typeof filters === 'string')
-          return this.customerTagService.get({ description: filters })
+          return this.customerTagService.get({ description: filters, offset: 0, take: 15 })
 
         return this.customerTagService.get({ description: filters.filter, offset: filters.offset, take: filters.take })
       }),

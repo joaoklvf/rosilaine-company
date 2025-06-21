@@ -78,6 +78,15 @@ export class BaseApiService<T extends { id?: string }> {
     );
   }
 
+  safeDelete(id: string): Observable<DeleteResult> {
+    const url = `${this.apiUrl}/safe-delete/${id}`;
+
+    return this.http.delete<DeleteResult>(url).pipe(
+      tap(_ => this.log(`deleted data id=${id}`)),
+      catchError(this.handleError<DeleteResult>('deleteT'))
+    );
+  }
+
   /** PUT: update the data on the server */
   update(data: T): Observable<T> {
     return this.http.put<T>(`${this.apiUrl}/${data.id}`, data).pipe(

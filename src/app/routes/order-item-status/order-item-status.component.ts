@@ -36,7 +36,7 @@ export class OrderItemStatusComponent {
       distinctUntilChanged(),
       switchMap((filters) => {
         if (typeof filters === 'string')
-          return this.orderItemStatusService.get({ description: filters })
+          return this.orderItemStatusService.get({ description: filters, offset: 0, take: 15 })
 
         return this.orderItemStatusService.get({ description: filters.filter, offset: filters.offset, take: filters.take })
       }),

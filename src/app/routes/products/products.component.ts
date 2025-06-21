@@ -50,7 +50,7 @@ export class ProductsComponent implements OnInit {
       distinctUntilChanged(),
       switchMap((filters) => {
         if (typeof filters === 'string')
-          return this.productService.get({ description: filters })
+          return this.productService.get({ description: filters, offset: 0, take: 15 })
 
         return this.productService.get({ description: filters.filter, offset: filters.offset, take: filters.take })
       }),
