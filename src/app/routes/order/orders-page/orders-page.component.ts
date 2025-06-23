@@ -13,6 +13,8 @@ import { OrderStatus } from 'src/app/models/order/order-status';
 import { CustomerService } from 'src/app/services/customer/customer.service';
 import { OrderStatusService } from 'src/app/services/order/order-status/order-status.service';
 import { HttpParams } from '@angular/common/http';
+import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
+import { tap, catchError, of } from 'rxjs';
 
 @Component({
   selector: 'app-orders-page',
@@ -35,7 +37,13 @@ export class OrdersPageComponent implements OnInit {
   status: OrderStatus | null = null;
   dataCount = 0;
 
-  constructor(private orderService: OrderService, private customerService: CustomerService, private orderStatusService: OrderStatusService, private router: Router) { }
+  constructor(
+    private orderService: OrderService,
+    private customerService: CustomerService,
+    private orderStatusService: OrderStatusService,
+    private router: Router,
+    private snackBarService: SnackBarService
+  ) { }
 
   ngOnInit() {
     this.getOrders();
@@ -72,13 +80,6 @@ export class OrdersPageComponent implements OnInit {
       this.getOrders();
   }
 
-  deleteOrder(id: string) {
-    this.orderService.delete(id).subscribe(response => {
-      if (response.affected)
-        this.orders = this.orders.filter(x => x.id !== id);
-    })
-  }
-
   getBrDate(value: Date) {
     return getBrDateStr(value);
   }
@@ -89,9 +90,21 @@ export class OrdersPageComponent implements OnInit {
       data: {
         title: "Deletar pedido",
         content: `Deseja deletar o pedido?`,
-        onConfirmAction: () => this.deleteOrder(order.id!)
+        onConfirmAction: () => this.deleteOrderById(order.id!)
       }
     });
+  }
+
+  deleteOrderById(id: string) {
+    this.orderService.safeDelete(id)
+      .pipe(
+        tap(_ => {
+          this.snackBarService.success('Pedido deletado com sucesso');
+          this.getOrders();
+        }),
+        catchError(() => of(this.snackBarService.error('Falha ao deletar pedido')))
+      )
+      .subscribe();
   }
 
   edit(value: Order) {

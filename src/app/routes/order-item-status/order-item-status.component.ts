@@ -1,13 +1,14 @@
 import { Component, ElementRef, inject, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { Subject, startWith, debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
+import { Subject, startWith, debounceTime, switchMap, catchError, of, tap } from 'rxjs';
 import { CustomDialogComponent } from 'src/app/components/custom-dialog/custom-dialog.component';
 import { DataTableFilter } from 'src/app/components/data-table/data-table-interfaces';
 import { DataTableComponent } from 'src/app/components/data-table/data-table.component';
 import { DataTableColumnProp } from 'src/app/interfaces/data-table';
 import { OrderItemStatus } from 'src/app/models/order/order-item/order-item-status';
 import { OrderItemStatusService } from 'src/app/services/order/order-item-status/order-item-status.service';
+import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 
 @Component({
   selector: 'app-order-item-status',
@@ -16,7 +17,7 @@ import { OrderItemStatusService } from 'src/app/services/order/order-item-status
   styleUrl: './order-item-status.component.scss'
 })
 export class OrderItemStatusComponent {
-  private searchText$ = new Subject<DataTableFilter>();
+  private searchText$ = new Subject<DataTableFilter | string>();
   readonly columns: DataTableColumnProp<OrderItemStatus>[] = [
     { description: "Status", fieldName: "description", width: '85%' },
   ]
@@ -27,13 +28,12 @@ export class OrderItemStatusComponent {
 
   @ViewChild("orderItemStatusDescription") orderItemStatusDescriptionField: ElementRef = new ElementRef(null);
 
-  constructor(private orderItemStatusService: OrderItemStatusService) { }
+  constructor(private orderItemStatusService: OrderItemStatusService, private snackBarService: SnackBarService) { }
 
   ngOnInit() {
     this.searchText$.pipe(
       startWith(''),
       debounceTime(300),
-      distinctUntilChanged(),
       switchMap((filters) => {
         if (typeof filters === 'string')
           return this.orderItemStatusService.get({ description: filters, offset: 0, take: 15 })
@@ -77,26 +77,27 @@ export class OrderItemStatusComponent {
     }
   }
 
-  deleteOrderItemStatus(orderItemStatus: OrderItemStatus) {
-    this.orderItemStatusService.update({ ...orderItemStatus, isDeleted: true })
-      .subscribe(orderItemStatusUpdated => {
-        if (!orderItemStatusUpdated)
-          return;
-
-        const orderItemStatuses = this.orderItemStatuses.filter(x => x.id !== orderItemStatus.id);
-        this.orderItemStatuses = [...orderItemStatuses];
-      });
-  }
-
-  openDialog(orderItemStatus: OrderItemStatus): void {
+  openDialog(itemStatus: OrderItemStatus): void {
     this.dialog.open(CustomDialogComponent, {
       width: '500px',
       data: {
         title: "Deletar status",
-        content: `Deseja deletar o status ${orderItemStatus.description}?`,
-        onConfirmAction: () => this.deleteOrderItemStatus(orderItemStatus)
+        content: `Deseja deletar o status ${itemStatus.description}?`,
+        onConfirmAction: () => this.deleteOrderItemStatusById(itemStatus.id!)
       }
     });
+  }
+
+  deleteOrderItemStatusById(id: string) {
+    this.orderItemStatusService.safeDelete(id)
+      .pipe(
+        tap(_ => {
+          this.snackBarService.success('Status deletado com sucesso');
+          this.searchText$.next('');
+        }),
+        catchError(() => of(this.snackBarService.error('Falha ao deletar status')))
+      )
+      .subscribe();
   }
 
   filterData(customerName: DataTableFilter) {

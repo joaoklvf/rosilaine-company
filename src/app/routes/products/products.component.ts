@@ -11,8 +11,9 @@ import { ProductService } from "src/app/services/product/product.service";
 import { getBrCurrencyStr } from "src/app/utils/text-format";
 import { DataTableComponent } from "../../components/data-table/data-table.component";
 import { DataTableColumnProp, FormatValueOptions } from "src/app/interfaces/data-table";
-import { startWith, debounceTime, distinctUntilChanged, switchMap, Subject } from "rxjs";
+import { startWith, debounceTime, switchMap, Subject, catchError, of, tap } from "rxjs";
 import { DataTableFilter } from "src/app/components/data-table/data-table-interfaces";
+import { SnackBarService } from "src/app/services/snack-bar/snack-bar.service";
 
 @Component({
   selector: 'app-products',
@@ -22,7 +23,7 @@ import { DataTableFilter } from "src/app/components/data-table/data-table-interf
 })
 
 export class ProductsComponent implements OnInit {
-  private searchText$ = new Subject<DataTableFilter>();
+  private searchText$ = new Subject<DataTableFilter | string>();
   categories: ProductCategory[] = [];
   products: Product[] = [];
   product = new Product();
@@ -37,7 +38,7 @@ export class ProductsComponent implements OnInit {
 
   @ViewChild("productDescription") productDescriptionField: ElementRef = new ElementRef(null);
 
-  constructor(private productService: ProductService, private productCategoryService: ProductCategoryService) { }
+  constructor(private productService: ProductService, private productCategoryService: ProductCategoryService, private snackBarService: SnackBarService) { }
   readonly dialog = inject(MatDialog);
 
   ngOnInit() {
@@ -47,7 +48,6 @@ export class ProductsComponent implements OnInit {
     this.searchText$.pipe(
       startWith(''),
       debounceTime(300),
-      distinctUntilChanged(),
       switchMap((filters) => {
         if (typeof filters === 'string')
           return this.productService.get({ description: filters, offset: 0, take: 15 })
@@ -107,26 +107,27 @@ export class ProductsComponent implements OnInit {
   getCurrencyValue = (value: number) =>
     getBrCurrencyStr(value);
 
-  deleteProduct(product: Product) {
-    this.productService.update({ ...product, isDeleted: true })
-      .subscribe(productUpdated => {
-        if (!productUpdated)
-          return;
-
-        const products = this.products.filter(x => x.id !== product.id);
-        this.products = [...products];
-      });
-  }
-
   openDialog(product: Product): void {
     this.dialog.open(CustomDialogComponent, {
       width: '500px',
       data: {
         title: "Deletar produto",
         content: `Deseja deletar o produto ${product.description}?`,
-        onConfirmAction: () => this.deleteProduct(product)
+        onConfirmAction: () => this.deleteProductById(product.id!)
       }
     });
+  }
+
+  deleteProductById(id: string) {
+    this.productService.safeDelete(id)
+      .pipe(
+        tap(_ => {
+          this.snackBarService.success('Produto deletado com sucesso');
+          this.searchText$.next('');
+        }),
+        catchError(() => of(this.snackBarService.error('Falha ao deletar produto')))
+      )
+      .subscribe();
   }
 
   filterData(filters: DataTableFilter) {

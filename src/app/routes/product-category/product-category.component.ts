@@ -1,13 +1,14 @@
 import { Component, ElementRef, inject, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { Subject, startWith, debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
+import { Subject, startWith, debounceTime, switchMap, catchError, of, tap } from 'rxjs';
 import { CustomDialogComponent } from 'src/app/components/custom-dialog/custom-dialog.component';
 import { DataTableFilter } from 'src/app/components/data-table/data-table-interfaces';
 import { DataTableComponent } from 'src/app/components/data-table/data-table.component';
 import { DataTableColumnProp } from 'src/app/interfaces/data-table';
 import { ProductCategory } from 'src/app/models/product/product-category';
 import { ProductCategoryService } from 'src/app/services/product/product-category/product-category.service';
+import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 
 @Component({
   selector: 'app-product-category',
@@ -16,7 +17,7 @@ import { ProductCategoryService } from 'src/app/services/product/product-categor
   styleUrl: './product-category.component.scss'
 })
 export class ProductCategoryComponent {
-  private searchText$ = new Subject<DataTableFilter>();
+  private searchText$ = new Subject<DataTableFilter | string>();
   readonly columns: DataTableColumnProp<ProductCategory>[] = [
     { description: "Categoria", fieldName: "description", width: '85%' },
   ]
@@ -27,13 +28,12 @@ export class ProductCategoryComponent {
 
   @ViewChild("productCategoryDescription") productCategoryDescriptionField: ElementRef = new ElementRef(null);
 
-  constructor(private productCategoryService: ProductCategoryService) { }
+  constructor(private productCategoryService: ProductCategoryService, private snackBarService: SnackBarService) { }
 
   ngOnInit() {
     this.searchText$.pipe(
       startWith(''),
       debounceTime(300),
-      distinctUntilChanged(),
       switchMap((filters) => {
         if (typeof filters === 'string')
           return this.productCategoryService.get({ description: filters, offset: 0, take: 15 })
@@ -77,29 +77,30 @@ export class ProductCategoryComponent {
     }
   }
 
-  deleteProductCategory(productCategory: ProductCategory) {
-    this.productCategoryService.update({ ...productCategory, isDeleted: true })
-      .subscribe(productCategoryUpdated => {
-        if (!productCategoryUpdated)
-          return;
-
-        const productCategories = this.productCategories.filter(x => x.id !== productCategory.id);
-        this.productCategories = [...productCategories];
-      });
-  }
-
   openDialog(productCategory: ProductCategory): void {
     this.dialog.open(CustomDialogComponent, {
       width: '500px',
       data: {
-        title: "Deletar ",
-        content: `Deseja deletar o  ${productCategory.description}?`,
-        onConfirmAction: () => this.deleteProductCategory(productCategory)
+        title: "Deletar categoria",
+        content: `Deseja deletar a categoria ${productCategory.description}?`,
+        onConfirmAction: () => this.deleteProductCategoryById(productCategory.id!)
       }
     });
   }
 
-  filterData(customerName: DataTableFilter) {
-    this.searchText$.next(customerName);
+  deleteProductCategoryById(id: string) {
+    this.productCategoryService.safeDelete(id)
+      .pipe(
+        tap(_ => {
+          this.snackBarService.success('Categoria deletada com sucesso');
+          this.searchText$.next('');
+        }),
+        catchError(() => of(this.snackBarService.error('Falha ao deletar categoria')))
+      )
+      .subscribe();
+  }
+
+  filterData(filters: DataTableFilter) {
+    this.searchText$.next(filters);
   }
 }

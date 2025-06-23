@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { startWith, debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
+import { startWith, debounceTime, switchMap } from 'rxjs';
 import { DataTableFilter } from 'src/app/components/data-table/data-table-interfaces';
 import { DataTableComponent } from 'src/app/components/data-table/data-table.component';
 import { DataTableColumnProp } from 'src/app/interfaces/data-table';

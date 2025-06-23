@@ -1,13 +1,14 @@
 import { Component, ElementRef, inject, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { startWith, debounceTime, distinctUntilChanged, switchMap, Subject } from 'rxjs';
+import { startWith, debounceTime, switchMap, Subject, catchError, of, tap } from 'rxjs';
 import { CustomDialogComponent } from 'src/app/components/custom-dialog/custom-dialog.component';
 import { DataTableFilter } from 'src/app/components/data-table/data-table-interfaces';
 import { DataTableComponent } from 'src/app/components/data-table/data-table.component';
 import { DataTableColumnProp } from 'src/app/interfaces/data-table';
 import { CustomerTag } from 'src/app/models/customer/customer-tag';
 import { CustomerTagService } from 'src/app/services/customer/customer-tag/customer-tag.service';
+import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 
 @Component({
   selector: 'app-customer-tags',
@@ -24,14 +25,13 @@ export class CustomerTagsComponent {
   customerTags: CustomerTag[] = [];
   dataCount = 0;
   @ViewChild("customerTagDescription") customerTagDescriptionField: ElementRef = new ElementRef(null);
-  private searchText$ = new Subject<DataTableFilter>();
+  private searchText$ = new Subject<DataTableFilter | string>();
 
-  constructor(private customerTagService: CustomerTagService) { }
+  constructor(private customerTagService: CustomerTagService, private snackBarService: SnackBarService) { }
   ngOnInit(): void {
     this.searchText$.pipe(
       startWith(''),
       debounceTime(300),
-      distinctUntilChanged(),
       switchMap((filters) => {
         if (typeof filters === 'string')
           return this.customerTagService.get({ description: filters, offset: 0, take: 15 })
@@ -75,26 +75,27 @@ export class CustomerTagsComponent {
     }
   }
 
-  deleteCustomerTag(customerTag: CustomerTag) {
-    this.customerTagService.update({ ...customerTag, isDeleted: true })
-      .subscribe(customerTagUpdated => {
-        if (!customerTagUpdated)
-          return;
-
-        const customerTags = this.customerTags.filter(x => x.id !== customerTag.id);
-        this.customerTags = [...customerTags];
-      });
-  }
-
   openDialog(customerTag: CustomerTag): void {
     this.dialog.open(CustomDialogComponent, {
       width: '500px',
       data: {
         title: "Deletar tag",
         content: `Deseja deletar a tag ${customerTag.description}?`,
-        onConfirmAction: () => this.deleteCustomerTag(customerTag)
+        onConfirmAction: () => this.deleteCustomerTagById(customerTag.id!)
       }
     });
+  }
+
+  deleteCustomerTagById(id: string) {
+    this.customerTagService.safeDelete(id)
+      .pipe(
+        tap(_ => {
+          this.snackBarService.success('Tag deletada com sucesso');
+          this.searchText$.next('');
+        }),
+        catchError(() => of(this.snackBarService.error('Falha ao deletar tag')))
+      )
+      .subscribe();
   }
 
   filterData(filters: DataTableFilter) {

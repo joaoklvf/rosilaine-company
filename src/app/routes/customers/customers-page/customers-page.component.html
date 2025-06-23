@@ -11,7 +11,7 @@
 
 <app-data-table
   [columns]="columns"
-  (removeAction)="remove($event.id!)"
+  (removeAction)="openDialog($event)"
   (editAction)="edit($event)"
   [showSearchField]="true"
   searchPlaceHolder="Nome"

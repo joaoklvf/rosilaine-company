@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Router, RouterModule } from '@angular/router';
-import { catchError, debounceTime, distinctUntilChanged, of, startWith, Subject, switchMap, tap } from 'rxjs';
+import { catchError, debounceTime, of, startWith, Subject, switchMap, tap } from 'rxjs';
+import { CustomDialogComponent } from 'src/app/components/custom-dialog/custom-dialog.component';
 import { DataTableFilter } from 'src/app/components/data-table/data-table-interfaces';
 import { DataTableComponent } from 'src/app/components/data-table/data-table.component';
 import { DataTableColumnProp, FormatValueOptions } from 'src/app/interfaces/data-table';
@@ -23,6 +25,7 @@ export class CustomersPageComponent implements OnInit {
   ]
   customers: Customer[] = [];
   dataCount = 0;
+  readonly dialog = inject(MatDialog);
 
   constructor(private customerService: CustomerService, private router: Router, private snackBarService: SnackBarService) { }
 
@@ -30,7 +33,6 @@ export class CustomersPageComponent implements OnInit {
     this.searchText$.pipe(
       startWith(''),
       debounceTime(300),
-      distinctUntilChanged(),
       switchMap((filters) => {
         if (typeof filters === 'string')
           return this.customerService.get({ name: filters, offset: 0, take: 15 })
@@ -43,14 +45,25 @@ export class CustomersPageComponent implements OnInit {
     });
   }
 
-  remove(id: string) {
+  openDialog(customer: Customer): void {
+    this.dialog.open(CustomDialogComponent, {
+      width: '500px',
+      data: {
+        title: "Deletar cliente",
+        content: `Deseja deletar o cliente ${customer.name}?`,
+        onConfirmAction: () => this.deleteCustomerById(customer.id!)
+      }
+    });
+  }
+
+  deleteCustomerById(id: string) {
     this.customerService.safeDelete(id)
       .pipe(
         tap(_ => {
-          this.snackBarService.success('Cliente excluído com sucesso');
+          this.snackBarService.success('Cliente deletado com sucesso');
           this.searchText$.next('');
         }),
-        catchError(() => of(this.snackBarService.error('Falha excluir cliente')))
+        catchError(() => of(this.snackBarService.error('Falha ao deletar cliente')))
       )
       .subscribe();
   }
