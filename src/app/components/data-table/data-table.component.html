@@ -32,7 +32,11 @@
         @for(row of readyData; track row){
         <tr>
           @for(column of columns(); track column){
-          <td width="{{ getColumnWidth(column) }}">
+          <td
+            width="{{ getColumnWidth(column) }}"
+            (click)="cellAction($index, row)"
+            [attr.role]="getRole($index)"
+          >
             {{ displayCell(row, column) }}
           </td>
           } @if (showActions) {

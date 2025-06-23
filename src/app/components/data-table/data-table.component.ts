@@ -10,7 +10,10 @@ import { DataTableFilter } from './data-table-interfaces';
   selector: 'app-data-table',
   imports: [MatIconModule, ReactiveFormsModule, DataTablePaginationComponent],
   templateUrl: './data-table.component.html',
-  styleUrl: './data-table.component.scss'
+  styleUrl: './data-table.component.scss',
+  host: {
+    '[attr.role]': 'role'
+  }
 })
 
 export class DataTableComponent<T> {
@@ -63,5 +66,21 @@ export class DataTableComponent<T> {
 
   changePageAction(skip: number) {
     this.searchAction.emit({ filter: '', offset: skip, take: this.dataPerPage() })
+  }
+
+  cellAction(index: number, row: T) {
+    if (this.isFirstCell(index))
+      this.edit(row);
+  }
+
+  getRole(index: number): string {
+    if (this.isFirstCell(index))
+      return 'button';
+
+    return 'cell';
+  }
+
+  isFirstCell(index: number) {
+    return index === 0;
   }
 }
