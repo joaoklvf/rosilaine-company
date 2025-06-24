@@ -1,4 +1,4 @@
-import { Component, inject, input, OnInit, output } from '@angular/core';
+import { Component, inject, input, model, OnInit, output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { BrDatePickerComponent } from 'src/app/components/br-date-picker/br-date-picker.component';
 import { CustomDialogComponent } from 'src/app/components/custom-dialog/custom-dialog.component';
@@ -17,8 +17,13 @@ export class FirstInstallmentDatePickerComponent implements OnInit {
   readonly order = input.required<Order>();
   readonly saveOrderAction = output<Order>();
   readonly dialog = inject(MatDialog);
-  firstInstallmentDate: Date | null = null;
+  readonly firstInstallmentDate = model<Date | null>(null);
+
   constructor(private orderService: OrderService, private snackBarService: SnackBarService) { }
+
+  get _firstInstallmentDate() {
+    return this.firstInstallmentDate();
+  }
 
   get _order() {
     return this.order();
@@ -31,7 +36,7 @@ export class FirstInstallmentDatePickerComponent implements OnInit {
   setDefaultFirstInstallmentDate() {
     const date = this._order.installments?.at(0)?.paymentDate ?? this._order.firstInstallmentDate ?? null;
     if (date)
-      this.firstInstallmentDate = new Date(date.toString())
+      this.firstInstallmentDate.set(new Date(date.toString()))
   }
 
   public generateInstallmentsAndSaveOrder(firstInstallmentDate: Date) {
