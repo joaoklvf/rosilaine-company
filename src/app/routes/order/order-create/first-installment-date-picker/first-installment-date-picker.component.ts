@@ -38,7 +38,7 @@ export class FirstInstallmentDatePickerComponent implements OnInit {
     const order = this.orderService.generateInstallments({ ...this._order, firstInstallmentDate }, this._order.installments!.length);
 
     this.orderService.update(order).subscribe(order => {
-      this.snackBarService.success('Mudança(s) salva(s) com sucesso!');
+      this.snackBarService.success('Parcelas atualizadas com sucesso!');
       this.saveOrderAction.emit({ ...order });
     });
   }
