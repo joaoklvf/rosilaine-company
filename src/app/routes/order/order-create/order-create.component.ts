@@ -98,6 +98,10 @@ export class OrderCreateComponent implements OnInit {
       orderItems: orderItems,
     }
 
+    this.createUpdateOrder(order);
+  }
+
+  createUpdateOrder(order: Order) {
     if (order.id) {
       this.orderService.update(order)
         .subscribe(orderResponse => {
@@ -113,7 +117,8 @@ export class OrderCreateComponent implements OnInit {
   }
 
   remove(orderItem: OrderItem): void {
-    this.order.value!.orderItems = this.order.value!.orderItems.filter(p => p !== orderItem);
+    const newItems = this.order.value!.orderItems.filter(p => p.id !== orderItem.id);
+    this.createUpdateOrder({ ...this.order.value!, orderItems: newItems });
   }
 
   edit(orderItem: OrderItem): void {
@@ -194,6 +199,7 @@ export class OrderCreateComponent implements OnInit {
     this.order.setValue({ ...order });
     this.orderTotal = getBrCurrencyStr(order.total);
     this.changeAddUpdateItemButtonText();
+    this.snackBarService.success('Pedido atualizado com sucesso!');
   }
 
   updateStatusesByOrder(order: Order) {
