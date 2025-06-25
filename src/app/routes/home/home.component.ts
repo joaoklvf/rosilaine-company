@@ -6,10 +6,11 @@ import { DataTableColumnProp } from 'src/app/interfaces/data-table';
 import { HomeResponse } from 'src/app/interfaces/home-response';
 import { HomeApiService as HomeService } from 'src/app/services/home/home.service';
 import { OrderInstallmentService } from 'src/app/services/order/order-installment/order-installment.service';
+import { CustomChartComponent } from "../../components/custom-chart/custom-chart.component";
 
 @Component({
   selector: 'app-home',
-  imports: [DataTableComponent],
+  imports: [DataTableComponent, CustomChartComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })

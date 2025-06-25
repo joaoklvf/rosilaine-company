@@ -12,6 +12,7 @@ import { provideEnvironmentNgxMask } from 'ngx-mask';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { LoaderComponent } from "./components/loader/loader.component";
 import { LoaderInterceptor } from './services/interceptors/loader-interceptor.interceptor';
+import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 
 @NgModule({
     declarations: [
@@ -35,7 +36,8 @@ import { LoaderInterceptor } from './services/interceptors/loader-interceptor.in
             provide: HTTP_INTERCEPTORS,
             useClass: LoaderInterceptor,
             multi: true
-        }
+        },
+        provideCharts(withDefaultRegisterables())
     ]
 })
 
