@@ -2,8 +2,13 @@
   <div class="col">
     <div class="card">
       <div class="card-body">
+        <h1>Balanço das parcelas</h1>
         @if(installmentsBalance) {
-        <app-custom-chart [data]="installmentsBalance" [labels]="chartLabels" />
+        <app-custom-chart
+          class="home-max-height"
+          [data]="installmentsBalance"
+          [labels]="chartLabels"
+        />
         }
       </div>
     </div>
