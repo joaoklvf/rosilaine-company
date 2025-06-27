@@ -1,9 +1,21 @@
-<h1>Parcelas próximas</h1>
-<app-custom-chart />
-<app-data-table
-  [columns]="columns"
-  [data]="homeData"
-  [showActionsColumn]="false"
-  [dataCount]="dataCount"
-  (searchAction)="getHomeData($event)"
-/>
+<div class="row">
+  <div class="col">
+    <div class="card">
+      <div class="card-body">
+        @if(installmentsBalance) {
+        <app-custom-chart [data]="installmentsBalance" [labels]="chartLabels" />
+        }
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <app-data-table
+      [title]="'Parcelas próximas'"
+      [columns]="columns"
+      [data]="nextInstallments"
+      [showActionsColumn]="false"
+      [dataCount]="dataCount"
+      (searchAction)="getHomeData($event)"
+    />
+  </div>
+</div>

@@ -27,6 +27,11 @@ export class DataTableComponent<T> {
   readonly dataPerPage = input(15);
   readonly dataCount = input(0);
   readonly showActionsColumn = input(true);
+  readonly title = input<string | null>(null);
+
+  get _title(){
+    return this.title();
+  }
 
   get showActions() {
     return this.showActionsColumn()

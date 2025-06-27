@@ -3,7 +3,7 @@ import { Inject, Injectable } from '@angular/core';
 import { Observable, tap, catchError, map, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { MessageService } from '../message/message.service';
-import { HomeResponse } from 'src/app/interfaces/home-response';
+import { InstallmentsBalanceResponse, NextInstallmentsResponse } from 'src/app/interfaces/home-response';
 
 @Injectable({
   providedIn: 'root'
@@ -13,11 +13,19 @@ export class HomeApiService {
   public apiUrl = `${environment.apiUrl}/home`;// URL to web api
 
   /** GET orders from the server */
-  get(params?: any): Observable<[HomeResponse[], number]> {
-    return this.http.get<[HomeResponse[], number]>(this.apiUrl, { params })
+  getNextInstallments(params?: any): Observable<[NextInstallmentsResponse[], number]> {
+    return this.http.get<[NextInstallmentsResponse[], number]>(`${this.apiUrl}/installments/next`, { params })
       .pipe(
         tap(_ => this.log('fetched orders')),
-        catchError(this.handleError<[HomeResponse[], number]>('getTs', [[], 0]))
+        catchError(this.handleError<[NextInstallmentsResponse[], number]>('getTs', [[], 0]))
+      );
+  }
+
+  getInstallmentsBalance(params?: any): Observable<InstallmentsBalanceResponse> {
+    return this.http.get<InstallmentsBalanceResponse>(`${this.apiUrl}/installments/balance`, { params })
+      .pipe(
+        tap(_ => this.log('fetched orders')),
+        catchError(this.handleError<InstallmentsBalanceResponse>('getTs'))
       );
   }
 

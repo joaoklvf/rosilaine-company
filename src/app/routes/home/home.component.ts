@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { startWith, debounceTime, switchMap } from 'rxjs';
 import { DataTableFilter } from 'src/app/components/data-table/data-table-interfaces';
 import { DataTableComponent } from 'src/app/components/data-table/data-table.component';
 import { DataTableColumnProp } from 'src/app/interfaces/data-table';
-import { HomeResponse } from 'src/app/interfaces/home-response';
-import { HomeApiService as HomeService } from 'src/app/services/home/home.service';
-import { OrderInstallmentService } from 'src/app/services/order/order-installment/order-installment.service';
+import { InstallmentsBalanceResponse, NextInstallmentsResponse } from 'src/app/interfaces/home-response';
 import { CustomChartComponent } from "../../components/custom-chart/custom-chart.component";
+import { HomeApiService } from 'src/app/services/home/home.service';
 
 @Component({
   selector: 'app-home',
@@ -15,15 +13,17 @@ import { CustomChartComponent } from "../../components/custom-chart/custom-chart
   styleUrl: './home.component.scss'
 })
 export class HomeComponent implements OnInit {
-  readonly columns: DataTableColumnProp<HomeResponse>[] = [
+  readonly columns: DataTableColumnProp<NextInstallmentsResponse>[] = [
     { description: "Cliente", fieldName: "customerName", width: '50%' },
     { description: "Data da parcela", fieldName: "installmentDate" },
     { description: "Valor (R$)", fieldName: "installmentAmount" },
   ]
-  homeData: HomeResponse[] = [];
+  nextInstallments: NextInstallmentsResponse[] = [];
   dataCount = 0;
+  installmentsBalance: number[] | undefined;
+  readonly chartLabels = ['Recebido', 'Total'];
 
-  constructor(private homeService: HomeService) { }
+  constructor(private homeService: HomeApiService) { }
 
   ngOnInit() {
     this.getHomeData({ take: 15, offset: 0 });
@@ -31,10 +31,15 @@ export class HomeComponent implements OnInit {
 
   getHomeData(params?: DataTableFilter) {
     this.homeService
-      .get(params)
+      .getNextInstallments(params)
       .subscribe(homeResponse => {
-        this.homeData = homeResponse[0];
+        this.nextInstallments = homeResponse[0];
         this.dataCount = homeResponse[1]
       });
+
+    this.homeService.getInstallmentsBalance()
+      .subscribe(response => {
+        this.installmentsBalance = [response.amountPaid, response.amountTotal];
+      })
   }
 }
