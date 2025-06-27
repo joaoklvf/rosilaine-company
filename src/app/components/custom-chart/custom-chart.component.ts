@@ -20,7 +20,7 @@ export class CustomChartComponent implements OnInit {
     plugins: {
       legend: {
         display: true,
-        position: 'top',
+        position: 'bottom',
       },
       datalabels: {
         formatter: (value, ctx) => {
