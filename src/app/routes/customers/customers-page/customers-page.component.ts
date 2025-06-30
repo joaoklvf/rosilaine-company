@@ -5,7 +5,7 @@ import { catchError, debounceTime, of, startWith, Subject, switchMap, tap } from
 import { CustomDialogComponent } from 'src/app/components/custom-dialog/custom-dialog.component';
 import { DataTableFilter } from 'src/app/components/data-table/data-table-interfaces';
 import { DataTableComponent } from 'src/app/components/data-table/data-table.component';
-import { DataTableColumnProp, FormatValueOptions } from 'src/app/interfaces/data-table';
+import { DataTableColumnProp } from 'src/app/interfaces/data-table';
 import { Customer } from 'src/app/models/customer/customer';
 import { CustomerService } from 'src/app/services/customer/customer.service';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
@@ -21,7 +21,6 @@ export class CustomersPageComponent implements OnInit {
   readonly columns: DataTableColumnProp<Customer>[] = [
     { description: "Nome", fieldName: "name", width: '50%' },
     { description: "Telefone", fieldName: "phone" },
-    { description: "Data de nascimento", fieldName: "birthDate", formatValue: FormatValueOptions.Date },
   ]
   customers: Customer[] = [];
   dataCount = 0;

@@ -29,7 +29,16 @@
         <tbody>
           @for (installment of installments; track installment) {
           <tr>
-            <td>{{ getBrDate(installment.debitDate) }}</td>
+            <td>
+              <app-br-date-picker
+                [label]="'Data da parcela'"
+                [value]="installment.debitDate"
+                (handleOnChange)="
+                  setInstallmentDebitDate($event, installment)
+                "
+                class="col-md-3"
+              ></app-br-date-picker>
+            </td>
             <td>{{ getCurrencyValue(installment.amount) }}</td>
             <td>
               <app-br-date-picker

@@ -83,11 +83,36 @@ export class OrderCreateComponent implements OnInit {
     this.title = 'Editar pedido';
   }
 
-  addUpdateItem(): void {
+  getError() {
     const orderItem = { ...this.orderItem };
-    if (!orderItem.product.id || orderItem.itemAmount <= 0)
-      return;
+    const order = { ...this.order.value };
 
+    if (orderItem.itemAmount <= 0)
+      return 'Insira a quantidade do produto';
+
+    if (!orderItem.product.id)
+      return 'Selecione um produto';
+
+    if (!order.status?.description)
+      return 'Defina o status do pedido';
+
+    if (!orderItem.itemStatus?.description)
+      return 'Defina o status do produto';
+
+    if (!order.customer?.id)
+      return 'Selecione um cliente';
+
+    return null;
+  }
+
+  addUpdateItem(): void {
+    const error = this.getError();
+    if (error) {
+      this.snackBarService.error(error);
+      return;
+    }
+    
+    const orderItem = { ...this.orderItem };
     const prevItems = [...this.order.value!.orderItems];
     const orderItems = orderItem.id
       ? prevItems.map(item => item.id === orderItem.id ? { ...orderItem } : item)

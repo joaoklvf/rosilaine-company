@@ -50,6 +50,10 @@ export class InstallmentManagementComponent implements OnInit {
     installment.paymentDate = value;
   }
 
+  setInstallmentDebitDate(value: Date, installment: OrderInstallment) {
+    installment.debitDate = value;
+  }
+
   setFirstInstallmentDate(value: Date) {
     this.data.order.firstInstallmentDate = value;
   }

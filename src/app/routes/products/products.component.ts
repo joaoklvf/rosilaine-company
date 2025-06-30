@@ -73,14 +73,31 @@ export class ProductsComponent implements OnInit {
     this.product.productPrice = value;
   }
 
-  add() {
-    const product = {
-      ...this.product,
-      name: this.product.description.trim(),
-    };
+  getError() {
+    const product = { ...this.product };
+    if (!product.description)
+      return 'Preencha a descrição do produto';
 
-    if (!product.name || !product.category)
+    if (!product.category.description)
+      return 'Defina a categoria do produto';
+
+    if (product.productPrice <= 0)
+      return 'Informe o valor do produto'
+
+    return null;
+  }
+
+  add() {
+    const error = this.getError();
+    if (error) {
+      this.snackBarService.error(error);
       return;
+    }
+
+    const product: Product = {
+      ...this.product,
+      description: this.product.description.trim(),
+    };
 
     if (product.id) {
       this.productService.update(product)
