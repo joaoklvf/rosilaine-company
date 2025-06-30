@@ -2,6 +2,7 @@ import { Component, input, OnInit, ViewChild } from '@angular/core';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import DataLabelsPlugin from 'chartjs-plugin-datalabels';
+import { getBrCurrencyStr } from 'src/app/utils/text-format';
 
 @Component({
   selector: 'app-custom-chart',
@@ -24,12 +25,16 @@ export class CustomChartComponent implements OnInit {
       },
       datalabels: {
         formatter: (value, ctx) => {
-          if (ctx.chart.data.labels) {
-            return ctx.chart.data.labels[ctx.dataIndex];
-          }
-          return '';
+          return getBrCurrencyStr(value)
         },
       },
+      tooltip: {
+        callbacks: {
+          label(tooltipItem) {
+            return `${getBrCurrencyStr(tooltipItem.parsed)}`;
+          },
+        }
+      }
     },
   };
   public pieChartData: ChartData<'pie', number[], string | string[]> = {
