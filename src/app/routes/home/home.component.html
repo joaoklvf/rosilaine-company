@@ -1,19 +1,49 @@
-<div class="row">
+<div class="row text-white">
   <div class="col">
-    <div class="card">
-      <div class="card-body">
-        <h1>Balanço das parcelas</h1>
-        @if(installmentsBalance) {
-        <app-custom-chart
-          class="home-max-height"
-          [data]="installmentsBalance"
-          [labels]="chartLabels"
-        />
-        }
+    <div class="d-flex flex-column align-items-center">
+      <p class="pacifico-font fs-1">Olá, Rosilaine 👋</p>
+      <h2>Aqui está um resumo das suas vendas 🛒</h2>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-7">
+    <div class="row mb-3">
+      <div class="col">
+        <div class="card">
+          <div class="card-body">
+            <h2>Total das parcelas 💰</h2>
+            <h1 class="mb-0">{{ installmentsTotal }}</h1>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card">
+          <div class="card-body">
+            <h2>Faturas em aberto 📑</h2>
+            <h1 class="mb-0">{{ pendingInstallments }}</h1>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <div class="card">
+          <div class="card-body">
+            <h1>Balanço das parcelas</h1>
+            @if(installmentsBalance) {
+            <app-custom-chart
+              [data]="installmentsBalance"
+              [labels]="chartLabels"
+              class="chart"
+            />
+            }
+          </div>
+        </div>
       </div>
     </div>
   </div>
-  <div class="col">
+  <div class="col-5">
     <app-data-table
       [title]="'Parcelas próximas'"
       [columns]="columns"
@@ -21,6 +51,7 @@
       [showActionsColumn]="false"
       [dataCount]="dataCount"
       (searchAction)="getHomeData($event)"
+      class="data-table"
     />
   </div>
 </div>

@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { DataTableFilter } from 'src/app/components/data-table/data-table-interfaces';
 import { DataTableComponent } from 'src/app/components/data-table/data-table.component';
 import { DataTableColumnProp } from 'src/app/interfaces/data-table';
-import { InstallmentsBalanceResponse, NextInstallmentsResponse } from 'src/app/interfaces/home-response';
+import { NextInstallmentsResponse } from 'src/app/interfaces/home-response';
 import { CustomChartComponent } from "../../components/custom-chart/custom-chart.component";
 import { HomeApiService } from 'src/app/services/home/home.service';
+import { getAmountStr, getBrCurrencyStr } from 'src/app/utils/text-format';
 
 @Component({
   selector: 'app-home',
@@ -21,7 +22,10 @@ export class HomeComponent implements OnInit {
   nextInstallments: NextInstallmentsResponse[] = [];
   dataCount = 0;
   installmentsBalance: number[] | undefined;
-  readonly chartLabels = ['Recebido', 'Total'];
+  installmentsTotal: string | undefined;
+  pendingInstallments: string | undefined;
+
+  readonly chartLabels = ['Recebido', 'Pendente'];
 
   constructor(private homeService: HomeApiService) { }
 
@@ -39,7 +43,9 @@ export class HomeComponent implements OnInit {
 
     this.homeService.getInstallmentsBalance()
       .subscribe(response => {
-        this.installmentsBalance = [response.amountPaid, response.amountTotal];
+        this.installmentsBalance = [response.amountPaid, response.amountToReceive];
+        this.installmentsTotal = getBrCurrencyStr(response.amountTotal);
+        this.pendingInstallments = getAmountStr(response.pendingInstallments)
       })
   }
 }

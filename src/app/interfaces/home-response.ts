@@ -8,4 +8,6 @@ export interface NextInstallmentsResponse {
 export interface InstallmentsBalanceResponse {
   amountPaid: number;
   amountTotal: number;
+  amountToReceive: number;
+  pendingInstallments: number;
 }

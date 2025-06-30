@@ -15,9 +15,11 @@ export class CustomChartComponent implements OnInit {
   @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
   labels = input<string[]>();
   data = input<number[]>();
-  public pieChartPlugins = [DataLabelsPlugin];
-  // Pie
-  public pieChartOptions: ChartConfiguration['options'] = {
+  width = input<string>('inherit');
+  height = input<string>('inherit');
+  public doughnutChartPlugins = [DataLabelsPlugin];
+  // doughnut
+  public doughnutChartOptions: ChartConfiguration['options'] = {
     plugins: {
       legend: {
         display: true,
@@ -27,6 +29,11 @@ export class CustomChartComponent implements OnInit {
         formatter: (value, ctx) => {
           return getBrCurrencyStr(value)
         },
+        font: {
+          weight: 700,
+          size: 14
+        },
+        color: 'white'
       },
       tooltip: {
         callbacks: {
@@ -37,7 +44,7 @@ export class CustomChartComponent implements OnInit {
       }
     },
   };
-  public pieChartData: ChartData<'pie', number[], string | string[]> = {
+  public doughnutChartData: ChartData<'doughnut', number[], string | string[]> = {
     labels: [''],
     datasets: [
       {
@@ -45,7 +52,7 @@ export class CustomChartComponent implements OnInit {
       },
     ],
   };
-  public pieChartType: ChartType = 'pie';
+  public doughnutChartType: ChartType = 'doughnut';
 
   ngOnInit(): void {
     const labels = this.labels();
@@ -53,9 +60,9 @@ export class CustomChartComponent implements OnInit {
     if (!(labels && data))
       return;
 
-    this.pieChartData.labels!.pop();
-    this.pieChartData.datasets[0].data.pop();
-    this.pieChartData.labels!.push(...labels);
-    this.pieChartData.datasets[0].data.push(...data);
+    this.doughnutChartData.labels!.pop();
+    this.doughnutChartData.datasets[0].data.pop();
+    this.doughnutChartData.labels!.push(...labels);
+    this.doughnutChartData.datasets[0].data.push(...data);
   }
 }

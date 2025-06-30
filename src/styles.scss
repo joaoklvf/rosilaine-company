@@ -1,3 +1,10 @@
+@font-face {
+  font-family: pacifico-regular;
+  src: url('./assets/fonts/Pacifico-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 :root {
   .snackbar-success {
     --mdc-snackbar-container-color: green;
@@ -15,6 +22,8 @@
 html,
 body {
   height: 100%;
+  background: #833AB4;
+  background: linear-gradient(180deg, rgba(131, 58, 180, 1) 50%, rgba(255, 120, 192, 1) 100%);
 }
 
 body {
@@ -28,4 +37,8 @@ app-br-date-picker .mat-mdc-form-field-subscript-wrapper {
 
 .mat-mdc-form-field-subscript-wrapper {
   display: none;
+}
+
+.pacifico-font {
+  font-family: 'pacifico-regular', 'arial', sans-serif; /* Or other fallback fonts */ 
 }
