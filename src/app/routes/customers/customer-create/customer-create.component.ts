@@ -10,7 +10,7 @@ import { CustomerTagService } from 'src/app/services/customer/customer-tag/custo
 import { CustomerService } from 'src/app/services/customer/customer.service';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 import { ViaCepService } from 'src/app/services/via-cep/via-cep.service';
-import { getDateFromStr } from 'src/app/utils/text-format';
+import { getBrDateStr, getDateFromStr } from 'src/app/utils/text-format';
 
 @Component({
   selector: 'app-customer-create',
@@ -42,7 +42,7 @@ export class CustomerCreateComponent implements OnInit {
 
     this.customerService.getById(id)
       .subscribe(customer => {
-        this.customer = { ...customer }
+        this.customer = { ...customer, birthDate: this.getCustomerBirthDate(customer.birthDate) }
 
         this.address.setValue({
           city: customer.city,
@@ -58,11 +58,10 @@ export class CustomerCreateComponent implements OnInit {
   }
 
   add() {
-    const birthDate = getDateFromStr(this.customer.birthDate);    
     let customer: Customer = {
       ...this.customer,
       name: this.customer.name.trim(),
-      birthDate
+      birthDate: this.getCustomerBirthDate(this.customer.birthDate)
     };
 
     if (this.address.value.city && (!this.customer.city || this.customer.city.length === 0)) {
@@ -121,5 +120,10 @@ export class CustomerCreateComponent implements OnInit {
 
   setTags(tags: CustomerTag[]) {
     this.customer.tags = [...tags];
+  }
+
+  getCustomerBirthDate(birthDate: string | null | Date) {
+    return birthDate ?
+      getBrDateStr(birthDate) : null;
   }
 }

@@ -4,7 +4,7 @@ import { CustomerTag } from "./customer-tag";
 export class Customer extends BaseEntity {
   name = '';
   phone = '';
-  birthDate = new Date();
+  birthDate: Date | string | null = null;
   zipCode: string | null = null;
   street: string | null = null;
   neighborhood: string | null = null;
