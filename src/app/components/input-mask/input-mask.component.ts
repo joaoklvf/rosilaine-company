@@ -11,6 +11,7 @@ import { getBrCurrencyStr } from 'src/app/utils/text-format';
 export class InputMaskComponent {
   @Input() label = '';
   @Input() value = 0;
+  @Input() disabled = false;
   @Output() handleOnChange = new EventEmitter<number>();
   @Output() handleDoubleClick = new EventEmitter();
 
