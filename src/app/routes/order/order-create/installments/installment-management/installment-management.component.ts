@@ -42,8 +42,29 @@ export class InstallmentManagementComponent implements OnInit {
   getCurrencyValue = (value: number | null) =>
     value && getBrCurrencyStr(value);
 
-  setInstallmentAmountPaid(value: number, installment: OrderInstallment) {
+  installmentPayment(value: number, installment: OrderInstallment) {
     installment.amountPaid = value;
+    this.updateNextInstallmentPayment(installment, value);
+  }
+
+  updateNextInstallmentPayment(prevInstallment: OrderInstallment, valuePaid: number) {
+    const installments = [...this.installments];
+    const currentInstallmentIndex = installments.findIndex(x => x.id === prevInstallment.id);
+    const nextInstallmentIndex = currentInstallmentIndex + 1;
+    const nextInstallment = installments[nextInstallmentIndex];
+    if (!nextInstallment)
+      return;
+
+    const paidDifference = valuePaid - prevInstallment.amount;
+    if (!paidDifference)
+      return;
+
+    const newAmount = nextInstallment.amount - paidDifference;
+    if (newAmount < 0)
+      return;
+
+    installments[nextInstallmentIndex].amount = newAmount;
+    this.installments = [...installments];
   }
 
   setInstallmentAmount(value: number, installment: OrderInstallment) {

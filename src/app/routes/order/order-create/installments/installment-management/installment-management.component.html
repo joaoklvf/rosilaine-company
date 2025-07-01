@@ -58,7 +58,7 @@
             <td>
               <app-input-mask
                 [value]="installment.amountPaid || 0"
-                (handleOnChange)="setInstallmentAmountPaid($event, installment)"
+                (handleOnChange)="installmentPayment($event, installment)"
                 (handleDoubleClick)="setInstallmentPaidAmount(installment)"
               >
               </app-input-mask>
