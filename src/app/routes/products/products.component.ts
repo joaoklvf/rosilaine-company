@@ -42,6 +42,8 @@ export class ProductsComponent implements OnInit {
   readonly dialog = inject(MatDialog);
 
   ngOnInit() {
+    this.getCategories();
+
     this.searchText$.pipe(
       startWith(''),
       debounceTime(300),
