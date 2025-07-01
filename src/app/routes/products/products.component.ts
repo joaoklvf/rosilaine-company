@@ -28,6 +28,7 @@ export class ProductsComponent implements OnInit {
   products: Product[] = [];
   product = new Product();
   dataCount = 0;
+  addUpdateButtonText = 'Adicionar';
 
   readonly columns: DataTableColumnProp<Product>[] = [
     { description: "Produto", fieldName: "description", width: '50%' },
@@ -42,7 +43,8 @@ export class ProductsComponent implements OnInit {
   readonly dialog = inject(MatDialog);
 
   ngOnInit() {
-    this.getCategories();
+    this.productCategoryService.get()
+      .subscribe(categories => this.categories = categories[0]);
 
     this.searchText$.pipe(
       startWith(''),
@@ -57,11 +59,6 @@ export class ProductsComponent implements OnInit {
       this.products = products[0];
       this.dataCount = products[1]
     });
-  }
-
-  getCategories() {
-    this.productCategoryService.get()
-      .subscribe(categories => this.categories = categories[0]);
   }
 
   setProduct(value: Product) {
@@ -103,28 +100,27 @@ export class ProductsComponent implements OnInit {
       description: this.product.description.trim(),
     };
 
-    if (product.id) {
+    if (product.id)
       this.productService.update(product)
-        .subscribe(product => {
-          const customerIndex = this.products.findIndex(c => c.id === product.id);
-          this.products[customerIndex] = product;
-          this.product = new Product();
+        .subscribe(product => this.afterRequest(product));
 
-          if (!product.category.id)
-            this.getCategories();
-        });
-    } else {
+    else
       this.productService.add(product)
-        .subscribe(product => {
-          this.products.push(product);
-          this.product = new Product();
+        .subscribe(product => this.afterRequest(product));
+  }
 
-          if (!product.category.id)
-            this.getCategories();
-        });
+  afterRequest(product: Product) {
+    const customerIndex = this.products.findIndex(c => c.id === product.id);
+    if (customerIndex >= 0)
+      this.products[customerIndex] = product;
+    else
+      this.products.push(product);
 
-      this.productDescriptionField.nativeElement.focus();
-    }
+    this.product = new Product();
+    this.productDescriptionField.nativeElement.focus();
+    
+    if (!this.categories.find(x => x.id === product.category.id))
+      this.categories.push(product.category)
   }
 
   edit(product: Product): void {

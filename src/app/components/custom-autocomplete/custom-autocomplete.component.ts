@@ -32,7 +32,7 @@ export class CustomAutocompleteComponent<T extends object> implements OnChanges 
       map(value => {
         const dataFiltered = this.getFilteredData(value);
 
-        if (this.creatable() && typeof value === 'string' && value.length > 0) {
+        if (this.creatable() && typeof value === 'string' && value.length > 0 && !dataFiltered.length) {
           return [{ [this.displayValue()]: `Criar ${value}` } as T, ...dataFiltered];
         }
 
