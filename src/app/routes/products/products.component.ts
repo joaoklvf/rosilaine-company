@@ -109,19 +109,22 @@ export class ProductsComponent implements OnInit {
           const customerIndex = this.products.findIndex(c => c.id === product.id);
           this.products[customerIndex] = product;
           this.product = new Product();
+
+          if (!product.category.id)
+            this.getCategories();
         });
     } else {
       this.productService.add(product)
         .subscribe(product => {
           this.products.push(product);
           this.product = new Product();
+
+          if (!product.category.id)
+            this.getCategories();
         });
 
       this.productDescriptionField.nativeElement.focus();
     }
-
-    if (!product.category.id)
-      this.getCategories();
   }
 
   edit(product: Product): void {
