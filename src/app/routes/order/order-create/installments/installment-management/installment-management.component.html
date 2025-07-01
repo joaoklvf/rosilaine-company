@@ -33,13 +33,17 @@
               <app-br-date-picker
                 [label]="'Data da parcela'"
                 [value]="installment.debitDate"
-                (handleOnChange)="
-                  setInstallmentDebitDate($event, installment)
-                "
+                (handleOnChange)="setInstallmentDebitDate($event, installment)"
                 class="col-md-3"
               ></app-br-date-picker>
             </td>
-            <td>{{ getCurrencyValue(installment.amount) }}</td>
+            <td>
+              <app-input-mask
+                [value]="installment.amount"
+                (handleOnChange)="setInstallmentAmount($event, installment)"
+              >
+              </app-input-mask>
+            </td>
             <td>
               <app-br-date-picker
                 [label]="'Data de pagamento'"

@@ -46,6 +46,10 @@ export class InstallmentManagementComponent implements OnInit {
     installment.amountPaid = value;
   }
 
+  setInstallmentAmount(value: number, installment: OrderInstallment) {
+    installment.amountPaid = value;
+  }
+
   setInstallmentPaymentDate(value: Date, installment: OrderInstallment) {
     installment.paymentDate = value;
   }
