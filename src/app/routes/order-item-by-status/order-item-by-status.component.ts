@@ -1,15 +1,18 @@
-import { Component, OnInit } from '@angular/core';
-import { DataTableComponent } from "../../components/data-table/data-table.component";
-import { OrderItemStatus } from 'src/app/models/order/order-item/order-item-status';
-import { OrderItemStatusService } from 'src/app/services/order/order-item-status/order-item-status.service';
+import { Component, inject, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
-import { FormsModule } from '@angular/forms';
-import { OrderItemByStatus } from 'src/app/interfaces/order-item-by-status';
-import { OrderItemService } from 'src/app/services/order/order-item/order-item.service';
-import { DataTableColumnProp } from 'src/app/interfaces/data-table';
-import { Subject, startWith, debounceTime, switchMap } from 'rxjs';
+import { catchError, debounceTime, of, Subject, switchMap, tap } from 'rxjs';
+import { CustomDialogComponent } from 'src/app/components/custom-dialog/custom-dialog.component';
 import { DataTableFilter } from 'src/app/components/data-table/data-table-interfaces';
+import { DataTableColumnProp } from 'src/app/interfaces/data-table';
+import { OrderItemByStatus } from 'src/app/interfaces/order-item-by-status';
+import { OrderItemStatus } from 'src/app/models/order/order-item/order-item-status';
+import { OrderItemStatusService } from 'src/app/services/order/order-item-status/order-item-status.service';
+import { OrderItemService } from 'src/app/services/order/order-item/order-item.service';
+import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
+import { DataTableComponent } from "../../components/data-table/data-table.component";
 
 @Component({
   selector: 'app-order-item-by-status',
@@ -18,6 +21,7 @@ import { DataTableFilter } from 'src/app/components/data-table/data-table-interf
   styleUrl: './order-item-by-status.component.scss'
 })
 export class OrderItemByStatusComponent implements OnInit {
+  readonly dialog = inject(MatDialog);
   readonly columns: DataTableColumnProp<OrderItemByStatus>[] = [
     { description: "Quantidade", fieldName: "amount" },
     { description: "Produto", fieldName: "productDescription" },
@@ -27,9 +31,10 @@ export class OrderItemByStatusComponent implements OnInit {
   itemsByStatus: OrderItemByStatus[] = [];
   private $searchStatus = new Subject<DataTableFilter | string>();
   selectedStatusId?: string;
+  massiveStatusId?: string;
   dataCount = 0;
 
-  constructor(private orderItemStatusService: OrderItemStatusService, private orderItemService: OrderItemService) { }
+  constructor(private orderItemStatusService: OrderItemStatusService, private orderItemService: OrderItemService, private snackBarService: SnackBarService) { }
 
   ngOnInit(): void {
     this.$searchStatus.pipe(
@@ -57,5 +62,36 @@ export class OrderItemByStatusComponent implements OnInit {
     this.$searchStatus.next(filter);
     this.selectedStatusId = typeof filter === 'string' ?
       filter : filter.filter;
+  }
+
+  openDialog(): void {
+    if (!this.massiveStatusId || !this.selectedStatusId)
+      return;
+
+    const status = this.orderItemStatuses.find(x => x.id === this.massiveStatusId)
+    if (!status)
+      return;
+
+    this.dialog.open(CustomDialogComponent, {
+      width: '500px',
+      data: {
+        title: "Atualizar produtos",
+        content: `Deseja atualizar TODOS os produtos para o status\n${status.description.toUpperCase()}?`,
+        onConfirmAction: () => this.updateItems(this.selectedStatusId!, status.id!)
+      }
+    });
+  }
+
+  updateItems(oldId: string, newId: string) {
+    this.orderItemService.manyStatusChange(oldId, newId)
+      .pipe(
+        tap(_ => {
+          this.snackBarService.success('Alteração realizada com sucesso');
+          this.$searchStatus.next(this.selectedStatusId!)
+        }),
+        catchError(() => of(this.snackBarService.error('Falha ao alterar status')))
+      )
+      .subscribe();
+
   }
 }

@@ -16,11 +16,17 @@ export class OrderItemService extends BaseApiService<OrderItem> {
 
   /** GET orders from the server */
   getByStatusId(params: any): Observable<[OrderItemByStatus[], number]> {
-    console.log('params')
     return this.http.get<[OrderItemByStatus[], number]>(`${this.apiUrl}/order-item-status`, { params })
       .pipe(
         tap(_ => this.log('fetched data')),
         catchError(this.handleError<[OrderItemByStatus[], number]>('getTs'))
       );
+  }
+
+  manyStatusChange(oldStatusId: string, newStatusId: string) {
+    return this.http.put<any>(`${this.apiUrl}/many-status-change`, { oldStatusId, newStatusId }).pipe(
+      tap(_ => this.log(`updated installments`)),
+      catchError(this.handleError<any>('updateT'))
+    );
   }
 }

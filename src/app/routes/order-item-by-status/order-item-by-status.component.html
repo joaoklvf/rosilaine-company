@@ -1,3 +1,49 @@
+<div class="accordion mb-4" id="accordionExample">
+  <div class="accordion-item">
+    <h2 class="accordion-header mb-0">
+      <button
+        class="accordion-button collapsed"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#collapseTwo"
+        aria-expanded="false"
+        aria-controls="collapseTwo"
+      >
+        Alteração em massa
+      </button>
+    </h2>
+    <div
+      id="collapseTwo"
+      class="accordion-collapse collapse"
+      data-bs-parent="#accordionExample"
+    >
+      <div class="accordion-body">
+        <div class="d-flex justify-content-between">
+          <mat-form-field class="mb-3">
+            <mat-label>Status do produto</mat-label>
+            <mat-select [(ngModel)]="massiveStatusId">
+              @for (status of orderItemStatuses; track status) {
+              <mat-option [value]="status.id">
+                {{ status.description }}
+              </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          <div class="align-self-end">
+            <button
+              type="button"
+              class="btn btn-outline-primary"
+              (click)="openDialog()"
+            >
+              Atualizar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="card">
   <div class="card-header">
     <h1 class="mb-0">Produtos por status no pedido</h1>
