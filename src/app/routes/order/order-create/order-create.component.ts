@@ -186,6 +186,7 @@ export class OrderCreateComponent implements OnInit {
 
     this.orderItem.product = { ...value };
     this.orderItem.itemSellingPrice = value.productPrice;
+    this.orderItem.itemOriginalPrice = value.productPrice;
   }
 
   setOrderStatus(value: OrderStatus | null) {
