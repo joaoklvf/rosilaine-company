@@ -1,0 +1,27 @@
+<div class="card">
+  <div class="card-header">
+    <h1 class="mb-0">Produtos por status no pedido</h1>
+  </div>
+  <div class="card-body">
+    <mat-form-field class="mb-3">
+      <mat-label>Status do produto</mat-label>
+      <mat-select
+        [value]="selectedStatusId"
+        (selectionChange)="filterData($event.value)"
+      >
+        @for (status of orderItemStatuses; track status) {
+        <mat-option [value]="status.id">
+          {{ status.description }}
+        </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <app-data-table
+      [data]="itemsByStatus"
+      [columns]="columns"
+      [dataCount]="dataCount"
+      (searchAction)="filterData($event)"
+      [showActionsColumn]="false"
+    />
+  </div>
+</div>

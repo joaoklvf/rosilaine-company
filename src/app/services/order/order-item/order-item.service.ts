@@ -3,6 +3,8 @@ import { BaseApiService } from '../../base/base-api.service';
 import { HttpClient } from '@angular/common/http';
 import { MessageService } from '../../message/message.service';
 import { OrderItem } from 'src/app/models/order/order-item/order-item';
+import { OrderItemByStatus } from 'src/app/interfaces/order-item-by-status';
+import { Observable, tap, catchError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,5 +12,15 @@ import { OrderItem } from 'src/app/models/order/order-item/order-item';
 export class OrderItemService extends BaseApiService<OrderItem> {
   constructor(http: HttpClient, messageService: MessageService) {
     super(http, messageService, 'order-items');
+  }
+
+  /** GET orders from the server */
+  getByStatusId(params: any): Observable<[OrderItemByStatus[], number]> {
+    console.log('params')
+    return this.http.get<[OrderItemByStatus[], number]>(`${this.apiUrl}/order-item-status`, { params })
+      .pipe(
+        tap(_ => this.log('fetched data')),
+        catchError(this.handleError<[OrderItemByStatus[], number]>('getTs'))
+      );
   }
 }
