@@ -42,9 +42,6 @@ export class ProductsComponent implements OnInit {
   readonly dialog = inject(MatDialog);
 
   ngOnInit() {
-    this.productCategoryService.get()
-      .subscribe(categories => this.categories = categories[0]);
-
     this.searchText$.pipe(
       startWith(''),
       debounceTime(300),
@@ -58,6 +55,11 @@ export class ProductsComponent implements OnInit {
       this.products = products[0];
       this.dataCount = products[1]
     });
+  }
+
+  getCategories() {
+    this.productCategoryService.get()
+      .subscribe(categories => this.categories = categories[0]);
   }
 
   setProduct(value: Product) {
@@ -115,6 +117,9 @@ export class ProductsComponent implements OnInit {
 
       this.productDescriptionField.nativeElement.focus();
     }
+
+    if (!product.category.id)
+      this.getCategories();
   }
 
   edit(product: Product): void {
