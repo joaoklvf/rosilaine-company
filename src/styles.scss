@@ -24,6 +24,7 @@ body {
   height: 100%;
   background: #833AB4;
   background: linear-gradient(180deg, rgba(131, 58, 180, 1) 50%, rgba(255, 120, 192, 1) 100%);
+  background-attachment: fixed
 }
 
 body {
@@ -40,5 +41,6 @@ app-br-date-picker .mat-mdc-form-field-subscript-wrapper {
 }
 
 .pacifico-font {
-  font-family: 'pacifico-regular', 'arial', sans-serif; /* Or other fallback fonts */ 
+  font-family: 'pacifico-regular', 'arial', sans-serif;
+  /* Or other fallback fonts */
 }
