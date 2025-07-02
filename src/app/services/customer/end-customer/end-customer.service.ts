@@ -19,7 +19,8 @@ export class EndCustomerService {
   }
 
   /** GET orders from the server */
-  get(customerId: string, params?: any): Observable<[EndCustomer[], number]> {
+  get(customerId: string, param?: any): Observable<[EndCustomer[], number]> {
+    const params = { ...param, customerId }
     const finalUrl = this.getUrlRequest(customerId);
     return this.http.get<[EndCustomer[], number]>(finalUrl, { params })
       .pipe(
