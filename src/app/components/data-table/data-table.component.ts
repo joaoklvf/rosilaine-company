@@ -29,7 +29,7 @@ export class DataTableComponent<T> {
   readonly showActionsColumn = input(true);
   readonly title = input<string | null>(null);
 
-  get _title(){
+  get _title() {
     return this.title();
   }
 

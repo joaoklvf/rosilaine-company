@@ -8,7 +8,7 @@ export const TableFormatMap = {
   [FormatValueOptions.String]: (value: string) => value,
 }
 
-function getCellFormattedValue<T>(value: T[keyof T], formatLabel: FormatValueOptions = FormatValueOptions.String) {
+function getCellFormattedValue<T>(value: T[keyof T] | string, formatLabel: FormatValueOptions = FormatValueOptions.String) {
   return TableFormatMap[formatLabel](String(value));
 }
 
