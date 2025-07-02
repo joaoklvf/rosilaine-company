@@ -11,6 +11,7 @@ import { OrderInstallmentService } from 'src/app/services/order/order-installmen
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 import { tap, catchError, of } from 'rxjs';
 import { FirstInstallmentDatePickerComponent } from '../../first-installment-date-picker/first-installment-date-picker.component';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 interface ModalProps {
   order: Order;
@@ -19,7 +20,7 @@ interface ModalProps {
 
 @Component({
   selector: 'app-installment-management',
-  imports: [MatDialogActions, MatDialogClose, MatDialogTitle, MatDialogContent, InstallmentsSelectComponent, InputMaskComponent, FormsModule, BrDatePickerComponent, FirstInstallmentDatePickerComponent],
+  imports: [MatDialogActions, MatDialogClose, MatDialogTitle, MatDialogContent, InstallmentsSelectComponent, InputMaskComponent, FormsModule, BrDatePickerComponent, FirstInstallmentDatePickerComponent, MatSlideToggleModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './installment-management.component.html',
   styleUrl: './installment-management.component.scss'
@@ -27,6 +28,7 @@ interface ModalProps {
 export class InstallmentManagementComponent implements OnInit {
   data: ModalProps = inject(MAT_DIALOG_DATA);
   readonly dialogRef = inject(MatDialogRef<InstallmentManagementComponent>);
+  isToRound = true;
   installments: OrderInstallment[] = [];
 
   constructor(private orderInstallmentService: OrderInstallmentService, private snackBarService: SnackBarService) { }

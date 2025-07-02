@@ -5,6 +5,7 @@
       <app-installments-select
         [order]="data.order"
         (saveOrderAction)="changeInstallments($event)"
+        [isToRound]="isToRound"
       />
     </div>
     <div class="">
@@ -12,7 +13,13 @@
         [order]="data.order"
         (saveOrderAction)="changeInstallments($event)"
         class="col-md-3"
+        [isToRound]="isToRound"
       ></app-first-installment-date-picker>
+    </div>
+    <div class="align-content-center">
+      <mat-slide-toggle [(ngModel)]="isToRound"
+        >Arredondar cálculo
+      </mat-slide-toggle>
     </div>
   </div>
   <div class="card mt-3">

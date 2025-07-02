@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { BrDatePickerComponent } from 'src/app/components/br-date-picker/br-date-picker.component';
 import { CustomDialogComponent } from 'src/app/components/custom-dialog/custom-dialog.component';
 import { Order } from 'src/app/models/order/order';
+import { OrderRequest } from 'src/app/models/order/order-request';
 import { OrderService } from 'src/app/services/order/order.service';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 
@@ -18,6 +19,7 @@ export class FirstInstallmentDatePickerComponent implements OnInit {
   readonly saveOrderAction = output<Order>();
   readonly dialog = inject(MatDialog);
   readonly firstInstallmentDate = model<Date | null>(null);
+  readonly isToRound = input(true);
 
   constructor(private orderService: OrderService, private snackBarService: SnackBarService) { }
 
@@ -40,7 +42,12 @@ export class FirstInstallmentDatePickerComponent implements OnInit {
   }
 
   public generateInstallmentsAndSaveOrder(firstInstallmentDate: Date) {
-    const order = this.orderService.generateInstallments({ ...this._order, firstInstallmentDate }, this._order.installments!.length);
+    const order: OrderRequest = {
+      ...this._order,
+      firstInstallmentDate,
+      installmentsAmount: this._order.installments!.length,
+      isToRound: this.isToRound()
+    };
 
     this.orderService.update(order).subscribe(order => {
       this.snackBarService.success('Parcelas atualizadas com sucesso!');

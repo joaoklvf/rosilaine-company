@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSelect, MatOption, MatFormField, MatLabel, MatSelectChange } from '@angular/material/select';
 import { CustomDialogComponent } from 'src/app/components/custom-dialog/custom-dialog.component';
 import { Order } from 'src/app/models/order/order';
+import { OrderRequest } from 'src/app/models/order/order-request';
 import { OrderService } from 'src/app/services/order/order.service';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 
@@ -17,17 +18,24 @@ export class InstallmentsSelectComponent implements OnInit {
   readonly order = input.required<Order>();
   readonly saveOrderAction = output<Order>();
   readonly dialog = inject(MatDialog);
+  readonly isToRound = input(true);
+
   myControl = new FormControl(0);
 
   constructor(private orderService: OrderService, private snackBarService: SnackBarService) { }
-  
+
   ngOnInit(): void {
     this.myControl.setValue(this.order().installments?.length ?? 0);
   }
 
-  public generateInstallmentsAndSaveOrder(amount: number) {
-    const orderWithInstallments = { ...this.orderService.generateInstallments(this.order(), amount) };
-    this.orderService.update(orderWithInstallments).subscribe(order => {
+  public generateInstallmentsAndSaveOrder(installmentsAmount: number) {
+    const orderRequest: OrderRequest = {
+      ...this.order(),
+      installmentsAmount,
+      isToRound: this.isToRound()
+    };
+
+    this.orderService.update(orderRequest).subscribe(order => {
       this.snackBarService.success('Parcelas geradas com sucesso!');
       this.saveOrderAction.emit({ ...order });
       this.myControl.setValue(order.installments!.length);
@@ -41,7 +49,7 @@ export class InstallmentsSelectComponent implements OnInit {
         data: {
           title: "Refazer parcelas",
           content: `Deseja refazer as parcelas?`,
-          onConfirmAction: () => this.generateInstallmentsAndSaveOrder(event.value),
+          onConfirmAction: () => this.generateInstallmentsAndSaveOrder(event.value,),
           onCancelAction: () => this.myControl.setValue(this.order().installments!.length)
         }
       });
