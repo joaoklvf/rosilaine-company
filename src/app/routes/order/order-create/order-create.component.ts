@@ -27,6 +27,8 @@ import { InstallmentManagementComponent } from "./installments/installment-manag
 import { InstallmentsSelectComponent } from "./installments/installments-select/installments-select.component";
 import { tap, catchError, of } from "rxjs";
 import { FirstInstallmentDatePickerComponent } from "./first-installment-date-picker/first-installment-date-picker.component";
+import { EndCustomerService } from "src/app/services/customer/end-customer/end-customer.service";
+import { EndCustomer } from "src/app/models/customer/end-customer";
 
 @Component({
   selector: 'app-order-create',
@@ -40,6 +42,7 @@ export class OrderCreateComponent implements OnInit {
   orderItem = new OrderItem();
   orderTotal = '';
   customers: Customer[] = [];
+  endCustomers: EndCustomer[] = [];
   products: Product[] = [];
   orderStatuses: OrderStatus[] = [];
   orderItemStatuses: OrderItemStatus[] = [];
@@ -48,7 +51,18 @@ export class OrderCreateComponent implements OnInit {
 
   readonly dialog = inject(MatDialog);
 
-  constructor(private orderService: OrderService, private customerService: CustomerService, private productService: ProductService, private orderStatusService: OrderStatusService, private route: ActivatedRoute, private orderItemStatusService: OrderItemStatusService, private orderItemService: OrderItemService, private snackBarService: SnackBarService, private router: Router) { }
+  constructor(
+    private orderService: OrderService,
+    private customerService: CustomerService,
+    private productService: ProductService,
+    private orderStatusService: OrderStatusService,
+    private route: ActivatedRoute,
+    private orderItemStatusService: OrderItemStatusService,
+    private orderItemService: OrderItemService,
+    private snackBarService: SnackBarService,
+    private router: Router,
+    private endCustomerService: EndCustomerService) {
+  }
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
@@ -78,6 +92,7 @@ export class OrderCreateComponent implements OnInit {
 
         this.order.setValue({ ...order })
         this.orderTotal = getBrCurrencyStr(order.total);
+        this.getEndCustomers(order.customer.id!)
       });
 
     this.title = 'Editar pedido';
@@ -111,7 +126,7 @@ export class OrderCreateComponent implements OnInit {
       this.snackBarService.error(error);
       return;
     }
-    
+
     const orderItem = { ...this.orderItem };
     const prevItems = [...this.order.value!.orderItems];
     const orderItems = orderItem.id
@@ -171,9 +186,22 @@ export class OrderCreateComponent implements OnInit {
     this.order.value!.firstInstallmentDate = value;
   }
 
-  setCustomer(value: Customer | null) {
-    if (value)
-      this.order.value!.customer = value;
+  setCustomer(customer: Customer | null) {
+    if (!customer)
+      return;
+
+    this.order.setValue({ ...this.order.value!, customer });
+    this.getEndCustomers(customer.id!);
+  }
+
+  setEndCustomer(endCustomer: EndCustomer | null) {
+    if (endCustomer)
+      this.order.setValue({ ...this.order.value!, endCustomer })
+  }
+
+  getEndCustomers(customerId: string) {
+    this.endCustomerService.get(customerId)
+      .subscribe(endCustomers => this.endCustomers = endCustomers[0]);
   }
 
   setProduct(value: Product | null) {
