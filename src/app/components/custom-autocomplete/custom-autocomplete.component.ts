@@ -67,11 +67,6 @@ export class CustomAutocompleteComponent<T extends object> implements OnChanges 
       this.emitOnChange(currentValue);
   }
 
-  onBlur() {
-    const currentValue = this.myControl.value;
-    this.emitOnChange(currentValue);
-  }
-
   emitOnChange(value: T | string | null) {
     const currentKey = this.displayValue();
 
