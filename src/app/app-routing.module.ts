@@ -4,12 +4,12 @@ import { HomeComponent } from "./routes/home/home.component";
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
-  { path: 'orders', loadComponent: () => import('./routes/order/orders-page/orders-page.component').then(x => x.OrdersPageComponent) },
-  { path: 'orders/create', loadComponent: () => import('./routes/order/order-create/order-create.component').then(x => x.OrderCreateComponent) },
-  { path: 'order/:id', loadComponent: () => import('./routes/order/order-create/order-create.component').then(x => x.OrderCreateComponent) },
-  { path: 'customers', loadComponent: () => import('./routes/customers/customers-page/customers-page.component').then(x => x.CustomersPageComponent) },
-  { path: 'customers/create', loadComponent: () => import('./routes/customers/customer-create/customer-create.component').then(x => x.CustomerCreateComponent) },
-  { path: 'customer/:id', loadComponent: () => import('./routes/customers/customer-create/customer-create.component').then(x => x.CustomerCreateComponent) },
+  { path: 'orders', loadComponent: () => import('./routes/order/pages/orders-page/orders-page.component').then(x => x.OrdersPageComponent) },
+  { path: 'orders/create', loadComponent: () => import('./routes/order/pages/order-create/order-create.component').then(x => x.OrderCreateComponent) },
+  { path: 'order/:id', loadComponent: () => import('./routes/order/pages/order-create/order-create.component').then(x => x.OrderCreateComponent) },
+  { path: 'customers', loadComponent: () => import('./routes/customers/pages/customers-page/customers-page.component').then(x => x.CustomersPageComponent) },
+  { path: 'customers/create', loadComponent: () => import('./routes/customers/pages/customer-create/customer-create.component').then(x => x.CustomerCreateComponent) },
+  { path: 'customer/:id', loadComponent: () => import('./routes/customers/pages/customer-create/customer-create.component').then(x => x.CustomerCreateComponent) },
   { path: 'products', loadComponent: () => import('./routes/products/products.component').then(x => x.ProductsComponent) },
   { path: 'order-status', loadComponent: () => import('./routes/order-status/order-status.component').then(x => x.OrderStatusComponent) },
   { path: 'order-item-status', loadComponent: () => import('./routes/order-item-status/order-item-status.component').then(x => x.OrderItemStatusComponent) },

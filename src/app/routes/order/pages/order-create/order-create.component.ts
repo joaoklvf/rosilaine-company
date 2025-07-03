@@ -23,12 +23,12 @@ import { OrderService } from "src/app/services/order/order.service";
 import { ProductService } from "src/app/services/product/product.service";
 import { SnackBarService } from "src/app/services/snack-bar/snack-bar.service";
 import { getBrCurrencyStr, getBrDateStr } from "src/app/utils/text-format";
-import { InstallmentManagementComponent } from "./installments/installment-management/installment-management.component";
-import { InstallmentsSelectComponent } from "./installments/installments-select/installments-select.component";
 import { tap, catchError, of } from "rxjs";
-import { FirstInstallmentDatePickerComponent } from "./first-installment-date-picker/first-installment-date-picker.component";
 import { EndCustomerService } from "src/app/services/customer/end-customer/end-customer.service";
 import { EndCustomer } from "src/app/models/customer/end-customer";
+import { FirstInstallmentDatePickerComponent } from "./components/first-installment-date-picker/first-installment-date-picker.component";
+import { InstallmentManagementComponent } from "./components/installments/installment-management/installment-management.component";
+import { InstallmentsSelectComponent } from "./components/installments/installments-select/installments-select.component";
 
 @Component({
   selector: 'app-order-create',

@@ -5,7 +5,6 @@ import { CustomDialogComponent } from 'src/app/components/custom-dialog/custom-d
 import { Order } from 'src/app/models/order/order';
 import { OrderService } from 'src/app/services/order/order.service';
 import { getBrDateStr } from 'src/app/utils/text-format';
-import { DataTableComponent } from "../../../components/data-table/data-table.component";
 import { DataTableColumnProp, FormatValueOptions } from 'src/app/interfaces/data-table';
 import { CustomAutocompleteComponent } from 'src/app/components/custom-autocomplete/custom-autocomplete.component';
 import { Customer } from 'src/app/models/customer/customer';
@@ -15,6 +14,7 @@ import { OrderStatusService } from 'src/app/services/order/order-status/order-st
 import { HttpParams } from '@angular/common/http';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 import { tap, catchError, of } from 'rxjs';
+import { DataTableComponent } from 'src/app/components/data-table/data-table.component';
 
 @Component({
   selector: 'app-orders-page',
