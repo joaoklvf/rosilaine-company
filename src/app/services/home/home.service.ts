@@ -3,7 +3,7 @@ import { Inject, Injectable } from '@angular/core';
 import { Observable, tap, catchError, map, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { MessageService } from '../message/message.service';
-import { InstallmentsBalanceResponse, NextInstallmentsResponse } from 'src/app/interfaces/home-response';
+import { InstallmentsBalanceResponse, DashInstallmentsResponse } from 'src/app/interfaces/home-response';
 
 @Injectable({
   providedIn: 'root'
@@ -13,20 +13,20 @@ export class HomeApiService {
   public apiUrl = `${environment.apiUrl}/home`;// URL to web api
 
   /** GET orders from the server */
-  getNextInstallments(params?: any): Observable<[NextInstallmentsResponse[], number]> {
-    return this.http.get<[NextInstallmentsResponse[], number]>(`${this.apiUrl}/installments/next`, { params })
+  getNextInstallments(params?: any): Observable<[DashInstallmentsResponse[], number]> {
+    return this.http.get<[DashInstallmentsResponse[], number]>(`${this.apiUrl}/installments/next`, { params })
       .pipe(
         tap(_ => this.log('fetched orders')),
-        catchError(this.handleError<[NextInstallmentsResponse[], number]>('getTs', [[], 0]))
+        catchError(this.handleError<[DashInstallmentsResponse[], number]>('getTs', [[], 0]))
       );
   }
 
   /** GET orders from the server */
-  getOverdueInstallments(params?: any): Observable<[NextInstallmentsResponse[], number]> {
-    return this.http.get<[NextInstallmentsResponse[], number]>(`${this.apiUrl}/installments/overdue`, { params })
+  getOverdueInstallments(params?: any): Observable<[DashInstallmentsResponse[], number]> {
+    return this.http.get<[DashInstallmentsResponse[], number]>(`${this.apiUrl}/installments/overdue`, { params })
       .pipe(
         tap(_ => this.log('fetched orders')),
-        catchError(this.handleError<[NextInstallmentsResponse[], number]>('getTs', [[], 0]))
+        catchError(this.handleError<[DashInstallmentsResponse[], number]>('getTs', [[], 0]))
       );
   }
 

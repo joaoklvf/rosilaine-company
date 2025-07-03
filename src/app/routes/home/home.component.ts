@@ -2,12 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { DataTableFilter } from 'src/app/components/data-table/data-table-interfaces';
 import { DataTableComponent } from 'src/app/components/data-table/data-table.component';
 import { DataTableColumnProp } from 'src/app/interfaces/data-table';
-import { NextInstallmentsResponse } from 'src/app/interfaces/home-response';
+import { DashInstallmentsResponse } from 'src/app/interfaces/home-response';
 import { CustomChartComponent } from "../../components/custom-chart/custom-chart.component";
 import { HomeApiService } from 'src/app/services/home/home.service';
 import { getAmountStr, getBrCurrencyStr } from 'src/app/utils/text-format';
 import { MatTabsModule } from '@angular/material/tabs';
 import { HomeDashOptions } from './interfaces/home';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -18,12 +19,12 @@ import { HomeDashOptions } from './interfaces/home';
 export class HomeComponent implements OnInit {
   readonly NEXT_INSTALLMENTS = HomeDashOptions.NextInstallments;
   readonly OVERDUE_INSTALLMENTS = HomeDashOptions.OverdueInstallments;
-  readonly columns: DataTableColumnProp<NextInstallmentsResponse>[] = [
+  readonly columns: DataTableColumnProp<DashInstallmentsResponse>[] = [
     { description: "Cliente", fieldName: "customerName", width: '50%' },
     { description: "Data da parcela", fieldName: "installmentDate" },
     { description: "Valor (R$)", fieldName: "installmentAmount" },
   ]
-  dashInstallments: NextInstallmentsResponse[] = [];
+  dashInstallments: DashInstallmentsResponse[] = [];
   dataCount = 0;
   installmentsBalance: number[] | undefined;
   installmentsTotal: string | undefined;
@@ -31,7 +32,7 @@ export class HomeComponent implements OnInit {
 
   readonly chartLabels = ['Recebido', 'Pendente'];
 
-  constructor(private homeService: HomeApiService) { }
+  constructor(private homeService: HomeApiService, private router: Router) { }
 
   ngOnInit() {
     const takeOffsetOptions = { take: 15, offset: 0 };
@@ -54,5 +55,9 @@ export class HomeComponent implements OnInit {
         this.dashInstallments = homeResponse[0];
         this.dataCount = homeResponse[1]
       });
+  }
+
+  goToOrderPage(orderId: string) {
+    this.router.navigate([`order/${orderId}`]);
   }
 }
