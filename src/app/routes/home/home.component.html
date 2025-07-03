@@ -44,14 +44,32 @@
     </div>
   </div>
   <div class="col-5">
-    <app-data-table
-      [title]="'Parcelas próximas'"
-      [columns]="columns"
-      [data]="nextInstallments"
-      [showActionsColumn]="false"
-      [dataCount]="dataCount"
-      (searchAction)="getHomeData($event)"
-      class="data-table"
-    />
+    <div class="card">
+      <div class="card-body">
+        <mat-tab-group
+        (selectedTabChange)="getInstallmentsData($event.index)"
+        >
+          <mat-tab label="Parcelas próximas" labelClass="mb-1">
+            <app-data-table
+              [columns]="columns"
+              [data]="dashInstallments"
+              [showActionsColumn]="false"
+              [dataCount]="dataCount"
+              (searchAction)="getInstallmentsData(NEXT_INSTALLMENTS, $event)"
+            />
+          </mat-tab>
+          <mat-tab label="Parcels vencidas">
+            <app-data-table
+              [columns]="columns"
+              [data]="dashInstallments"
+              [showActionsColumn]="false"
+              [dataCount]="dataCount"
+              (searchAction)="
+                getInstallmentsData(OVERDUE_INSTALLMENTS, $event)
+              "
+          /></mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
   </div>
 </div>

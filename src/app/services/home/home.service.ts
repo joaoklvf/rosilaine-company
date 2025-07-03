@@ -21,6 +21,15 @@ export class HomeApiService {
       );
   }
 
+  /** GET orders from the server */
+  getOverdueInstallments(params?: any): Observable<[NextInstallmentsResponse[], number]> {
+    return this.http.get<[NextInstallmentsResponse[], number]>(`${this.apiUrl}/installments/overdue`, { params })
+      .pipe(
+        tap(_ => this.log('fetched orders')),
+        catchError(this.handleError<[NextInstallmentsResponse[], number]>('getTs', [[], 0]))
+      );
+  }
+
   getInstallmentsBalance(params?: any): Observable<InstallmentsBalanceResponse> {
     return this.http.get<InstallmentsBalanceResponse>(`${this.apiUrl}/installments/balance`, { params })
       .pipe(
