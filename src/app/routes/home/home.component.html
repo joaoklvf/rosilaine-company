@@ -2,12 +2,12 @@
   <div class="col">
     <div class="d-flex flex-column align-items-center">
       <p class="pacifico-font fs-1">Olá, Rosilaine 👋</p>
-      <h2>Aqui está um resumo das suas vendas 🛒</h2>
+      <h2 class="text-center">Aqui está um resumo das suas vendas 🛒</h2>
     </div>
   </div>
 </div>
 <div class="row">
-  <div class="col-7">
+  <div class="col-12 col-lg-7">
     <div class="row mb-3">
       <div class="col">
         <div class="card">
@@ -17,7 +17,7 @@
           </div>
         </div>
       </div>
-      <div class="col">
+      <div class="col open-installments-margin">
         <div class="card">
           <div class="card-body">
             <h2>Parcelas em aberto 📑</h2>
@@ -43,12 +43,10 @@
       </div>
     </div>
   </div>
-  <div class="col-5">
+  <div class="col-12 mt-3 mt-lg-0 col-lg-5">
     <div class="card">
       <div class="card-body">
-        <mat-tab-group
-        (selectedTabChange)="getInstallmentsData($event.index)"
-        >
+        <mat-tab-group (selectedTabChange)="getInstallmentsData($event.index)">
           <mat-tab label="Parcelas próximas" labelClass="mb-1">
             <app-data-table
               [columns]="columns"
@@ -56,6 +54,7 @@
               [showActionsColumn]="false"
               [dataCount]="dataCount"
               (searchAction)="getInstallmentsData(NEXT_INSTALLMENTS, $event)"
+              class="data-table"
             />
           </mat-tab>
           <mat-tab label="Parcels vencidas">
@@ -64,9 +63,8 @@
               [data]="dashInstallments"
               [showActionsColumn]="false"
               [dataCount]="dataCount"
-              (searchAction)="
-                getInstallmentsData(OVERDUE_INSTALLMENTS, $event)
-              "
+              (searchAction)="getInstallmentsData(OVERDUE_INSTALLMENTS, $event)"
+              class="data-table"
           /></mat-tab>
         </mat-tab-group>
       </div>
