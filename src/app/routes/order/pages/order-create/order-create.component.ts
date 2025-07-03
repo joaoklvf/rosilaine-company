@@ -29,6 +29,7 @@ import { EndCustomer } from "src/app/models/customer/end-customer";
 import { FirstInstallmentDatePickerComponent } from "./components/first-installment-date-picker/first-installment-date-picker.component";
 import { InstallmentManagementComponent } from "./components/installments/installment-management/installment-management.component";
 import { InstallmentsSelectComponent } from "./components/installments/installments-select/installments-select.component";
+import { OrderRequest } from "src/app/models/order/order-request";
 
 @Component({
   selector: 'app-order-create',
@@ -149,7 +150,8 @@ export class OrderCreateComponent implements OnInit {
         });
     }
     else {
-      this.orderService.add(order)
+      const orderRequest = { ...order, installmentsAmount: 1 };
+      this.orderService.add(orderRequest)
         .subscribe(orderResponse => {
           this.router.navigate([`/order/${orderResponse.id}`])
         });
