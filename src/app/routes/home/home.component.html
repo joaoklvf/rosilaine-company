@@ -47,6 +47,16 @@
     <div class="card">
       <div class="card-body">
         <mat-tab-group (selectedTabChange)="getInstallmentsData($event.index)">
+          <mat-tab label="Parcels vencidas">
+            <app-data-table
+              [columns]="columns"
+              [data]="dashInstallments"
+              [showActionsColumn]="false"
+              [dataCount]="dataCount"
+              (searchAction)="getInstallmentsData(OVERDUE_INSTALLMENTS, $event)"
+              class="data-table"
+              (editAction)="goToOrderPage($event.orderId)"
+          /></mat-tab>
           <mat-tab label="Parcelas próximas" labelClass="mb-1">
             <app-data-table
               [columns]="columns"
@@ -58,16 +68,6 @@
               (editAction)="goToOrderPage($event.orderId)"
             />
           </mat-tab>
-          <mat-tab label="Parcels vencidas">
-            <app-data-table
-              [columns]="columns"
-              [data]="dashInstallments"
-              [showActionsColumn]="false"
-              [dataCount]="dataCount"
-              (searchAction)="getInstallmentsData(OVERDUE_INSTALLMENTS, $event)"
-              class="data-table"
-              (editAction)="goToOrderPage($event.orderId)"
-          /></mat-tab>
         </mat-tab-group>
       </div>
     </div>

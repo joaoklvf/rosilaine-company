@@ -36,7 +36,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     const takeOffsetOptions = { take: 15, offset: 0 };
-    this.getInstallmentsData(this.NEXT_INSTALLMENTS, takeOffsetOptions);
+    this.getInstallmentsData(this.OVERDUE_INSTALLMENTS, takeOffsetOptions);
 
     this.homeService.getInstallmentsBalance()
       .subscribe(response => {
@@ -45,7 +45,7 @@ export class HomeComponent implements OnInit {
         this.pendingInstallments = getAmountStr(response.pendingInstallments)
       })
   }
-
+ 
   getInstallmentsData(dashOption: HomeDashOptions, params?: DataTableFilter) {
     const observable = dashOption === this.NEXT_INSTALLMENTS ?
       this.homeService.getNextInstallments(params) : this.homeService.getOverdueInstallments(params);

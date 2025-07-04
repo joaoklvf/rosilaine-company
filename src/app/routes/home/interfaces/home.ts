@@ -1,4 +1,4 @@
 export enum HomeDashOptions {
-  NextInstallments,
-  OverdueInstallments
+  OverdueInstallments,
+  NextInstallments
 }
