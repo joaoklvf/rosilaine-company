@@ -1,161 +1,169 @@
 <h1 class="text-white">{{ title }}</h1>
+
 <div class="card mb-3">
   <div class="card-body">
-    <div class="row">
-      <div class="col-md-4">
-        <label for="customer-name">Nome</label>
-        <input
-          class="form-control"
-          id="customer-name"
-          placeholder="Nome"
-          [(ngModel)]="customer.name"
-          [maxLength]="60"
-          name="name"
-        />
-      </div>
-      <div class="col-md-4">
-        <label for="customer-birth-date">Data de nascimento</label>
-        <input
-          class="form-control"
-          id="customer-birth-date"
-          placeholder="dd/mm/aaaa"
-          name="birth-date"
-          mask="00/00/0000"
-          matInput
-          [dropSpecialCharacters]="false"
-          [(ngModel)]="customer.birthDate"
-          [maxLength]="60"
-        />
-      </div>
-      <div class="col-md-4">
-        <label for="customer-phone">Telefone</label>
-        <input
-          class="form-control"
-          id="customer-phone"
-          type="text"
-          mask="(00) 00000-0000"
-          matInput
-          placeholder="(99) 99999-9999"
-          [dropSpecialCharacters]="false"
-          [(ngModel)]="customer.phone"
-          [maxLength]="60"
-        />
-      </div>
-    </div>
-    <div class="row" [formGroup]="address">
-      <div class="col-md-4">
-        <label for="customer-zip-code">CEP</label>
-        <input
-          class="form-control"
-          id="customer-zip-code"
-          placeholder="CEP"
-          name="zip-code"
-          type="text"
-          mask="00000-000"
-          matInput
-          [dropSpecialCharacters]="false"
-          (blur)="getAddressByZipCode()"
-          formControlName="zipCode"
-          [maxLength]="10"
-        />
-      </div>
-      <div class="col-md-4">
-        <label for="customer-state">Estado (UF)</label>
-        <input
-          class="form-control"
-          id="customer-state"
-          placeholder="Estado (UF)"
-          name="state"
-          [maxLength]="2"
-          formControlName="state"
-          (keyup)="upper($event)"
-        />
-      </div>
-      <div class="col-md-4">
-        <label for="customer-city">Cidade</label>
-        <input
-          class="form-control"
-          [maxLength]="60"
-          id="customer-city"
-          placeholder="Cidade"
-          name="city"
-          formControlName="city"
-        />
-      </div>
-      <div class="col-md-4">
-        <label for="customer-neighborhood">Bairro</label>
-        <input
-          class="form-control"
-          [maxLength]="60"
-          id="customer-neighborhood"
-          placeholder="Bairro"
-          name="neighborhood"
-          formControlName="neighborhood"
-        />
-      </div>
-      <div class="col-md-4">
-        <label for="customer-street">Rua</label>
-        <input
-          class="form-control"
-          [maxLength]="60"
-          id="customer-street"
-          placeholder="Rua"
-          name="street"
-          formControlName="street"
-        />
-      </div>
-      <div class="col-md-4">
-        <label for="customer-house-number">Número</label>
-        <input
-          class="form-control"
-          [maxLength]="60"
-          id="customer-house-number"
-          placeholder="Número"
-          [(ngModel)]="customer.houseNumber"
-          name="house-number"
-          [ngModelOptions]="{ standalone: true }"
-        />
-      </div>
-      <div class="col-md-6">
-        <label for="customer-complemento">Complemento</label>
-        <input
-          class="form-control"
-          id="customer-complemento"
-          placeholder="Complemento"
-          name="complemento"
-          [(ngModel)]="customer.complemento"
-          [maxLength]="60"
-          [ngModelOptions]="{ standalone: true }"
-        />
-      </div>
-      <div class="col-md-6">
-        <label for="customer-address-observation">Observação</label>
-        <input
-          class="form-control"
-          id="customer-address-observation"
-          placeholder="Observação"
-          [(ngModel)]="customer.addressObservation"
-          [maxLength]="60"
-          name="address-observation"
-          [ngModelOptions]="{ standalone: true }"
-        />
-      </div>
-      <div class="col">
-        <app-custom-chips-autocomplete
-          [data]="tags"
-          (handleOnChange)="setTags($event)"
-          displayValue="description"
-          label="Tags"
-          [defaultValue]="customer.tags"
-        />
-      </div>
-    </div>
-    <div class="row">
-      <div class="col align-content-end text-end m-0">
-        <button type="button" class="btn btn-primary" (click)="add()">
-          {{ buttonText }}
-        </button>
-      </div>
-    </div>
+    <mat-tab-group>
+      <mat-tab label="Dados" labelClass="mb-1">
+        <div class="data-tab">
+          <div class="row">
+            <div class="col-md-4">
+              <label for="customer-name">Nome</label>
+              <input
+                class="form-control"
+                id="customer-name"
+                placeholder="Nome"
+                [(ngModel)]="customer.name"
+                [maxLength]="60"
+                name="name"
+              />
+            </div>
+            <div class="col-md-4">
+              <label for="customer-birth-date">Data de nascimento</label>
+              <input
+                class="form-control"
+                id="customer-birth-date"
+                placeholder="dd/mm/aaaa"
+                name="birth-date"
+                mask="00/00/0000"
+                matInput
+                [dropSpecialCharacters]="false"
+                [(ngModel)]="customer.birthDate"
+                [maxLength]="60"
+              />
+            </div>
+            <div class="col-md-4">
+              <label for="customer-phone">Telefone</label>
+              <input
+                class="form-control"
+                id="customer-phone"
+                type="text"
+                mask="(00) 00000-0000"
+                matInput
+                placeholder="(99) 99999-9999"
+                [dropSpecialCharacters]="false"
+                [(ngModel)]="customer.phone"
+                [maxLength]="60"
+              />
+            </div>
+          </div>
+          <div class="row" [formGroup]="address">
+            <div class="col-md-4">
+              <label for="customer-zip-code">CEP</label>
+              <input
+                class="form-control"
+                id="customer-zip-code"
+                placeholder="CEP"
+                name="zip-code"
+                type="text"
+                mask="00000-000"
+                matInput
+                [dropSpecialCharacters]="false"
+                (blur)="getAddressByZipCode()"
+                formControlName="zipCode"
+                [maxLength]="10"
+              />
+            </div>
+            <div class="col-md-4">
+              <label for="customer-state">Estado (UF)</label>
+              <input
+                class="form-control"
+                id="customer-state"
+                placeholder="Estado (UF)"
+                name="state"
+                [maxLength]="2"
+                formControlName="state"
+                (keyup)="upper($event)"
+              />
+            </div>
+            <div class="col-md-4">
+              <label for="customer-city">Cidade</label>
+              <input
+                class="form-control"
+                [maxLength]="60"
+                id="customer-city"
+                placeholder="Cidade"
+                name="city"
+                formControlName="city"
+              />
+            </div>
+            <div class="col-md-4">
+              <label for="customer-neighborhood">Bairro</label>
+              <input
+                class="form-control"
+                [maxLength]="60"
+                id="customer-neighborhood"
+                placeholder="Bairro"
+                name="neighborhood"
+                formControlName="neighborhood"
+              />
+            </div>
+            <div class="col-md-4">
+              <label for="customer-street">Rua</label>
+              <input
+                class="form-control"
+                [maxLength]="60"
+                id="customer-street"
+                placeholder="Rua"
+                name="street"
+                formControlName="street"
+              />
+            </div>
+            <div class="col-md-4">
+              <label for="customer-house-number">Número</label>
+              <input
+                class="form-control"
+                [maxLength]="60"
+                id="customer-house-number"
+                placeholder="Número"
+                [(ngModel)]="customer.houseNumber"
+                name="house-number"
+                [ngModelOptions]="{ standalone: true }"
+              />
+            </div>
+            <div class="col-md-6">
+              <label for="customer-complemento">Complemento</label>
+              <input
+                class="form-control"
+                id="customer-complemento"
+                placeholder="Complemento"
+                name="complemento"
+                [(ngModel)]="customer.complemento"
+                [maxLength]="60"
+                [ngModelOptions]="{ standalone: true }"
+              />
+            </div>
+            <div class="col-md-6">
+              <label for="customer-address-observation">Observação</label>
+              <input
+                class="form-control"
+                id="customer-address-observation"
+                placeholder="Observação"
+                [(ngModel)]="customer.addressObservation"
+                [maxLength]="60"
+                name="address-observation"
+                [ngModelOptions]="{ standalone: true }"
+              />
+            </div>
+            <div class="col">
+              <app-custom-chips-autocomplete
+                [data]="tags"
+                (handleOnChange)="setTags($event)"
+                displayValue="description"
+                label="Tags"
+                [defaultValue]="customer.tags"
+              />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col align-content-end text-end m-0">
+              <button type="button" class="btn btn-primary" (click)="add()">
+                {{ buttonText }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+      <mat-tab label="Dashboard"> </mat-tab>
+    </mat-tab-group>
   </div>
 </div>

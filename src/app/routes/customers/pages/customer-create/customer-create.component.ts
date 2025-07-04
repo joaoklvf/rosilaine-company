@@ -10,13 +10,14 @@ import { CustomerTagService } from 'src/app/services/customer/customer-tag/custo
 import { CustomerService } from 'src/app/services/customer/customer.service';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 import { ViaCepService } from 'src/app/services/via-cep/via-cep.service';
-import { getBrDateStr, getDateFromStr } from 'src/app/utils/text-format';
+import { getBrDateStr } from 'src/app/utils/text-format';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-customer-create',
   templateUrl: './customer-create.component.html',
   styleUrl: './customer-create.component.scss',
-  imports: [FormsModule, NgxMaskDirective, ReactiveFormsModule, CustomChipsAutocompleteComponent, MatInputModule]
+  imports: [FormsModule, NgxMaskDirective, ReactiveFormsModule, CustomChipsAutocompleteComponent, MatInputModule, MatTabsModule]
 })
 
 export class CustomerCreateComponent implements OnInit {
@@ -51,9 +52,10 @@ export class CustomerCreateComponent implements OnInit {
           street: customer.street,
           zipCode: customer.zipCode
         });
+
+        this.title = customer.name;
       });
 
-    this.title = 'Editar Cliente';
     this.buttonText = 'Atualizar';
   }
 
