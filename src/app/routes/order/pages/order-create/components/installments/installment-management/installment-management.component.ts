@@ -1,17 +1,15 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
-import { MatDialogActions, MatDialogClose, MatDialogTitle, MatDialogContent, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { InstallmentsSelectComponent } from "../installments-select/installments-select.component";
-import { Order } from 'src/app/models/order/order';
-import { getBrCurrencyStr, getBrDateStr } from 'src/app/utils/text-format';
-import { InputMaskComponent } from 'src/app/components/input-mask/input-mask.component';
-import { OrderInstallment } from 'src/app/models/order/order-installment';
 import { FormsModule } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
+import { catchError, of, tap } from 'rxjs';
 import { BrDatePickerComponent } from 'src/app/components/br-date-picker/br-date-picker.component';
+import { InputMaskComponent } from 'src/app/components/input-mask/input-mask.component';
+import { Order } from 'src/app/models/order/order';
+import { OrderInstallment } from 'src/app/models/order/order-installment';
 import { OrderInstallmentService } from 'src/app/services/order/order-installment/order-installment.service';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
-import { tap, catchError, of } from 'rxjs';
-import { FirstInstallmentDatePickerComponent } from '../../first-installment-date-picker/first-installment-date-picker.component';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { getBrCurrencyStr, getBrDateStr } from 'src/app/utils/text-format';
+import { InstallmentsHeaderComponent } from "../../installments-header/installments-header.component";
 
 interface ModalProps {
   order: Order;
@@ -20,7 +18,7 @@ interface ModalProps {
 
 @Component({
   selector: 'app-installment-management',
-  imports: [MatDialogActions, MatDialogClose, MatDialogTitle, MatDialogContent, InstallmentsSelectComponent, InputMaskComponent, FormsModule, BrDatePickerComponent, FirstInstallmentDatePickerComponent, MatSlideToggleModule],
+  imports: [MatDialogActions, MatDialogClose, MatDialogTitle, MatDialogContent, InputMaskComponent, FormsModule, BrDatePickerComponent, InstallmentsHeaderComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './installment-management.component.html',
   styleUrl: './installment-management.component.scss'
@@ -28,7 +26,6 @@ interface ModalProps {
 export class InstallmentManagementComponent implements OnInit {
   data: ModalProps = inject(MAT_DIALOG_DATA);
   readonly dialogRef = inject(MatDialogRef<InstallmentManagementComponent>);
-  isToRound = true;
   installments: OrderInstallment[] = [];
 
   constructor(private orderInstallmentService: OrderInstallmentService, private snackBarService: SnackBarService) { }

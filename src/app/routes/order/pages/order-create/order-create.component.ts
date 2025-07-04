@@ -4,18 +4,21 @@ import { MatDialog } from "@angular/material/dialog";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
-import { MatSelectModule, MatSelectChange } from "@angular/material/select";
+import { MatSelectChange, MatSelectModule } from "@angular/material/select";
 import { ActivatedRoute, Router } from "@angular/router";
+import { catchError, of, tap } from "rxjs";
 import { BrDatePickerComponent } from "src/app/components/br-date-picker/br-date-picker.component";
 import { CustomAutocompleteComponent } from "src/app/components/custom-autocomplete/custom-autocomplete.component";
 import { InputMaskComponent } from "src/app/components/input-mask/input-mask.component";
 import { Customer } from "src/app/models/customer/customer";
+import { EndCustomer } from "src/app/models/customer/end-customer";
 import { Order } from "src/app/models/order/order";
 import { OrderItem } from "src/app/models/order/order-item/order-item";
 import { OrderItemStatus } from "src/app/models/order/order-item/order-item-status";
 import { OrderStatus } from "src/app/models/order/order-status";
 import { Product } from "src/app/models/product/product";
 import { CustomerService } from "src/app/services/customer/customer.service";
+import { EndCustomerService } from "src/app/services/customer/end-customer/end-customer.service";
 import { OrderItemStatusService } from "src/app/services/order/order-item-status/order-item-status.service";
 import { OrderItemService } from "src/app/services/order/order-item/order-item.service";
 import { OrderStatusService } from "src/app/services/order/order-status/order-status.service";
@@ -23,19 +26,14 @@ import { OrderService } from "src/app/services/order/order.service";
 import { ProductService } from "src/app/services/product/product.service";
 import { SnackBarService } from "src/app/services/snack-bar/snack-bar.service";
 import { getBrCurrencyStr, getBrDateStr } from "src/app/utils/text-format";
-import { tap, catchError, of } from "rxjs";
-import { EndCustomerService } from "src/app/services/customer/end-customer/end-customer.service";
-import { EndCustomer } from "src/app/models/customer/end-customer";
-import { FirstInstallmentDatePickerComponent } from "./components/first-installment-date-picker/first-installment-date-picker.component";
 import { InstallmentManagementComponent } from "./components/installments/installment-management/installment-management.component";
-import { InstallmentsSelectComponent } from "./components/installments/installments-select/installments-select.component";
-import { OrderRequest } from "src/app/models/order/order-request";
+import { InstallmentsHeaderComponent } from "./components/installments-header/installments-header.component";
 
 @Component({
   selector: 'app-order-create',
   templateUrl: './order-create.component.html',
   styleUrl: './order-create.component.scss',
-  imports: [InputMaskComponent, CustomAutocompleteComponent, FormsModule, BrDatePickerComponent, MatSelectModule, MatFormFieldModule, MatIconModule, InstallmentsSelectComponent, MatInputModule, FirstInstallmentDatePickerComponent],
+  imports: [InputMaskComponent, CustomAutocompleteComponent, FormsModule, BrDatePickerComponent, MatSelectModule, MatFormFieldModule, MatIconModule, MatInputModule, InstallmentsHeaderComponent],
 })
 
 export class OrderCreateComponent implements OnInit {

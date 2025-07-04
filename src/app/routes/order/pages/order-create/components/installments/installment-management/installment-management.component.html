@@ -1,27 +1,10 @@
 <h2 mat-dialog-title>Parcelas</h2>
 <mat-dialog-content class="text-dark">
-  <div class="d-flex gap-2">
-    <div class="">
-      <app-installments-select
-        [order]="data.order"
-        (saveOrderAction)="changeInstallments($event)"
-        [isToRound]="isToRound"
-      />
-    </div>
-    <div class="">
-      <app-first-installment-date-picker
-        [order]="data.order"
-        (saveOrderAction)="changeInstallments($event)"
-        class="col-md-3"
-        [isToRound]="isToRound"
-      ></app-first-installment-date-picker>
-    </div>
-    <div class="align-content-center">
-      <mat-slide-toggle [(ngModel)]="isToRound"
-        >Arredondar cálculo
-      </mat-slide-toggle>
-    </div>
-  </div>
+  <app-installments-header
+    [order]="data.order"
+    (saveOrderAction)="changeInstallments($event)"
+  />
+
   <div class="card mt-3">
     <div class="card-body table-responsive">
       <table class="table">

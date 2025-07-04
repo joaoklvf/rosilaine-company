@@ -9,12 +9,7 @@
           {{ orderTotal }}
         </div>
       </div>
-      <app-installments-select
-        style="min-width: 248px"
-        [order]="order.value!"
-        (saveOrderAction)="saveOrder($event)"
-      />
-      <app-first-installment-date-picker
+      <app-installments-header
         [order]="order.value!"
         (saveOrderAction)="saveOrder($event)"
       />
