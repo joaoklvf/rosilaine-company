@@ -27,7 +27,7 @@
   </mat-form-field>
 
   <div class="align-content-center">
-    <mat-slide-toggle [(ngModel)]="isToRound"
+    <mat-slide-toggle [(ngModel)]="isToRound" (change)="changeIfIsToRound()"
       >Arredondar cálculo
     </mat-slide-toggle>
   </div>
