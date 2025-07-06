@@ -1,0 +1,67 @@
+<div class="row">
+  <div class="col-12 col-lg-7">
+    <div class="row mb-3">
+      <div class="col">
+        <div class="card">
+          <div class="card-body">
+            <h2>Total das parcelas 💰</h2>
+            <h1 class="mb-0">{{ installmentsTotal() }}</h1>
+          </div>
+        </div>
+      </div>
+      <div class="col open-installments-margin">
+        <div class="card">
+          <div class="card-body">
+            <h2>Parcelas em aberto 📑</h2>
+            <h1 class="mb-0">{{ pendingInstallments() }}</h1>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <div class="card">
+          <div class="card-body">
+            <h1>Balanço das parcelas</h1>
+            @if(installmentsBalance()) {
+            <app-custom-chart
+              [data]="installmentsBalance()"
+              [labels]="chartLabels"
+              class="chart"
+            />
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 mt-3 mt-lg-0 col-lg-5">
+    <div class="card">
+      <div class="card-body">
+        <mat-tab-group (selectedTabChange)="onTabChangeAction($event.index)">
+          <mat-tab label="Parcels vencidas">
+            <app-data-table
+              [columns]="columns()"
+              [data]="dashInstallments()!"
+              [showActionsColumn]="false"
+              [dataCount]="dataCount()"
+              (searchAction)="searchAction({ option: 0, filter: $event })"
+              class="data-table"
+              (editAction)="goToOrderPage($event.orderId)"
+          /></mat-tab>
+          <mat-tab label="Parcelas próximas" labelClass="mb-1">
+            <app-data-table
+              [columns]="columns()"
+              [data]="dashInstallments()!"
+              [showActionsColumn]="false"
+              [dataCount]="dataCount()"
+              (searchAction)="searchAction({ option: 1, filter: $event })"
+              class="data-table"
+              (editAction)="goToOrderPage($event.orderId)"
+            />
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+  </div>
+</div>

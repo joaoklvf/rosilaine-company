@@ -1,0 +1,18 @@
+.chart {
+  height: 324px;
+  display: flex;
+  justify-content: center;
+}
+
+.data-table {
+  display: block;
+  max-height: 450px;
+}
+
+.open-installments-margin {
+  margin-top: 1rem;
+
+  @media (min-width: 322px) {
+    margin-top: 0;
+  }
+}
