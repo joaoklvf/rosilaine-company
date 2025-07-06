@@ -15,8 +15,6 @@ import { HomeDashOptions } from './interfaces/home';
   styleUrl: './home.component.scss'
 })
 export class HomeComponent implements OnInit {
-  readonly NEXT_INSTALLMENTS = HomeDashOptions.NextInstallments;
-  readonly OVERDUE_INSTALLMENTS = HomeDashOptions.OverdueInstallments;
   readonly columns: DataTableColumnProp<DashInstallmentsResponse>[] = [
     { description: "Cliente", fieldName: "customerName", width: '50%' },
     { description: "Data da parcela", fieldName: "installmentDate" },
@@ -32,7 +30,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     const takeOffsetOptions = { take: 15, offset: 0 };
-    this.getInstallmentsData({ option: this.OVERDUE_INSTALLMENTS, filter: takeOffsetOptions });
+    this.getInstallmentsData({ option: HomeDashOptions.OverdueInstallments, filter: takeOffsetOptions });
 
     this.homeService.getInstallmentsBalance()
       .subscribe(response => {
@@ -43,7 +41,7 @@ export class HomeComponent implements OnInit {
   }
 
   getInstallmentsData({ option, filter }: GetInstallmentsDataProps) {
-    const observable = option === this.NEXT_INSTALLMENTS ?
+    const observable = option === HomeDashOptions.NextInstallments ?
       this.homeService.getNextInstallments(filter) : this.homeService.getOverdueInstallments(filter);
 
     observable
