@@ -42,7 +42,7 @@ export class InstallmentsHeaderComponent {
 
   changeAmountAndRecreateInstallments(installmentsAmount: number) {
     this.dialog.open(CustomDialogComponent, {
-      width: '250px',
+      width: '300px',
       data: {
         title: "Alterar quantidade de parcelas",
         content: `Deseja alterar quantidade de parcelas, recriando todas elas?`,
@@ -53,14 +53,27 @@ export class InstallmentsHeaderComponent {
   }
 
   changeFirstDateAndRecreateInstallments(firstInstallmentDate: Date) {
-    const installmentsAmount = this._order.installments?.length;
+    const installmentsAmount = this.installmentsAmountControl.value!;
     this.dialog.open(CustomDialogComponent, {
-      width: '250px',
+      width: '300px',
       data: {
         title: "Alterar primeira data de vencimento",
         content: `Deseja alterar a primeira data de vencimento e recriar as parcelas?`,
         onConfirmAction: () => this.generateInstallmentsAndSaveOrder({ ... this._order, firstInstallmentDate, installmentsAmount }),
         onCancelAction: () => this.setDefaultFirstInstallmentDate()
+      }
+    });
+  }
+
+  changeIfIsToRound() {
+    const installmentsAmount = this.installmentsAmountControl.value!;
+    this.dialog.open(CustomDialogComponent, {
+      width: '300px',
+      data: {
+        title: "Alterar arredondamento",
+        content: `Deseja alterar a arredondamento e recriar as parcelas?`,
+        onConfirmAction: () => this.generateInstallmentsAndSaveOrder({ ... this._order, installmentsAmount }),
+        onCancelAction: () => this.isToRound = !this.isToRound
       }
     });
   }
