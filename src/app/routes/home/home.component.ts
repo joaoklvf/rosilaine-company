@@ -1,18 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { DataTableFilter } from 'src/app/components/data-table/data-table-interfaces';
-import { DataTableComponent } from 'src/app/components/data-table/data-table.component';
+import { MatTabsModule } from '@angular/material/tabs';
+import { GetInstallmentsDataProps } from 'src/app/components/installments-dashboard/interfaces/installments-dashboard';
 import { DataTableColumnProp } from 'src/app/interfaces/data-table';
 import { DashInstallmentsResponse } from 'src/app/interfaces/home-response';
-import { CustomChartComponent } from "../../components/custom-chart/custom-chart.component";
 import { HomeApiService } from 'src/app/services/home/home.service';
 import { getAmountStr, getBrCurrencyStr } from 'src/app/utils/text-format';
-import { MatTabsModule } from '@angular/material/tabs';
+import { InstallmentsDashboardComponent } from "../../components/installments-dashboard/installments-dashboard.component";
 import { HomeDashOptions } from './interfaces/home';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
-  imports: [DataTableComponent, CustomChartComponent, MatTabsModule],
+  imports: [InstallmentsDashboardComponent, MatTabsModule, InstallmentsDashboardComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
@@ -32,11 +30,11 @@ export class HomeComponent implements OnInit {
 
   readonly chartLabels = ['Recebido', 'Pendente'];
 
-  constructor(private homeService: HomeApiService, private router: Router) { }
+  constructor(private homeService: HomeApiService) { }
 
   ngOnInit() {
     const takeOffsetOptions = { take: 15, offset: 0 };
-    this.getInstallmentsData(this.OVERDUE_INSTALLMENTS, takeOffsetOptions);
+    this.getInstallmentsData({ option: this.OVERDUE_INSTALLMENTS, filter: takeOffsetOptions });
 
     this.homeService.getInstallmentsBalance()
       .subscribe(response => {
@@ -45,19 +43,15 @@ export class HomeComponent implements OnInit {
         this.pendingInstallments = getAmountStr(response.pendingInstallments)
       })
   }
- 
-  getInstallmentsData(dashOption: HomeDashOptions, params?: DataTableFilter) {
-    const observable = dashOption === this.NEXT_INSTALLMENTS ?
-      this.homeService.getNextInstallments(params) : this.homeService.getOverdueInstallments(params);
+
+  getInstallmentsData({ option, filter }: GetInstallmentsDataProps) {
+    const observable = option === this.NEXT_INSTALLMENTS ?
+      this.homeService.getNextInstallments(filter) : this.homeService.getOverdueInstallments(filter);
 
     observable
       .subscribe(homeResponse => {
         this.dashInstallments = homeResponse[0];
         this.dataCount = homeResponse[1]
       });
-  }
-
-  goToOrderPage(orderId: string) {
-    this.router.navigate([`order/${orderId}`]);
   }
 }
