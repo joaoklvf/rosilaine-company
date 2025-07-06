@@ -28,8 +28,6 @@ export class HomeComponent implements OnInit {
   installmentsTotal: string | undefined;
   pendingInstallments: string | undefined;
 
-  readonly chartLabels = ['Recebido', 'Pendente'];
-
   constructor(private homeService: HomeApiService) { }
 
   ngOnInit() {
