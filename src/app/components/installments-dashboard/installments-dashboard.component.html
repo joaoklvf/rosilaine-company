@@ -48,6 +48,7 @@
               (searchAction)="searchAction({ option: 0, filter: $event })"
               class="data-table"
               (editAction)="goToOrderPage($event.orderId)"
+              [cardMode]="false"
           /></mat-tab>
           <mat-tab label="Parcelas próximas" labelClass="mb-1">
             <app-data-table
@@ -58,6 +59,7 @@
               (searchAction)="searchAction({ option: 1, filter: $event })"
               class="data-table"
               (editAction)="goToOrderPage($event.orderId)"
+              [cardMode]="false"
             />
           </mat-tab>
         </mat-tab-group>
