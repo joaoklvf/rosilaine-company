@@ -27,8 +27,9 @@ export class OrdersPageComponent implements OnInit {
   orders: Order[] = [];
   readonly dialog = inject(MatDialog);
   readonly columns: DataTableColumnProp<Order>[] = [
-    { description: "Cliente", fieldName: "customer.name", width: '30%' },
+    { description: "Cliente", fieldName: "customer.name", width: '20%' },
     { description: "Cliente final", fieldName: "endCustomer.name", width: '20%' },
+    { description: "Valor", fieldName: 'total', formatValue: FormatValueOptions.Currency },
     { description: "Data do pedido", fieldName: "orderDate", formatValue: FormatValueOptions.Date },
     { description: "Status", fieldName: "status.description" },
   ]
