@@ -43,6 +43,7 @@ export class CustomChartComponent implements OnInit {
         }
       }
     },
+    maintainAspectRatio: false
   };
   public doughnutChartData: ChartData<'doughnut', number[], string | string[]> = {
     labels: [''],
@@ -64,7 +65,5 @@ export class CustomChartComponent implements OnInit {
     this.doughnutChartData.datasets[0].data.pop();
     this.doughnutChartData.labels!.push(...labels);
     this.doughnutChartData.datasets[0].data.push(...data);
-
-    this.chart?.update();
   }
 }
