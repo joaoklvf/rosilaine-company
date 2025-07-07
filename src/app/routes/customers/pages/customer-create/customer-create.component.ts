@@ -178,7 +178,6 @@ export class CustomerCreateComponent implements OnInit {
   }
 
   checkToFetchData() {
-    console.log('caiu aqui')
     if (this.customer.id)
       this.fetchInitialDashBoardData();
   }
