@@ -1,23 +1,29 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
+import { MatTabsModule } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxMaskDirective } from 'ngx-mask';
 import { CustomChipsAutocompleteComponent } from 'src/app/components/custom-chips-autocomplete/custom-chips-autocomplete.component';
+import { InstallmentsDashboardComponent } from 'src/app/components/installments-dashboard/installments-dashboard.component';
+import { GetInstallmentsDataProps } from 'src/app/components/installments-dashboard/interfaces/installments-dashboard';
+import { DataTableColumnProp } from 'src/app/interfaces/data-table';
+import { DashInstallmentsResponse } from 'src/app/interfaces/home-response';
 import { Customer } from 'src/app/models/customer/customer';
 import { CustomerTag } from 'src/app/models/customer/customer-tag';
+import { HomeDashOptions } from 'src/app/routes/home/interfaces/home';
 import { CustomerTagService } from 'src/app/services/customer/customer-tag/customer-tag.service';
 import { CustomerService } from 'src/app/services/customer/customer.service';
+import { CustomerInstallmentsService } from 'src/app/services/customer/installments/customer-installments.service';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 import { ViaCepService } from 'src/app/services/via-cep/via-cep.service';
-import { getBrDateStr } from 'src/app/utils/text-format';
-import { MatTabsModule } from '@angular/material/tabs';
+import { getAmountStr, getBrCurrencyStr, getBrDateStr } from 'src/app/utils/text-format';
 
 @Component({
   selector: 'app-customer-create',
   templateUrl: './customer-create.component.html',
   styleUrl: './customer-create.component.scss',
-  imports: [FormsModule, NgxMaskDirective, ReactiveFormsModule, CustomChipsAutocompleteComponent, MatInputModule, MatTabsModule]
+  imports: [FormsModule, NgxMaskDirective, ReactiveFormsModule, CustomChipsAutocompleteComponent, MatInputModule, MatTabsModule, InstallmentsDashboardComponent]
 })
 
 export class CustomerCreateComponent implements OnInit {
@@ -32,7 +38,26 @@ export class CustomerCreateComponent implements OnInit {
     neighborhood: new FormControl<null | string>(null)
   });
   tags: CustomerTag[] = [];
-  constructor(private customerService: CustomerService, private viaCepService: ViaCepService, private route: ActivatedRoute, private snackBarService: SnackBarService, private router: Router, private customerTagService: CustomerTagService) { }
+
+  readonly columns: DataTableColumnProp<DashInstallmentsResponse>[] = [
+    { description: "Data da parcela", fieldName: "installmentDate" },
+    { description: "Valor (R$)", fieldName: "installmentAmount" },
+  ]
+  dashInstallments: DashInstallmentsResponse[] = [];
+  dataCount = 0;
+  installmentsBalance: number[] | undefined;
+  installmentsTotal: string | undefined;
+  pendingInstallments: string | undefined;
+
+  constructor(
+    private customerService: CustomerService,
+    private viaCepService: ViaCepService,
+    private route: ActivatedRoute,
+    private snackBarService: SnackBarService,
+    private router: Router,
+    private customerTagService: CustomerTagService,
+    private customerInstallmentsService: CustomerInstallmentsService
+  ) { }
 
   ngOnInit(): void {
     this.customerTagService.get().subscribe(tags => this.tags = [...tags[0]]);
@@ -127,5 +152,34 @@ export class CustomerCreateComponent implements OnInit {
   getCustomerBirthDate(birthDate: string | null | Date) {
     return birthDate ?
       getBrDateStr(birthDate) : null;
+  }
+
+  fetchInitialDashBoardData() {
+    const takeOffsetOptions = { take: 15, offset: 0 };
+    this.getInstallmentsData({ option: HomeDashOptions.OverdueInstallments, filter: takeOffsetOptions });
+
+    this.customerInstallmentsService.getInstallmentsBalance(this.customer.id!)
+      .subscribe(response => {
+        this.installmentsBalance = [response.amountPaid, response.amountToReceive];
+        this.installmentsTotal = getBrCurrencyStr(response.amountTotal);
+        this.pendingInstallments = getAmountStr(response.pendingInstallments)
+      })
+  }
+
+  getInstallmentsData({ option, filter }: GetInstallmentsDataProps) {
+    const observable = option === HomeDashOptions.NextInstallments ?
+      this.customerInstallmentsService.getNextInstallments(this.customer.id!, filter) : this.customerInstallmentsService.getOverdueInstallments(this.customer.id!, filter);
+
+    observable
+      .subscribe(homeResponse => {
+        this.dashInstallments = homeResponse[0];
+        this.dataCount = homeResponse[1]
+      });
+  }
+
+  checkToFetchData() {
+    console.log('caiu aqui')
+    if (this.customer.id)
+      this.fetchInitialDashBoardData();
   }
 }

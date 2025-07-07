@@ -2,7 +2,7 @@
 
 <div class="card mb-3">
   <div class="card-body">
-    <mat-tab-group>
+    <mat-tab-group (selectedTabChange)="checkToFetchData()">
       <mat-tab label="Dados" labelClass="mb-1">
         <div class="data-tab">
           <div class="row">
@@ -163,7 +163,19 @@
           </div>
         </div>
       </mat-tab>
-      <mat-tab label="Dashboard"> </mat-tab>
+      <mat-tab label="Dashboard">
+        <div class="data-tab">
+          <app-installments-dashboard
+            [columns]="columns"
+            [dashInstallments]="dashInstallments"
+            [dataCount]="dataCount"
+            [installmentsBalance]="installmentsBalance"
+            [installmentsTotal]="installmentsTotal"
+            [pendingInstallments]="pendingInstallments"
+            (getInstallmentsData)="getInstallmentsData($event)"
+          />
+        </div>
+      </mat-tab>
     </mat-tab-group>
   </div>
 </div>
