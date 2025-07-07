@@ -13,7 +13,7 @@ export class BaseSubCollectionApiService {
   constructor(public http: HttpClient, public messageService: MessageService, @Inject('collection') public collection: string, @Inject('subCollection') public subCollection: string) { }
   private readonly API_URL = `${environment.apiUrl}`;// URL to web api
 
-  getUrlRequest(collectionId: string) {
+  public getUrlRequest(collectionId: string) {
     return `${this.API_URL}/${this.collection}/${collectionId}/${this.subCollection}`;
   }
 
