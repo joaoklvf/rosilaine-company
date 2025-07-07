@@ -28,7 +28,17 @@ export class DataTableComponent<T> {
   readonly dataCount = input(0);
   readonly showActionsColumn = input(true);
   readonly title = input<string | null>(null);
+  readonly cardMode = input(true);
 
+
+  get mainFormClass() {
+    return this.cardMode() ? 'card' : '';
+  }
+
+  get bodyFormClass() {
+    return this.cardMode() ? 'card-body' : '';
+  }
+  
   get _title() {
     return this.title();
   }

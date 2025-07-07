@@ -1,6 +1,6 @@
 @if(showSearchField()) {
-<div class="card mb-3">
-  <div class="card-body">
+<div class="{{ mainFormClass + ' mb-3' }}">
+  <div class="{{ bodyFormClass }}">
     <label for="Pesquisar">Pesquisar</label>
     <input
       type="text"
@@ -14,8 +14,8 @@
 </div>
 }
 
-<div class="card">
-  <div class="card-body">
+<div class="{{ mainFormClass }}">
+  <div class="{{ bodyFormClass }}">
     @if (_title) {
     <h1>{{ _title }}</h1>
     }
