@@ -15,4 +15,5 @@ export class Order extends BaseEntity {
   orderItems: OrderItem[] = [];
   installments?: OrderInstallment[];
   endCustomer: EndCustomer | null = null;
+  isRounded = true;
 }

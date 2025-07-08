@@ -38,6 +38,7 @@ export class InstallmentsHeaderComponent {
   ngOnInit(): void {
     this.installmentsAmountControl.setValue(this.order().installments?.length ?? 0);
     this.setDefaultFirstInstallmentDate();
+    this.isToRound = this._order.isRounded;
   }
 
   changeAmountAndRecreateInstallments(installmentsAmount: number) {
