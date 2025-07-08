@@ -18,7 +18,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 })
 export class InstallmentsHeaderComponent {
   readonly order = input.required<Order>();
-  readonly saveOrderAction = output<Order>();
+  readonly saveAction = output<Order>();
   readonly dialog = inject(MatDialog);
   readonly firstInstallmentDate = model<Date | null>(null);
 
@@ -87,7 +87,7 @@ export class InstallmentsHeaderComponent {
 
     this.orderService.update(orderRequest).subscribe(order => {
       this.snackBarService.success('Parcelas atualizadas com sucesso!');
-      this.saveOrderAction.emit({ ...order });
+      this.saveAction.emit({ ...order });
       this.installmentsAmountControl.setValue(order.installments!.length);
     });
   }
