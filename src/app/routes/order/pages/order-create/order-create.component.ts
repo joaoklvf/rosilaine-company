@@ -280,6 +280,11 @@ export class OrderCreateComponent implements OnInit {
     });
   }
 
+  print() {
+    sessionStorage.setItem('order', JSON.stringify(this.order.value))
+    this.router.navigate(['order-print'])
+  }
+
   clearItem() {
     this.orderItem = new OrderItem();
     this.changeAddUpdateItemButtonText();

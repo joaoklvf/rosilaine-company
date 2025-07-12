@@ -5,6 +5,16 @@
   font-style: normal;
 }
 
+@media print {
+  .container {
+    max-width: 1400px !important;
+  }
+
+  .navbar-toggler {
+    display: none;
+  }
+}
+
 :root {
   .snackbar-success {
     --mdc-snackbar-container-color: green;
