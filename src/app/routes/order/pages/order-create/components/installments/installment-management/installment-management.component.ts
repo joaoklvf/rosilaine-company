@@ -47,6 +47,9 @@ export class InstallmentManagementComponent implements OnInit {
   }
 
   updateNextInstallmentPayment(prevInstallment: OrderInstallment, valuePaid: number) {
+    if (valuePaid === 0)
+      return;
+
     const installments = [...this.installments];
     const currentInstallmentIndex = installments.findIndex(x => x.id === prevInstallment.id);
     const nextInstallmentIndex = currentInstallmentIndex + 1;
