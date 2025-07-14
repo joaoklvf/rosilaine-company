@@ -1,3 +1,5 @@
+import { getAmountStr } from "./text-format";
+
 export function getNextMonthDate(date: Date) {
   const currentMonth = date.getMonth();
   if (currentMonth === 11) {
@@ -14,3 +16,5 @@ export function getBrazilianStrDate(value: Date | string) {
   const date = new Date(value);
   return date.toLocaleDateString('pt-BR')
 }
+
+export const CURRENT_MONTH = getAmountStr((new Date().getMonth() + 1));

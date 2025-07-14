@@ -10,8 +10,16 @@
     max-width: 1400px !important;
   }
 
-  .navbar-toggler {
-    display: none;
+  .print-hidden {
+    display: none !important;
+  }
+
+  html, body {
+    background: white !important;
+  }
+
+  .navbar-brand {
+    color: rgba(131, 58, 180, 1) !important;
   }
 }
 

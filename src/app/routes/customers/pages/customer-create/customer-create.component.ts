@@ -1,6 +1,8 @@
 import { Component, input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxMaskDirective } from 'ngx-mask';
@@ -8,7 +10,7 @@ import { CustomChipsAutocompleteComponent } from 'src/app/components/custom-chip
 import { InstallmentsDashboardComponent } from 'src/app/components/installments-dashboard/installments-dashboard.component';
 import { GetInstallmentsDataProps } from 'src/app/components/installments-dashboard/interfaces/installments-dashboard';
 import { DataTableColumnProp } from 'src/app/interfaces/data-table';
-import { DashInstallmentsResponse } from 'src/app/interfaces/home-response';
+import { CustomerInstallmentsMonthlyResponse, DashInstallmentsResponse } from 'src/app/interfaces/home-response';
 import { Customer } from 'src/app/models/customer/customer';
 import { CustomerTag } from 'src/app/models/customer/customer-tag';
 import { HomeDashOptions } from 'src/app/routes/home/interfaces/home';
@@ -17,16 +19,18 @@ import { CustomerService } from 'src/app/services/customer/customer.service';
 import { CustomerInstallmentsService } from 'src/app/services/customer/installments/customer-installments.service';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 import { ViaCepService } from 'src/app/services/via-cep/via-cep.service';
+import { CURRENT_MONTH } from 'src/app/utils/date-util';
 import { getAmountStr, getBrCurrencyStr, getBrDateStr } from 'src/app/utils/text-format';
 
 @Component({
   selector: 'app-customer-create',
   templateUrl: './customer-create.component.html',
   styleUrl: './customer-create.component.scss',
-  imports: [FormsModule, NgxMaskDirective, ReactiveFormsModule, CustomChipsAutocompleteComponent, MatInputModule, MatTabsModule, InstallmentsDashboardComponent]
+  imports: [FormsModule, NgxMaskDirective, ReactiveFormsModule, CustomChipsAutocompleteComponent, MatInputModule, MatTabsModule, InstallmentsDashboardComponent, MatSelectModule, MatIconModule]
 })
 
 export class CustomerCreateComponent implements OnInit {
+  readonly selectMonthValue = CURRENT_MONTH;
   customer = new Customer();
   title = 'Cadastrar Cliente';
   buttonText = 'Adicionar';
@@ -48,6 +52,8 @@ export class CustomerCreateComponent implements OnInit {
   installmentsBalance: number[] | undefined;
   installmentsTotal: string | undefined;
   pendingInstallments: string | undefined;
+  monthInstallments?: CustomerInstallmentsMonthlyResponse[];
+  monthInstallmentsCurrencyValue = '';
 
   constructor(
     private customerService: CustomerService,
@@ -154,7 +160,7 @@ export class CustomerCreateComponent implements OnInit {
       getBrDateStr(birthDate) : null;
   }
 
-  fetchInitialDashBoardData() {
+  fetchDashBoardData() {
     const takeOffsetOptions = { take: 15, offset: 0 };
     this.getInstallmentsData({ option: HomeDashOptions.OverdueInstallments, filter: takeOffsetOptions });
 
@@ -163,6 +169,22 @@ export class CustomerCreateComponent implements OnInit {
         this.installmentsBalance = [response.amountPaid, response.amountToReceive];
         this.installmentsTotal = getBrCurrencyStr(response.amountTotal);
         this.pendingInstallments = getAmountStr(response.pendingInstallments)
+      })
+  }
+
+  fetchInstallmentsmonthInstallments(month: string) {
+    this.monthInstallmentsCurrencyValue = '';
+    this.customerInstallmentsService.getMonthInstallments(this.customer.id!, month)
+      .subscribe(response => {
+        this.monthInstallments = response.map((x) => ({
+          ...x,
+          order_date: getBrDateStr(x.order_date),
+          debit_date: getBrDateStr(x.debit_date),
+          installment_amount: getBrCurrencyStr(x.installment_amount),
+          order_total: getBrCurrencyStr(x.order_total),
+        }));
+
+        this.monthInstallmentsCurrencyValue = getBrCurrencyStr(response.map(x => Number(x.installment_amount)).reduce((prev, acc) => prev + acc));
       })
   }
 
@@ -177,8 +199,18 @@ export class CustomerCreateComponent implements OnInit {
       });
   }
 
-  checkToFetchData() {
-    if (this.customer.id)
-      this.fetchInitialDashBoardData();
+  checkToFetchData(index: number) {
+    if (!this.customer.id)
+      return;
+
+    if (index === 1 && !this.installmentsBalance)
+      this.fetchDashBoardData();
+
+    if (index === 2 && !this.monthInstallments)
+      this.fetchInstallmentsmonthInstallments(CURRENT_MONTH);
+  }
+
+  print() {
+    window.print();
   }
 }

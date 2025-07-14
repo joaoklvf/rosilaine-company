@@ -4,7 +4,7 @@ import { BaseSubCollectionApiService } from '../../base/base-sub-collection-api.
 import { MessageService } from '../../message/message.service';
 import { Observable } from 'rxjs/internal/Observable';
 import { tap, catchError } from 'rxjs';
-import { DashInstallmentsResponse, InstallmentsBalanceResponse } from 'src/app/interfaces/home-response';
+import { CustomerInstallmentsMonthlyResponse, DashInstallmentsResponse, InstallmentsBalanceResponse } from 'src/app/interfaces/home-response';
 
 @Injectable({
   providedIn: 'root'
@@ -49,6 +49,16 @@ export class CustomerInstallmentsService extends BaseSubCollectionApiService {
       .pipe(
         tap(_ => this.log('fetched orders')),
         catchError(this.handleError<InstallmentsBalanceResponse>('getTs'))
+      );
+  }
+
+  getMonthInstallments(customerId: string, month: string): Observable<CustomerInstallmentsMonthlyResponse[]> {
+    const route = this.getRouteRequest(customerId, 'monthly');
+    const params = { month, customerId };
+    return this.http.get<CustomerInstallmentsMonthlyResponse[]>(route, { params })
+      .pipe(
+        tap(_ => this.log('fetched orders')),
+        catchError(this.handleError<CustomerInstallmentsMonthlyResponse[]>('getTs'))
       );
   }
 }
