@@ -221,7 +221,7 @@
           <tbody>
             @for (item of monthInstallments; track $index) {
             <tr>
-              <th>{{ item.order_date }}</th>
+              <td>{{ item.order_date }}</td>
               <td>{{ item.order_total }}</td>
               <td>
                 {{ item.installment_number }} / {{ item.installments_total }}
