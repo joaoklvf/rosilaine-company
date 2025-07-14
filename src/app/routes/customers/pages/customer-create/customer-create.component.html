@@ -214,14 +214,14 @@
               <th scope="col">Data do pedido</th>
               <th scope="col">Total do pedido</th>
               <th scope="col">Nº da parcela</th>
-              <th scope="col">Data de pagamento</th>
+              <th scope="col">Data de vencimento</th>
               <th scope="col">Valor da parcela</th>
             </tr>
           </thead>
           <tbody>
             @for (item of monthInstallments; track $index) {
             <tr>
-              <th scope="row">{{ item.order_date }}</th>
+              <th>{{ item.order_date }}</th>
               <td>{{ item.order_total }}</td>
               <td>
                 {{ item.installment_number }} / {{ item.installments_total }}
