@@ -181,7 +181,9 @@
           <mat-form-field>
             <mat-label>Mês</mat-label>
             <mat-select
-              (selectionChange)="fetchInstallmentsmonthInstallments($event.value)"
+              (selectionChange)="
+                fetchInstallmentsmonthInstallments($event.value)
+              "
               [value]="selectMonthValue"
             >
               <mat-option value="01">Janeiro</mat-option>
@@ -198,7 +200,11 @@
               <mat-option value="12">Dezembro</mat-option>
             </mat-select>
           </mat-form-field>
-          <button type="button" class="btn btn-outline-primary print-hidden ms-2" (click)="print()">
+          <button
+            type="button"
+            class="btn btn-outline-primary print-hidden ms-2"
+            (click)="print()"
+          >
             <mat-icon fontIcon="print" />
           </button>
         </div>
@@ -208,7 +214,6 @@
               <th scope="col">Data do pedido</th>
               <th scope="col">Total do pedido</th>
               <th scope="col">Nº da parcela</th>
-              <th scope="col">Total de parcelas</th>
               <th scope="col">Data de pagamento</th>
               <th scope="col">Valor da parcela</th>
             </tr>
@@ -218,16 +223,19 @@
             <tr>
               <th scope="row">{{ item.order_date }}</th>
               <td>{{ item.order_total }}</td>
-              <td>{{ item.installment_number }}</td>
-              <td>{{ item.installments_total }}</td>
+              <td>
+                {{ item.installment_number }} / {{ item.installments_total }}
+              </td>
               <td>{{ item.debit_date }}</td>
-              <td>{{ item.installment_amount }}</td>
+              <td>
+                <b>{{ item.installment_amount }}</b>
+              </td>
             </tr>
             }
           </tbody>
         </table>
         <h2>
-          Total: <b>{{ monthInstallmentsCurrencyValue }}</b>
+          Total do mês: <b>{{ monthInstallmentsCurrencyValue }}</b>
         </h2>
       </mat-tab>
     </mat-tab-group>
