@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -8,6 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgxMaskDirective } from 'ngx-mask';
 import { CustomChipsAutocompleteComponent } from 'src/app/components/custom-chips-autocomplete/custom-chips-autocomplete.component';
 import { InstallmentsDashboardComponent } from 'src/app/components/installments-dashboard/installments-dashboard.component';
+import { GetInstallmentsDataProps } from 'src/app/components/installments-dashboard/interfaces/installments-dashboard';
 import { DataTableColumnProp } from 'src/app/interfaces/data-table';
 import { CustomerInstallmentsMonthlyResponse, DashInstallmentsResponse } from 'src/app/interfaces/home-response';
 import { Customer } from 'src/app/models/customer/customer';
@@ -29,8 +30,9 @@ import { getAmountStr, getBrCurrencyStr, getBrDateStr } from 'src/app/utils/text
 })
 
 export class CustomerCreateComponent implements OnInit {
-  readonly TAKE_OFFSET_OPTIONS = { take: 15, offset: 0 };
   readonly selectMonthValue = CURRENT_MONTH;
+  readonly TAKE_OFFSET_OPTIONS = { take: 15, offset: 0 };
+
   customer = new Customer();
   title = 'Cadastrar Cliente';
   buttonText = 'Adicionar';
@@ -161,7 +163,7 @@ export class CustomerCreateComponent implements OnInit {
   }
 
   fetchDashBoardData() {
-    this.getInstallmentsData(HomeDashOptions.OverdueInstallments);
+    this.getInstallmentsData({ option: HomeDashOptions.OverdueInstallments, filter: this.TAKE_OFFSET_OPTIONS });
 
     this.customerInstallmentsService.getInstallmentsBalance(this.customer.id!)
       .subscribe(response => {
@@ -171,7 +173,7 @@ export class CustomerCreateComponent implements OnInit {
       })
   }
 
-  fetchInstallmentsmonthInstallments(month: string) {
+  fetchMonthInstallments(month: string) {
     this.monthInstallmentsCurrencyValue = '';
     this.customerInstallmentsService.getMonthInstallments(this.customer.id!, month)
       .subscribe(response => {
@@ -187,10 +189,10 @@ export class CustomerCreateComponent implements OnInit {
       })
   }
 
-  getInstallmentsData(option: HomeDashOptions) {
+  getInstallmentsData({ option, filter }: GetInstallmentsDataProps) {
+    const params = filter ?? this.TAKE_OFFSET_OPTIONS;
     const observable = option === HomeDashOptions.NextInstallments ?
-      this.customerInstallmentsService.getNextInstallments(this.customer.id!, this.TAKE_OFFSET_OPTIONS) :
-      this.customerInstallmentsService.getOverdueInstallments(this.customer.id!, this.TAKE_OFFSET_OPTIONS);
+      this.customerInstallmentsService.getNextInstallments(this.customer.id!, params) : this.customerInstallmentsService.getOverdueInstallments(this.customer.id!, params);
 
     observable
       .subscribe(homeResponse => {
@@ -207,7 +209,7 @@ export class CustomerCreateComponent implements OnInit {
       this.fetchDashBoardData();
 
     if (index === 2 && !this.monthInstallments)
-      this.fetchInstallmentsmonthInstallments(CURRENT_MONTH);
+      this.fetchMonthInstallments(CURRENT_MONTH);
   }
 
   print() {
