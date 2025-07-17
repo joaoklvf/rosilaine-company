@@ -1,4 +1,4 @@
-import { Component, input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -8,7 +8,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgxMaskDirective } from 'ngx-mask';
 import { CustomChipsAutocompleteComponent } from 'src/app/components/custom-chips-autocomplete/custom-chips-autocomplete.component';
 import { InstallmentsDashboardComponent } from 'src/app/components/installments-dashboard/installments-dashboard.component';
-import { GetInstallmentsDataProps } from 'src/app/components/installments-dashboard/interfaces/installments-dashboard';
 import { DataTableColumnProp } from 'src/app/interfaces/data-table';
 import { CustomerInstallmentsMonthlyResponse, DashInstallmentsResponse } from 'src/app/interfaces/home-response';
 import { Customer } from 'src/app/models/customer/customer';
@@ -30,6 +29,7 @@ import { getAmountStr, getBrCurrencyStr, getBrDateStr } from 'src/app/utils/text
 })
 
 export class CustomerCreateComponent implements OnInit {
+  readonly TAKE_OFFSET_OPTIONS = { take: 15, offset: 0 };
   readonly selectMonthValue = CURRENT_MONTH;
   customer = new Customer();
   title = 'Cadastrar Cliente';
@@ -161,8 +161,7 @@ export class CustomerCreateComponent implements OnInit {
   }
 
   fetchDashBoardData() {
-    const takeOffsetOptions = { take: 15, offset: 0 };
-    this.getInstallmentsData({ option: HomeDashOptions.OverdueInstallments, filter: takeOffsetOptions });
+    this.getInstallmentsData(HomeDashOptions.OverdueInstallments);
 
     this.customerInstallmentsService.getInstallmentsBalance(this.customer.id!)
       .subscribe(response => {
@@ -188,9 +187,10 @@ export class CustomerCreateComponent implements OnInit {
       })
   }
 
-  getInstallmentsData({ option, filter }: GetInstallmentsDataProps) {
+  getInstallmentsData(option: HomeDashOptions) {
     const observable = option === HomeDashOptions.NextInstallments ?
-      this.customerInstallmentsService.getNextInstallments(this.customer.id!, filter) : this.customerInstallmentsService.getOverdueInstallments(this.customer.id!, filter);
+      this.customerInstallmentsService.getNextInstallments(this.customer.id!, this.TAKE_OFFSET_OPTIONS) :
+      this.customerInstallmentsService.getOverdueInstallments(this.customer.id!, this.TAKE_OFFSET_OPTIONS);
 
     observable
       .subscribe(homeResponse => {

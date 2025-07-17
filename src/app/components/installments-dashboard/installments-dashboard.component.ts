@@ -5,7 +5,7 @@ import { CustomChartComponent } from '../custom-chart/custom-chart.component';
 import { DataTableComponent } from '../data-table/data-table.component';
 import { DataTableColumnProp } from 'src/app/interfaces/data-table';
 import { Router } from '@angular/router';
-import { GetInstallmentsDataProps } from './interfaces/installments-dashboard';
+import { HomeDashOptions } from 'src/app/routes/home/interfaces/home';
 
 @Component({
   selector: 'app-installments-dashboard',
@@ -24,17 +24,17 @@ export class InstallmentsDashboardComponent {
   readonly installmentsBalance = input<number[] | undefined>();
   readonly installmentsTotal = input<string | undefined>();
   readonly pendingInstallments = input<string | undefined>();
-  readonly getInstallmentsData = output<GetInstallmentsDataProps>();
+  readonly getInstallmentsData = output<HomeDashOptions>();
 
   goToOrderPage(orderId: string) {
     this.router.navigate([`order/${orderId}`]);
   }
 
-  searchAction(props: GetInstallmentsDataProps) {
-    this.getInstallmentsData.emit(props);
+  searchAction(index: HomeDashOptions) {
+    this.getInstallmentsData.emit(index);
   }
 
-  onTabChangeAction(index: number) {
-    this.getInstallmentsData.emit({ option: index });
+  onTabChangeAction(index: HomeDashOptions) {
+    this.getInstallmentsData.emit(index);
   }
 }

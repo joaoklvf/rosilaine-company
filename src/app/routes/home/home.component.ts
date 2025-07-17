@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTabsModule } from '@angular/material/tabs';
-import { GetInstallmentsDataProps } from 'src/app/components/installments-dashboard/interfaces/installments-dashboard';
 import { DataTableColumnProp } from 'src/app/interfaces/data-table';
 import { DashInstallmentsResponse } from 'src/app/interfaces/home-response';
 import { HomeApiService } from 'src/app/services/home/home.service';
@@ -15,6 +14,7 @@ import { HomeDashOptions } from './interfaces/home';
   styleUrl: './home.component.scss'
 })
 export class HomeComponent implements OnInit {
+  readonly TAKE_OFFSET_OPTIONS = { take: 15, offset: 0 };
   readonly columns: DataTableColumnProp<DashInstallmentsResponse>[] = [
     { description: "Cliente", fieldName: "customerName", width: '50%' },
     { description: "Data da parcela", fieldName: "installmentDate" },
@@ -29,8 +29,7 @@ export class HomeComponent implements OnInit {
   constructor(private homeService: HomeApiService) { }
 
   ngOnInit() {
-    const takeOffsetOptions = { take: 15, offset: 0 };
-    this.getInstallmentsData({ option: HomeDashOptions.OverdueInstallments, filter: takeOffsetOptions });
+    this.getInstallmentsData(HomeDashOptions.OverdueInstallments);
 
     this.homeService.getInstallmentsBalance()
       .subscribe(response => {
@@ -40,9 +39,9 @@ export class HomeComponent implements OnInit {
       })
   }
 
-  getInstallmentsData({ option, filter }: GetInstallmentsDataProps) {
+  getInstallmentsData(option: HomeDashOptions) {
     const observable = option === HomeDashOptions.NextInstallments ?
-      this.homeService.getNextInstallments(filter) : this.homeService.getOverdueInstallments(filter);
+      this.homeService.getNextInstallments(this.TAKE_OFFSET_OPTIONS) : this.homeService.getOverdueInstallments(this.TAKE_OFFSET_OPTIONS);
 
     observable
       .subscribe(homeResponse => {
