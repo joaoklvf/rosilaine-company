@@ -11,15 +11,15 @@
         <span aria-hidden="true">&laquo;</span>
       </button>
     </li>
-    @for (page of pagesCount; track $index) {
+    @for (page of pages; track $index) {
     <li class="page-item">
       <button
         type="button"
-        class="{{ getClassName(page) }}"
+        class="page-link {{ getClassName(page) }}"
         href="#"
         (click)="onPageButtonClick(page)"
       >
-        {{ page + 1 }}
+        {{ page }}
       </button>
     </li>
     }

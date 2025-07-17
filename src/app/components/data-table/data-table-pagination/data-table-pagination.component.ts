@@ -1,5 +1,5 @@
 import { Component, input, output } from '@angular/core';
-import { fillArrayFromNumber } from 'src/app/utils/arrays';
+import { getPages } from './utils/data-table-pagination-util';
 
 @Component({
   selector: 'app-data-table-pagination',
@@ -12,12 +12,16 @@ export class DataTablePaginationComponent {
   readonly totalPages = input(1);
   currentOffset = 0;
 
+  get currentPage() {
+    return this.currentOffset + 1;
+  }
+
   get _totalPages() {
     return this.totalPages();
   }
 
-  get pagesCount() {
-    return fillArrayFromNumber(this._totalPages)
+  get pages() {
+    return getPages(this._totalPages, this.currentPage)
   }
 
   get hasMoreData() {
@@ -28,7 +32,7 @@ export class DataTablePaginationComponent {
     if (this.currentOffset === 0)
       return;
 
-    this.currentOffset = this.currentOffset - 1;
+    this.currentOffset--;
     this.getData();
   }
 
@@ -40,8 +44,8 @@ export class DataTablePaginationComponent {
     this.getData();
   }
 
-  onPageButtonClick(index: number) {
-    this.currentOffset = index;
+  onPageButtonClick(page: string) {
+    this.currentOffset = Number(page) - 1;
     this.getData();
   }
 
@@ -49,7 +53,13 @@ export class DataTablePaginationComponent {
     this.searchAction.emit(this.currentOffset)
   }
 
-  getClassName(index: number) {
-    return `page-link ${index === this.currentOffset ? 'active' : ''}`;
+  getClassName(page: string) {
+    if (page === '...')
+      return 'disabled';
+
+    if (Number(page) === this.currentPage)
+      return 'active'
+
+    return '';
   }
 }
