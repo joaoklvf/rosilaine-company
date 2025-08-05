@@ -1,11 +1,11 @@
-import { Component, input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgxMaskDirective } from 'ngx-mask';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { CustomChipsAutocompleteComponent } from 'src/app/components/custom-chips-autocomplete/custom-chips-autocomplete.component';
 import { InstallmentsDashboardComponent } from 'src/app/components/installments-dashboard/installments-dashboard.component';
 import { GetInstallmentsDataProps } from 'src/app/components/installments-dashboard/interfaces/installments-dashboard';
@@ -26,7 +26,8 @@ import { getAmountStr, getBrCurrencyStr, getBrDateStr } from 'src/app/utils/text
   selector: 'app-customer-create',
   templateUrl: './customer-create.component.html',
   styleUrl: './customer-create.component.scss',
-  imports: [FormsModule, NgxMaskDirective, ReactiveFormsModule, CustomChipsAutocompleteComponent, MatInputModule, MatTabsModule, InstallmentsDashboardComponent, MatSelectModule, MatIconModule]
+  imports: [FormsModule, NgxMaskDirective, ReactiveFormsModule, CustomChipsAutocompleteComponent, MatInputModule, MatTabsModule, InstallmentsDashboardComponent, MatSelectModule, MatIconModule],
+  providers: [provideNgxMask()]
 })
 
 export class CustomerCreateComponent implements OnInit {
