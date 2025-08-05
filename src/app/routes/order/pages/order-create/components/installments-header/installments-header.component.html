@@ -1,11 +1,11 @@
-<div class="d-flex gap-2">
+<div class="d-flex gap-2 flex-wrap">
   <app-br-date-picker
     [label]="'Data da primeira parcela'"
     (handleOnChange)="changeFirstDateAndRecreateInstallments($event)"
     [value]="_firstInstallmentDate"
   ></app-br-date-picker>
 
-  <mat-form-field class="w-100">
+  <mat-form-field>
     <mat-label>Número de parcelas</mat-label>
     <mat-select
       (selectionChange)="changeAmountAndRecreateInstallments($event.value)"
