@@ -1,6 +1,6 @@
 import { Component, input, OnInit, ViewChild } from '@angular/core';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
-import { BaseChartDirective } from 'ng2-charts';
+import { BaseChartDirective, provideCharts, withDefaultRegisterables } from 'ng2-charts';
 import DataLabelsPlugin from 'chartjs-plugin-datalabels';
 import { getBrCurrencyStr } from 'src/app/utils/text-format';
 
@@ -9,7 +9,8 @@ import { getBrCurrencyStr } from 'src/app/utils/text-format';
   standalone: true,
   imports: [BaseChartDirective],
   templateUrl: './custom-chart.component.html',
-  styleUrl: './custom-chart.component.scss'
+  styleUrl: './custom-chart.component.scss',
+  providers: [provideCharts(withDefaultRegisterables())]
 })
 export class CustomChartComponent implements OnInit {
   @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
