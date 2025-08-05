@@ -1,9 +1,8 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
-import { HomeComponent } from "./routes/home/home.component";
 
 const routes: Routes = [
-  { path: '', component: HomeComponent },
+  { path: '', loadComponent: () => import('./routes/home/home.component').then(x => x.HomeComponent)  },
   { path: 'orders', loadComponent: () => import('./routes/order/pages/orders-page/orders-page.component').then(x => x.OrdersPageComponent) },
   { path: 'orders/create', loadComponent: () => import('./routes/order/pages/order-create/order-create.component').then(x => x.OrderCreateComponent) },
   { path: 'order/:id', loadComponent: () => import('./routes/order/pages/order-create/order-create.component').then(x => x.OrderCreateComponent) },
