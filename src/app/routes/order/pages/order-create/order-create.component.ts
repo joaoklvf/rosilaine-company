@@ -28,6 +28,8 @@ import { SnackBarService } from "src/app/services/snack-bar/snack-bar.service";
 import { getBrCurrencyStr, getBrDateStr } from "src/app/utils/text-format";
 import { InstallmentManagementComponent } from "./components/installments/installment-management/installment-management.component";
 import { InstallmentsHeaderComponent } from "./components/installments-header/installments-header.component";
+import { getError } from "./utils/order-create.utilts";
+import { ItemResponse } from "./interfaces/order-create.interfaces";
 
 @Component({
   selector: 'app-order-create',
@@ -97,78 +99,100 @@ export class OrderCreateComponent implements OnInit {
     this.title = 'Editar pedido';
   }
 
-  getError() {
-    const orderItem = { ...this.orderItem };
-    const order = { ...this.order.value };
-
-    if (orderItem.itemAmount <= 0)
-      return 'Insira a quantidade do produto';
-
-    if (!orderItem.product.id)
-      return 'Selecione um produto';
-
-    if (!order.status?.description)
-      return 'Defina o status do pedido';
-
-    if (!orderItem.itemStatus?.description)
-      return 'Defina o status do produto';
-
-    if (!order.customer?.id)
-      return 'Selecione um cliente';
-
-    return null;
-  }
-
   addUpdateItem(): void {
-    const error = this.getError();
+    const error = getError(this.orderItem, this.order.value!);
     if (error) {
       this.snackBarService.error(error);
       return;
     }
 
-    const orderItem = { ...this.orderItem };
-    const prevItems = [...this.order.value!.orderItems];
-    const orderItems = orderItem.id
-      ? prevItems.map(item => item.id === orderItem.id ? { ...orderItem } : item)
-      : [...prevItems, orderItem];
-
-    const order: Order = {
-      ...this.order.value!,
-      orderItems: orderItems,
+    if (this.order.value!.id) {
+      this.updateItem();
+      return;
     }
 
-    this.createUpdateOrder(order);
+    this.createOrder();
   }
 
-  createUpdateOrder(order: Order) {
-    if (order.id) {
-      this.orderService.update(order)
-        .subscribe(orderResponse => {
-          this.updateOrder(orderResponse);
-        });
-    }
-    else {
-      const orderRequest = { ...order, installmentsAmount: 1 };
-      this.orderService.add(orderRequest)
-        .subscribe(orderResponse => {
-          this.router.navigate([`/order/${orderResponse.id}`])
-        });
-    }
+  updateItem() {
+    const addRequest = { ...this.orderItem, order: this.order.value };
+
+    this.orderItemService
+      .add(addRequest)
+      .subscribe((addItem) => {
+        const response = addItem as unknown as ItemResponse;
+        if (!response.orderItem?.id) {
+          this.snackBarService.error('Falha ao adicionar produto');
+          return;
+        }
+
+        this.snackBarService.success(`Produto ${response.orderItem.product?.description} adicionado com sucesso!`);
+        this.updateOrder(response, [...this.order.value!.orderItems, response.orderItem!]);
+      });
+  }
+
+  addItem() {
+    const updateRequest = { ...this.orderItem, order: this.order.value };
+
+    this.orderItemService
+      .update(updateRequest)
+      .subscribe((updatedItem) => {
+        const response = updatedItem as unknown as ItemResponse;
+        if (!response.orderItem?.id) {
+          this.snackBarService.error('Falha ao atualizar produto');
+          return;
+        }
+
+        this.snackBarService.success(`Produto ${response.orderItem.product?.description} atualizado com sucesso!`);
+        this.updateOrder(response, this.order.value!.orderItems.map(item => item.id === response.orderItem!.id ? response.orderItem! : item));
+      });
+  }
+
+  createOrder() {
+    const order: Order = {
+      ...this.order.value!,
+      orderItems: [this.orderItem],
+    };
+
+    const orderRequest = { ...order, installmentsAmount: 1 };
+    this.orderService.add(orderRequest)
+      .subscribe(orderResponse => {
+        this.router.navigate([`/order/${orderResponse.id}`])
+      });
   }
 
   remove(orderItem: OrderItem): void {
-    const newItems = this.order.value!.orderItems.filter(p => p.id !== orderItem.id);
-    this.createUpdateOrder({ ...this.order.value!, orderItems: newItems });
+    this.orderItemService.delete(orderItem.id!)
+      .subscribe((removedItem) => {
+        const response = removedItem as unknown as ItemResponse;
+        if (!response) {
+          this.snackBarService.error('Falha ao remover produto');
+          return;
+        }
+
+        this.snackBarService.success(`Produto ${orderItem.product?.description} removido com sucesso!`);
+        this.updateOrder(response, this.order.value!.orderItems.filter(item => item.id !== orderItem.id));
+      });
+  }
+
+  updateOrder(response: ItemResponse, orderItems: OrderItem[]) {
+    const order = this.order.value!;
+
+    this.order.setValue({
+      ...order,
+      installments: response.installments,
+      total: response.total,
+      orderItems
+    });
+
+    this.orderTotal = getBrCurrencyStr(response.total);
+    this.clearItem();
   }
 
   edit(orderItem: OrderItem): void {
     this.orderItem = { ...orderItem };
     this.orderItem.itemStatus = orderItem.itemStatus;
     this.changeAddUpdateItemButtonText();
-  }
-
-  update(orderItem: OrderItem, index: number): void {
-    this.order.value!.orderItems[index] = orderItem;
   }
 
   getCurrencyValue = (value: number) =>
@@ -245,25 +269,6 @@ export class OrderCreateComponent implements OnInit {
 
   getBrDate(value: Date | null) {
     return value && getBrDateStr(value);
-  }
-
-  updateOrder(order: Order) {
-    this.updateStatusesByOrder(order);
-    this.orderItem = new OrderItem();
-    this.order.setValue({ ...order });
-    this.orderTotal = getBrCurrencyStr(order.total);
-    this.changeAddUpdateItemButtonText();
-    this.snackBarService.success('Pedido atualizado com sucesso!');
-  }
-
-  updateStatusesByOrder(order: Order) {
-    if (!this.orderStatuses.find(x => x.id === order.status.id))
-      this.orderStatuses = [...this.orderStatuses, order.status]
-
-    const currentOrderItemStatuses = order.orderItems.map(x => x.itemStatus);
-    const newOrderItemStatuses = currentOrderItemStatuses.filter(x => !this.orderItemStatuses.find(y => y.id === x.id));
-    if (newOrderItemStatuses.length)
-      this.orderItemStatuses = [...this.orderItemStatuses, ...newOrderItemStatuses];
   }
 
   saveOrder(order: Order) {
