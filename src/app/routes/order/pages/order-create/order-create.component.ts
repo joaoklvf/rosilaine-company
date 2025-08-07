@@ -174,8 +174,9 @@ export class OrderCreateComponent implements OnInit {
   getCurrencyValue = (value: number) =>
     getBrCurrencyStr(value);
 
-  setPrice(value: number) {
-    this.orderItem.itemSellingPrice = value;
+  setPrice(value: number | string) {
+    const price = Number(value);
+    this.orderItem.itemSellingPrice = price;
   }
 
   setOrderDate(value: Date) {
