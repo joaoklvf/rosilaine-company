@@ -21,23 +21,15 @@ export class InstallmentsHeaderComponent {
   readonly saveAction = output<Order>();
   readonly dialog = inject(MatDialog);
   readonly firstInstallmentDate = model<Date | null>(null);
+  readonly installmentsAmount = model(1);
+  readonly isToRound = model(false);
 
-  constructor(private orderService: OrderService, private snackBarService: SnackBarService) { }
-
-  get _firstInstallmentDate() {
-    return this.firstInstallmentDate();
-  }
-
-  get _order() {
-    return this.order();
-  }
-
-  get installmentsAmount() {
-    return this._order?.installments?.length ?? 0;
-  }
+  constructor(private readonly orderService: OrderService, private readonly snackBarService: SnackBarService) { }
 
   ngOnInit(): void {
     this.setDefaultFirstInstallmentDate();
+    this.setDefaultInstallmentsAmount();
+    this.setDefaultIsToRound();
   }
 
   changeAmountAndRecreateInstallments(installmentsAmount: number) {
@@ -46,8 +38,8 @@ export class InstallmentsHeaderComponent {
       data: {
         title: "Alterar quantidade de parcelas",
         content: `Deseja alterar quantidade de parcelas, recriando todas elas?`,
-        onConfirmAction: () => this.generateInstallmentsAndSaveOrder({ ... this._order!, installmentsAmount }),
-        onCancelAction: () => { }
+        onConfirmAction: () => this.generateInstallmentsAndSaveOrder({ ... this.order()!, installmentsAmount }),
+        onCancelAction: () => this.setDefaultInstallmentsAmount()
       }
     });
   }
@@ -58,7 +50,7 @@ export class InstallmentsHeaderComponent {
       data: {
         title: "Alterar primeira data de vencimento",
         content: `Deseja alterar a primeira data de vencimento e recriar as parcelas?`,
-        onConfirmAction: () => this.generateInstallmentsAndSaveOrder({ ... this._order!, firstInstallmentDate, installmentsAmount: this.installmentsAmount }),
+        onConfirmAction: () => this.generateInstallmentsAndSaveOrder({ ... this.order()!, firstInstallmentDate, installmentsAmount: this.installmentsAmount() }),
         onCancelAction: () => this.setDefaultFirstInstallmentDate()
       }
     });
@@ -70,8 +62,8 @@ export class InstallmentsHeaderComponent {
       data: {
         title: "Alterar arredondamento",
         content: `Deseja alterar a arredondamento e recriar as parcelas?`,
-        onConfirmAction: () => this.generateInstallmentsAndSaveOrder({ ... this._order!, installmentsAmount: this.installmentsAmount }),
-        onCancelAction: () => { }
+        onConfirmAction: () => this.generateInstallmentsAndSaveOrder({ ... this.order()!, installmentsAmount: this.installmentsAmount() }),
+        onCancelAction: () => { this.setDefaultIsToRound() }
       }
     });
   }
@@ -81,16 +73,26 @@ export class InstallmentsHeaderComponent {
       ...order,
       isToRound: order.isRounded
     };
+    console.log('orderRequest', orderRequest);
 
-    this.orderService.update(orderRequest).subscribe(order => {
+    this.orderService.recreateInstallments(orderRequest).subscribe(updatedInstallments => {
       this.snackBarService.success('Parcelas atualizadas com sucesso!');
-      this.saveAction.emit({ ...order });
+      this.saveAction.emit({ ...order, installments: updatedInstallments });
     });
   }
 
   setDefaultFirstInstallmentDate() {
-    const date = this._order?.installments?.at(0)?.paymentDate ?? this._order?.firstInstallmentDate ?? null;
+    const date = this.order()?.installments?.at(0)?.paymentDate ?? this.order()?.firstInstallmentDate ?? null;
     if (date)
       this.firstInstallmentDate.set(new Date(date.toString()))
+  }
+
+  setDefaultInstallmentsAmount() {
+    const amount = this.order()?.installments?.length ?? 1;
+    this.installmentsAmount.set(amount);
+  }
+
+  setDefaultIsToRound() {
+    this.isToRound.set(this.order()?.isRounded!);
   }
 }

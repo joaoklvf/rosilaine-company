@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from "@angular/core";
+import { Component, OnInit, inject, model } from "@angular/core";
 import { FormControl, FormsModule } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -6,7 +6,6 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectChange, MatSelectModule } from "@angular/material/select";
 import { ActivatedRoute, Router } from "@angular/router";
-import { catchError, of, tap } from "rxjs";
 import { BrDatePickerComponent } from "src/app/components/br-date-picker/br-date-picker.component";
 import { CustomAutocompleteComponent } from "src/app/components/custom-autocomplete/custom-autocomplete.component";
 import { InputMaskComponent } from "src/app/components/input-mask/input-mask.component";
@@ -25,11 +24,11 @@ import { OrderStatusService } from "src/app/services/order/order-status/order-st
 import { OrderService } from "src/app/services/order/order.service";
 import { ProductService } from "src/app/services/product/product.service";
 import { SnackBarService } from "src/app/services/snack-bar/snack-bar.service";
-import { getBrCurrencyStr, getBrDateStr } from "src/app/utils/text-format";
-import { InstallmentManagementComponent } from "./components/installments/installment-management/installment-management.component";
+import { getBrCurrencyStr, getBrDateStr, getBrDateTimeStr } from "src/app/utils/text-format";
 import { InstallmentsHeaderComponent } from "./components/installments-header/installments-header.component";
-import { getError } from "./utils/order-create.utilts";
+import { InstallmentManagementComponent } from "./components/installments/installment-management/installment-management.component";
 import { ItemResponse } from "./interfaces/order-create.interfaces";
+import { getError } from "./utils/order-create.utilts";
 
 @Component({
   selector: 'app-order-create',
@@ -42,6 +41,7 @@ export class OrderCreateComponent implements OnInit {
   order = new FormControl(new Order());
   orderItem = new OrderItem();
   orderTotal = '';
+  orderUpdated = '';
   customers: Customer[] = [];
   endCustomers: EndCustomer[] = [];
   products: Product[] = [];
@@ -49,20 +49,21 @@ export class OrderCreateComponent implements OnInit {
   orderItemStatuses: OrderItemStatus[] = [];
   title = 'Cadastrar pedido';
   addUpdateItemButtonText = 'Adicionar';
+  endCustomer = model<EndCustomer | null>(null);
 
   readonly dialog = inject(MatDialog);
 
   constructor(
-    private orderService: OrderService,
-    private customerService: CustomerService,
-    private productService: ProductService,
-    private orderStatusService: OrderStatusService,
-    private route: ActivatedRoute,
-    private orderItemStatusService: OrderItemStatusService,
-    private orderItemService: OrderItemService,
-    private snackBarService: SnackBarService,
-    private router: Router,
-    private endCustomerService: EndCustomerService) {
+    private readonly orderService: OrderService,
+    private readonly customerService: CustomerService,
+    private readonly productService: ProductService,
+    private readonly orderStatusService: OrderStatusService,
+    private readonly route: ActivatedRoute,
+    private readonly orderItemStatusService: OrderItemStatusService,
+    private readonly orderItemService: OrderItemService,
+    private readonly snackBarService: SnackBarService,
+    private readonly router: Router,
+    private readonly endCustomerService: EndCustomerService) {
   }
 
   ngOnInit() {
@@ -93,7 +94,9 @@ export class OrderCreateComponent implements OnInit {
 
         this.order.setValue({ ...order })
         this.orderTotal = getBrCurrencyStr(order.total);
+        this.orderUpdated = getBrDateTimeStr(order.updatedDate);
         this.getEndCustomers(order.customer.id!)
+        this.setEndCustomer(order.endCustomer);
       });
 
     this.title = 'Editar pedido';
@@ -106,45 +109,52 @@ export class OrderCreateComponent implements OnInit {
       return;
     }
 
-    if (this.order.value!.id) {
+    if (!this.order.value!.id) {
+      this.createOrder();
+      return;
+    }
+
+    if (this.orderItem.id) {
       this.updateItem();
       return;
     }
 
-    this.createOrder();
+    this.addItem();
   }
 
-  updateItem() {
-    const addRequest = { ...this.orderItem, order: this.order.value };
-
-    this.orderItemService
-      .add(addRequest)
-      .subscribe((addItem) => {
-        const response = addItem as unknown as ItemResponse;
-        if (!response.orderItem?.id) {
-          this.snackBarService.error('Falha ao adicionar produto');
-          return;
-        }
-
-        this.snackBarService.success(`Produto ${response.orderItem.product?.description} adicionado com sucesso!`);
-        this.updateOrder(response, [...this.order.value!.orderItems, response.orderItem!]);
-      });
-  }
-
-  addItem() {
-    const updateRequest = { ...this.orderItem, order: this.order.value };
+  updateItem(orderItem = this.orderItem) {
+    const updateRequest = { ...orderItem, order: this.order.value };
 
     this.orderItemService
       .update(updateRequest)
-      .subscribe((updatedItem) => {
-        const response = updatedItem as unknown as ItemResponse;
+      .subscribe((addItem) => {
+        const response = addItem as unknown as ItemResponse;
         if (!response.orderItem?.id) {
           this.snackBarService.error('Falha ao atualizar produto');
           return;
         }
 
         this.snackBarService.success(`Produto ${response.orderItem.product?.description} atualizado com sucesso!`);
-        this.updateOrder(response, this.order.value!.orderItems.map(item => item.id === response.orderItem!.id ? response.orderItem! : item));
+
+        const items = this.order.value!.orderItems.map(x => x.id === response.orderItem!.id ? response.orderItem! : x);
+        this.saveOrderChanges(response, items);
+      });
+  }
+
+  addItem() {
+    const addRequest = { ...this.orderItem, order: this.order.value };
+
+    this.orderItemService
+      .add(addRequest)
+      .subscribe((updatedItem) => {
+        const response = updatedItem as unknown as ItemResponse;
+        if (!response.orderItem?.id) {
+          this.snackBarService.error('Falha ao adicionar produto');
+          return;
+        }
+
+        this.snackBarService.success(`Produto ${response.orderItem.product?.description} adicionado com sucesso!`);
+        this.saveOrderChanges(response, [...this.order.value!.orderItems, response.orderItem]);
       });
   }
 
@@ -171,21 +181,21 @@ export class OrderCreateComponent implements OnInit {
         }
 
         this.snackBarService.success(`Produto ${orderItem.product?.description} removido com sucesso!`);
-        this.updateOrder(response, this.order.value!.orderItems.filter(item => item.id !== orderItem.id));
+        this.saveOrderChanges(response, this.order.value!.orderItems.filter(item => item.id !== orderItem.id));
       });
   }
 
-  updateOrder(response: ItemResponse, orderItems: OrderItem[]) {
+  saveOrderChanges(response: ItemResponse, orderItems: OrderItem[]) {
     const order = this.order.value!;
 
     this.order.setValue({
       ...order,
-      installments: response.installments,
-      total: response.total,
+      ...response,
       orderItems
     });
 
     this.orderTotal = getBrCurrencyStr(response.total);
+    this.orderUpdated = getBrDateTimeStr(response.updatedDate);
     this.clearItem();
   }
 
@@ -215,22 +225,33 @@ export class OrderCreateComponent implements OnInit {
     if (!customer)
       return;
 
-    this.order.setValue({ ...this.order.value!, customer });
+    this.endCustomer.set(null);
+    this.order.setValue({ ...this.order.value!, customer, endCustomer: null });
+    this.updateOrder();
     this.getEndCustomers(customer.id!);
   }
 
   setEndCustomer(endCustomer: EndCustomer | null) {
-    if (endCustomer)
-      this.order.setValue({ ...this.order.value!, endCustomer })
+    this.endCustomer.set(endCustomer);
+    this.order.setValue({ ...this.order.value!, endCustomer });
+  }
+
+  setEndCustomerAndSave(endCustomer: EndCustomer | null) {
+    if (endCustomer === null)
+      return;
+
+    this.setEndCustomer(endCustomer);
+    this.updateOrder();
   }
 
   getEndCustomers(customerId: string) {
+    this.order.setValue({ ...this.order.value!, endCustomer: null })
     this.endCustomerService.get(customerId)
       .subscribe(endCustomers => this.endCustomers = endCustomers[0]);
   }
 
   setProduct(value: Product | null) {
-    if (!(value && value.id)) {
+    if (!value?.id) {
       if (this.orderItem.product.id) {
         this.clearItem();
       }
@@ -257,22 +278,18 @@ export class OrderCreateComponent implements OnInit {
     if (!optionSelected)
       return;
 
-    const orderItemChanged = { ...orderItemSelected, itemStatus: optionSelected };
-    this.orderItemService.update(orderItemChanged).subscribe(orderItem => {
-      const prevItems = [...this.order.value!.orderItems];
-      const orderItems = orderItem.id
-        ? prevItems.map(item => item.id === orderItem.id ? { ...orderItem } : item)
-        : [...prevItems, orderItem];
-
-      this.order.value!.orderItems = orderItems;
-    })
+    this.updateItem({ ...orderItemSelected, itemStatus: optionSelected });
   }
 
   getBrDate(value: Date | null) {
     return value && getBrDateStr(value);
   }
 
-  saveOrder(order: Order) {
+  getBrDateTime(value?: Date | null) {
+    return value && getBrDateTimeStr(value);
+  }
+
+  setOrder(order: Order) {
     this.order.setValue({ ...order });
   }
 
@@ -281,7 +298,7 @@ export class OrderCreateComponent implements OnInit {
       width: '1000px',
       data: {
         order: { ...this.order.value },
-        saveOrder: (order: Order) => this.saveOrder(order)
+        saveOrder: (order: Order) => this.setOrder(order)
       }
     });
   }
@@ -302,22 +319,24 @@ export class OrderCreateComponent implements OnInit {
   }
 
   setOrderItemDeliveryDate(value: Date, item: OrderItem) {
-    this.updateDeliveryDate(value, item);
+    this.updateItem({ ...item, deliveryDate: value });
   }
 
   setOrderItemDeliveryToday(item: OrderItem) {
-    this.updateDeliveryDate(new Date(), item);
+    this.updateItem({ ...item, deliveryDate: new Date() });
   }
 
-  updateDeliveryDate(deliveryDate: Date, orderItem: OrderItem) {
-    this.orderItemService.update({ ...orderItem, deliveryDate })
-      .pipe(
-        tap(_ => {
-          orderItem.deliveryDate = deliveryDate;
-          this.snackBarService.success('Data de entrega atualizada com sucesso');
-        }),
-        catchError(() => of(this.snackBarService.error('Falha ao data de entrega')))
-      )
-      .subscribe();
+  updateOrder() {
+    this.orderService.update(this.order.value!)
+      .subscribe((updatedOrder) => {
+        if (!updatedOrder) {
+          this.snackBarService.error('Falha ao atualizar pedido');
+          return;
+        }
+
+        this.snackBarService.success('Pedido atualizado com sucesso');
+        this.orderTotal = getBrCurrencyStr(updatedOrder.total);
+        this.orderUpdated = getBrDateTimeStr(updatedOrder.updatedDate);
+      })
   }
 }

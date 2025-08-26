@@ -2,14 +2,14 @@
   <app-br-date-picker
     [label]="'Data da primeira parcela'"
     (handleOnChange)="changeFirstDateAndRecreateInstallments($event)"
-    [value]="_firstInstallmentDate"
+    [value]="firstInstallmentDate()"
   ></app-br-date-picker>
 
   <mat-form-field>
     <mat-label>Número de parcelas</mat-label>
     <mat-select
       (selectionChange)="changeAmountAndRecreateInstallments($event.value)"
-      [value]="installmentsAmount"
+      [(ngModel)]="installmentsAmount"
     >
       <mat-option [value]="1">1</mat-option>
       <mat-option [value]="2">2</mat-option>
@@ -27,7 +27,7 @@
   </mat-form-field>
 
   <div class="align-content-center">
-    <mat-slide-toggle [(ngModel)]="_order!.isRounded" (change)="changeIfIsToRound()"
+    <mat-slide-toggle [(ngModel)]="isToRound" (change)="changeIfIsToRound()"
       >Arredondar cálculo
     </mat-slide-toggle>
   </div>

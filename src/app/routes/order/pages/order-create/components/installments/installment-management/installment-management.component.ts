@@ -6,7 +6,7 @@ import { BrDatePickerComponent } from 'src/app/components/br-date-picker/br-date
 import { InputMaskComponent } from 'src/app/components/input-mask/input-mask.component';
 import { Order } from 'src/app/models/order/order';
 import { OrderInstallment } from 'src/app/models/order/order-installment';
-import { OrderInstallmentService } from 'src/app/services/order/order-installment/order-installment.service';
+import { OrderService } from 'src/app/services/order/order.service';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 import { getBrCurrencyStr, getBrDateStr } from 'src/app/utils/text-format';
 import { InstallmentsHeaderComponent } from "../../installments-header/installments-header.component";
@@ -28,7 +28,7 @@ export class InstallmentManagementComponent implements OnInit {
   readonly dialogRef = inject(MatDialogRef<InstallmentManagementComponent>);
   installments: OrderInstallment[] = [];
 
-  constructor(private orderInstallmentService: OrderInstallmentService, private snackBarService: SnackBarService) { }
+  constructor(private readonly orderService: OrderService, private readonly snackBarService: SnackBarService) { }
 
   ngOnInit(): void {
     if (this.data.order.installments)
@@ -94,7 +94,7 @@ export class InstallmentManagementComponent implements OnInit {
   }
 
   saveInstallments() {
-    this.orderInstallmentService.updateMany(this.installments)
+    this.orderService.updateInstallments(this.installments, this.data.order.id!)
       .pipe(
         tap(_ => {
           const installments = this.installments.map(x => ({ ...x }));

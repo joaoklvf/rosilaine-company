@@ -1,4 +1,7 @@
-<h1 class="text-white">{{ title }}</h1>
+<div class="d-flex text-white justify-content-between align-items-end">
+  <h1>{{ title }}</h1>
+  <h5>Atualizado em {{ orderUpdated }}</h5>
+</div>
 @if(order.value!.orderItems.length > 0){
 <div class="card mb-3">
   <div class="card-body">
@@ -11,23 +14,35 @@
       </div>
       <app-installments-header
         [order]="order.value!"
-        (saveAction)="saveOrder($event)"
+        (saveAction)="setOrder($event)"
       />
-      <div class="align-content-end text-end">
-        <button
-          type="button"
-          class="btn btn-primary text-white"
-          (click)="installmentsManagement()"
-        >
-          Visualizar
-        </button>
-        <button
-          type="button"
-          class="btn btn-primary text-white ms-2"
-          (click)="print()"
-        >
-          Imprimir
-        </button>
+      <div class="d-flex justify-content-between flex-grow-1 align-items-end">
+        <div>
+          <button
+            type="button"
+            class="btn btn-primary text-white"
+            (click)="installmentsManagement()"
+          >
+            Visualizar
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary text-white ms-2"
+            (click)="print()"
+          >
+            Imprimir
+          </button>
+        </div>
+        <div>
+          <button
+            type="button"
+            class="btn btn-outline-primary ms-2 btn-sm d-flex"
+            title="Salvar"
+            (click)="updateOrder()"
+          >
+            <mat-icon fontIcon="save" />
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -46,10 +61,10 @@
       ></app-custom-autocomplete>
       <app-custom-autocomplete
         [label]="'Cliente final'"
-        (handleOnChange)="setEndCustomer($event)"
+        (handleOnChange)="setEndCustomerAndSave($event)"
         [data]="endCustomers"
         [displayValue]="'name'"
-        [value]="order.value!.endCustomer!"
+        [value]="endCustomer()"
         class="col-md-3 mb-md-0 mb-2"
         [creatable]="true"
       ></app-custom-autocomplete>

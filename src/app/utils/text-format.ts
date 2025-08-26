@@ -4,6 +4,9 @@ export const getBrCurrencyStr = (value: number | string) =>
 export const getBrDateStr = (value: Date | string) =>
   new Date(value).toLocaleDateString('pt-BR');
 
+export const getBrDateTimeStr = (value: Date | string) =>
+  new Date(value).toLocaleString('pt-BR');
+
 export const getAmountStr = (value: number | string) =>
   Number(value).toString().padStart(2, "0");
 
