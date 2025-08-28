@@ -8,7 +8,7 @@
   <mat-form-field>
     <mat-label>Número de parcelas</mat-label>
     <mat-select
-      (selectionChange)="changeAmountAndRecreateInstallments($event.value)"
+      (selectionChange)="changeAmountAndRecreateInstallments()"
       [(ngModel)]="installmentsAmount"
     >
       <mat-option [value]="1">1</mat-option>

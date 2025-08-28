@@ -32,7 +32,7 @@ export class InstallmentsHeaderComponent {
     this.setDefaultIsToRound();
   }
 
-  changeAmountAndRecreateInstallments(installmentsAmount: number) {
+  changeAmountAndRecreateInstallments() {
     this.dialog.open(CustomDialogComponent, {
       width: '300px',
       data: {
