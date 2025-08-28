@@ -358,6 +358,11 @@ export class OrderCreateComponent implements OnInit {
       })
   }
 
+  saveOrderButtonClick() {
+    this.updateOrder();
+    this.router.navigate(['/orders'])
+  }
+
   saveInstallmentsChanges(params: IInstallmentHeader) {
     const orderRequest: OrderRequest = {
       ...this.order.value!,
