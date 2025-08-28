@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { InstallmentManagementComponent } from './installment-management.component';
+import { InstallmentManagementComponent } from './installments-management.component';
 
 describe('InstallmentManagementComponent', () => {
   let component: InstallmentManagementComponent;

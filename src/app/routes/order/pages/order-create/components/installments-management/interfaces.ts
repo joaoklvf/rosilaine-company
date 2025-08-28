@@ -1,5 +1,5 @@
 import { OrderInstallment } from "src/app/models/order/order-installment";
-import { IInstallmentHeader } from "../../installments-header/interfaces";
+import { IInstallmentHeader } from "../installments-header/interfaces";
 
 interface IInstallmentsManagement {
   installments: OrderInstallment[];

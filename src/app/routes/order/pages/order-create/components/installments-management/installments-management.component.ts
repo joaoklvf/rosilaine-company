@@ -8,16 +8,16 @@ import { OrderInstallment } from 'src/app/models/order/order-installment';
 import { OrderService } from 'src/app/services/order/order.service';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 import { getBrCurrencyStr, getBrDateStr } from 'src/app/utils/text-format';
-import { InstallmentsHeaderComponent } from "../../installments-header/installments-header.component";
-import { IInstallmentHeader } from '../../installments-header/interfaces';
+import { InstallmentsHeaderComponent } from "../installments-header/installments-header.component";
+import { IInstallmentHeader } from '../installments-header/interfaces';
 import { ModalProps } from './interfaces';
 
 @Component({
-  selector: 'app-installment-management',
+  selector: 'app-installments-management',
   imports: [MatDialogActions, MatDialogClose, MatDialogTitle, MatDialogContent, InputMaskComponent, FormsModule, BrDatePickerComponent, InstallmentsHeaderComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl: './installment-management.component.html',
-  styleUrl: './installment-management.component.scss'
+  templateUrl: './installments-management.component.html',
+  styleUrl: './installments-management.component.scss'
 })
 export class InstallmentManagementComponent implements OnInit {
   data: ModalProps = inject(MAT_DIALOG_DATA);

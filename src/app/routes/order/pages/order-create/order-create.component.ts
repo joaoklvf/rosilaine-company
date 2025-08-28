@@ -26,7 +26,7 @@ import { ProductService } from "src/app/services/product/product.service";
 import { SnackBarService } from "src/app/services/snack-bar/snack-bar.service";
 import { getBrCurrencyStr, getBrDateStr, getBrDateTimeStr } from "src/app/utils/text-format";
 import { InstallmentsHeaderComponent } from "./components/installments-header/installments-header.component";
-import { InstallmentManagementComponent } from "./components/installments/installment-management/installment-management.component";
+import { InstallmentManagementComponent } from "./components/installments-management/installments-management.component";
 import { ItemResponse } from "./interfaces/order-create.interfaces";
 import { getError } from "./utils/order-create.utilts";
 import { IInstallmentHeader } from "./components/installments-header/interfaces";
