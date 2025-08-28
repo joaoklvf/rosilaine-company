@@ -59,13 +59,13 @@ export class CustomerCreateComponent implements OnInit {
   monthInstallmentsCurrencyValue = '';
 
   constructor(
-    private customerService: CustomerService,
-    private viaCepService: ViaCepService,
-    private route: ActivatedRoute,
-    private snackBarService: SnackBarService,
-    private router: Router,
-    private customerTagService: CustomerTagService,
-    private customerInstallmentsService: CustomerInstallmentsService
+    private readonly customerService: CustomerService,
+    private readonly viaCepService: ViaCepService,
+    private readonly route: ActivatedRoute,
+    private readonly snackBarService: SnackBarService,
+    private readonly router: Router,
+    private readonly customerTagService: CustomerTagService,
+    private readonly customerInstallmentsService: CustomerInstallmentsService
   ) { }
 
   ngOnInit(): void {

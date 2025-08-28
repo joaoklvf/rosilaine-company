@@ -33,7 +33,7 @@ export class ProductCategoryComponent {
   ngOnInit() {
     this.searchText$.pipe(
       startWith(''),
-      debounceTime(300),
+      debounceTime(1000),
       switchMap((filters) => {
         if (typeof filters === 'string')
           return this.productCategoryService.get({ description: filters, offset: 0, take: 15 })

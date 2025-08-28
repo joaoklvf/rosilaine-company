@@ -36,7 +36,7 @@ export class CustomersPageComponent implements OnInit {
   ngOnInit() {
     this.searchText$.pipe(
       startWith(''),
-      debounceTime(300),
+      debounceTime(1000),
       switchMap((filters) => {
         if (typeof filters === 'string')
           return this.customerService.get({ name: filters, offset: 0, take: 15 })

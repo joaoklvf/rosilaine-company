@@ -68,7 +68,7 @@ export class OrdersPageComponent implements OnInit {
 
     this.orderService.get(params)
       .subscribe(orders => {
-        this.orders = orders[0];
+        this.orders = orders[0].map(x => ({ ...x, customer: { ...x.customer, name: `${x.customer.name} ${x.customer.nickname ?? ''}` } }));
         this.dataCount = orders[1];
       });
   }

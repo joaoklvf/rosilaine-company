@@ -38,7 +38,7 @@ export class InstallmentsHeaderComponent {
       data: {
         title: "Alterar quantidade de parcelas",
         content: `Deseja alterar quantidade de parcelas, recriando todas elas?`,
-        onConfirmAction: () => this.generateInstallmentsAndSaveOrder({ ... this.order()!, installmentsAmount }),
+        onConfirmAction: () => this.generateInstallmentsAndSaveOrder(),
         onCancelAction: () => this.setDefaultInstallmentsAmount()
       }
     });
@@ -50,7 +50,7 @@ export class InstallmentsHeaderComponent {
       data: {
         title: "Alterar primeira data de vencimento",
         content: `Deseja alterar a primeira data de vencimento e recriar as parcelas?`,
-        onConfirmAction: () => this.generateInstallmentsAndSaveOrder({ ... this.order()!, firstInstallmentDate, installmentsAmount: this.installmentsAmount() }),
+        onConfirmAction: () => this.generateInstallmentsAndSaveOrder(firstInstallmentDate),
         onCancelAction: () => this.setDefaultFirstInstallmentDate()
       }
     });
@@ -62,22 +62,23 @@ export class InstallmentsHeaderComponent {
       data: {
         title: "Alterar arredondamento",
         content: `Deseja alterar a arredondamento e recriar as parcelas?`,
-        onConfirmAction: () => this.generateInstallmentsAndSaveOrder({ ... this.order()!, installmentsAmount: this.installmentsAmount() }),
+        onConfirmAction: () => this.generateInstallmentsAndSaveOrder(),
         onCancelAction: () => { this.setDefaultIsToRound() }
       }
     });
   }
 
-  public generateInstallmentsAndSaveOrder(order: OrderRequest) {
+  public generateInstallmentsAndSaveOrder(firstInstallmentDate?: Date) {
     const orderRequest: OrderRequest = {
-      ...order,
-      isToRound: order.isRounded
+      ...this.order()!,
+      isToRound: this.isToRound(),
+      installmentsAmount: this.installmentsAmount(),
+      firstInstallmentDate: firstInstallmentDate ?? this.firstInstallmentDate()
     };
-    console.log('orderRequest', orderRequest);
 
     this.orderService.recreateInstallments(orderRequest).subscribe(updatedInstallments => {
       this.snackBarService.success('Parcelas atualizadas com sucesso!');
-      this.saveAction.emit({ ...order, installments: updatedInstallments });
+      this.saveAction.emit({ ...orderRequest, installments: updatedInstallments });
     });
   }
 

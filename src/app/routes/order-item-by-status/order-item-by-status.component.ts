@@ -38,7 +38,7 @@ export class OrderItemByStatusComponent implements OnInit {
 
   ngOnInit(): void {
     this.$searchStatus.pipe(
-      debounceTime(300),
+      debounceTime(1000),
       switchMap((filters) => {
         if (typeof filters === 'string')
           return this.orderItemService.getByStatusId({ statusId: filters, offset: 0, take: 15 })

@@ -72,7 +72,7 @@ export class OrderCreateComponent implements OnInit {
       this.loadOrder(id);
 
     this.customerService.get()
-      .subscribe(customers => this.customers = customers[0]);
+      .subscribe(customers => this.customers = customers[0].map(x => ({ ...x, name: `${x.name} ${x.nickname}` })));
 
     this.productService.get()
       .subscribe(products => this.products = products[0]);
@@ -227,8 +227,10 @@ export class OrderCreateComponent implements OnInit {
 
     this.endCustomer.set(null);
     this.order.setValue({ ...this.order.value!, customer, endCustomer: null });
-    this.updateOrder();
     this.getEndCustomers(customer.id!);
+
+    if (this.order.value?.id)
+      this.updateOrder();
   }
 
   setEndCustomer(endCustomer: EndCustomer | null) {
@@ -241,7 +243,9 @@ export class OrderCreateComponent implements OnInit {
       return;
 
     this.setEndCustomer(endCustomer);
-    this.updateOrder();
+
+    if (this.order.value?.id)
+      this.updateOrder();
   }
 
   getEndCustomers(customerId: string) {
@@ -263,9 +267,14 @@ export class OrderCreateComponent implements OnInit {
     this.orderItem.itemOriginalPrice = value.productPrice;
   }
 
-  setOrderStatus(value: OrderStatus | null) {
-    if (value)
-      this.order.value!.status = value;
+  setOrderStatus(status: OrderStatus | null) {
+    if (!status)
+      return;
+
+    this.order.setValue({ ...this.order.value!, status });
+
+    if (this.order.value?.id)
+      this.updateOrder();
   }
 
   setOrderItemStatus(value: OrderItemStatus | null) {
