@@ -1,7 +1,7 @@
 export interface DashInstallmentsResponse {
   installmentId: string;
   installmentDate: string;
-  installmentAmount: string;
+  installmentsAmount: string;
   customerName: string;
   orderId: string;
 }

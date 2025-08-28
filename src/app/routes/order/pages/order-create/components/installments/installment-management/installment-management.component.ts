@@ -4,17 +4,13 @@ import { MAT_DIALOG_DATA, MatDialogActions, MatDialogClose, MatDialogContent, Ma
 import { catchError, of, tap } from 'rxjs';
 import { BrDatePickerComponent } from 'src/app/components/br-date-picker/br-date-picker.component';
 import { InputMaskComponent } from 'src/app/components/input-mask/input-mask.component';
-import { Order } from 'src/app/models/order/order';
 import { OrderInstallment } from 'src/app/models/order/order-installment';
 import { OrderService } from 'src/app/services/order/order.service';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 import { getBrCurrencyStr, getBrDateStr } from 'src/app/utils/text-format';
 import { InstallmentsHeaderComponent } from "../../installments-header/installments-header.component";
-
-interface ModalProps {
-  order: Order;
-  saveOrder: (order: Order) => void,
-}
+import { IInstallmentHeader } from '../../installments-header/interfaces';
+import { ModalProps } from './interfaces';
 
 @Component({
   selector: 'app-installment-management',
@@ -25,14 +21,18 @@ interface ModalProps {
 })
 export class InstallmentManagementComponent implements OnInit {
   data: ModalProps = inject(MAT_DIALOG_DATA);
-  readonly dialogRef = inject(MatDialogRef<InstallmentManagementComponent>);
   installments: OrderInstallment[] = [];
 
-  constructor(private readonly orderService: OrderService, private readonly snackBarService: SnackBarService) { }
+  readonly dialogRef = inject(MatDialogRef<InstallmentManagementComponent>);
+
+  constructor(
+    private readonly orderService: OrderService,
+    private readonly snackBarService: SnackBarService
+  ) { }
 
   ngOnInit(): void {
-    if (this.data.order.installments)
-      this.installments = this.data.order.installments?.map(x => ({ ...x }));
+    if (this.data.installments)
+      this.installments = this.data.installments?.map(x => ({ ...x }));
   }
 
   getBrDate = (value: Date | null) =>
@@ -69,7 +69,7 @@ export class InstallmentManagementComponent implements OnInit {
     this.installments = [...installments];
   }
 
-  setInstallmentAmount(value: number, installment: OrderInstallment) {
+  setInstallmentsAmount(value: number, installment: OrderInstallment) {
     installment.amount = value;
   }
 
@@ -82,7 +82,7 @@ export class InstallmentManagementComponent implements OnInit {
   }
 
   setFirstInstallmentDate(value: Date) {
-    this.data.order.firstInstallmentDate = value;
+    this.data.firstInstallmentDate = value;
   }
 
   setInstallmentPaidAmount(installment: OrderInstallment) {
@@ -93,33 +93,21 @@ export class InstallmentManagementComponent implements OnInit {
     installment.paymentDate = installment.debitDate;
   }
 
+  saveHeader(headerData: IInstallmentHeader) {
+    this.data.saveHeaderAction(headerData);
+  }
+
   saveInstallments() {
-    this.orderService.updateInstallments(this.installments, this.data.order.id!)
+    this.orderService.updateInstallments(this.installments, this.data.orderId)
       .pipe(
         tap(_ => {
           const installments = this.installments.map(x => ({ ...x }));
-          this.data.saveOrder({ ...this.data.order, installments, firstInstallmentDate: installments[0].debitDate })
+          this.data.saveInstallments(installments);
           this.snackBarService.success('Parcelas atualizadas com sucesso');
           this.dialogRef.close();
         }),
         catchError(() => of(this.snackBarService.error('Falha ao atualizar parcelas')))
       )
       .subscribe();
-  }
-
-  saveOrder(order: Order) {
-    if (!order.installments)
-      return;
-
-    this.data.saveOrder(order);
-    this.installments = [...order.installments];
-  }
-
-  changeInstallments(order: Order) {
-    if (!order.installments)
-      return;
-
-    this.installments = order.installments.map(x => ({ ...x }));
-    this.data.saveOrder(order);
   }
 }

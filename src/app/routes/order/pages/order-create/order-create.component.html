@@ -13,8 +13,10 @@
         </div>
       </div>
       <app-installments-header
-        [order]="order.value!"
-        (saveAction)="setOrder($event)"
+        [installmentsAmount]="order.value!.installments?.length ?? 1"
+        [firstInstallmentDate]="order.value!.firstInstallmentDate"
+        [isRounded]="order.value!.isRounded"
+        (saveAction)="saveInstallmentsChanges($event)"
       />
       <div class="d-flex justify-content-between flex-grow-1 align-items-end">
         <div>

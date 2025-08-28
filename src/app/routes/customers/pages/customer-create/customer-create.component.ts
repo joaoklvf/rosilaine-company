@@ -48,7 +48,7 @@ export class CustomerCreateComponent implements OnInit {
 
   readonly columns: DataTableColumnProp<DashInstallmentsResponse>[] = [
     { description: "Data da parcela", fieldName: "installmentDate" },
-    { description: "Valor (R$)", fieldName: "installmentAmount" },
+    { description: "Valor (R$)", fieldName: "installmentsAmount" },
   ]
   dashInstallments: DashInstallmentsResponse[] = [];
   dataCount = 0;
@@ -186,7 +186,12 @@ export class CustomerCreateComponent implements OnInit {
           order_total: getBrCurrencyStr(x.order_total),
         }));
 
-        this.monthInstallmentsCurrencyValue = getBrCurrencyStr(response.map(x => Number(x.installment_amount)).reduce((prev, acc) => prev + acc));
+        this.monthInstallmentsCurrencyValue =
+          getBrCurrencyStr(
+            response
+              .map(x => Number(x.installment_amount))
+              .reduce((prev, acc) => prev + acc, 0)
+          );
       })
   }
 

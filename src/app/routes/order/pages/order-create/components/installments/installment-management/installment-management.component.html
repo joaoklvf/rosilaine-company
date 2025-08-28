@@ -1,8 +1,10 @@
 <h2 mat-dialog-title>Parcelas</h2>
 <mat-dialog-content class="text-dark">
   <app-installments-header
-    [order]="data.order"
-    (saveAction)="changeInstallments($event)"
+    [installmentsAmount]="this.data.installmentsAmount"
+    [firstInstallmentDate]="this.data.firstInstallmentDate"
+    [isRounded]="this.data.isRounded"
+    (saveAction)="saveHeader($event)"
   />
 
   <div class="card mt-3">
@@ -30,7 +32,7 @@
             <td>
               <app-input-mask
                 [value]="installment.amount"
-                (handleOnChange)="setInstallmentAmount($event, installment)"
+                (handleOnChange)="setInstallmentsAmount($event, installment)"
               >
               </app-input-mask>
             </td>

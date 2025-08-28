@@ -5,10 +5,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { BrDatePickerComponent } from 'src/app/components/br-date-picker/br-date-picker.component';
 import { CustomDialogComponent } from 'src/app/components/custom-dialog/custom-dialog.component';
-import { Order } from 'src/app/models/order/order';
-import { OrderRequest } from 'src/app/models/order/order-request';
-import { OrderService } from 'src/app/services/order/order.service';
-import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
+import { IInstallmentHeader } from './interfaces';
 
 @Component({
   selector: 'app-installments-header',
@@ -17,14 +14,16 @@ import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
   styleUrl: './installments-header.component.scss'
 })
 export class InstallmentsHeaderComponent {
-  readonly order = input<Order>();
-  readonly saveAction = output<Order>();
+  readonly saveAction = output<IInstallmentHeader>();
   readonly dialog = inject(MatDialog);
-  readonly firstInstallmentDate = model<Date | null>(null);
-  readonly installmentsAmount = model(1);
-  readonly isToRound = model(false);
+  readonly firstInstallmentDate = input<Date | null>(null);
+  readonly installmentsAmount = input(1);
+  readonly isRounded = input(false);
+  readonly modelFirstInstallmentDate = model<Date | null>(this.firstInstallmentDate());
+  readonly modelInstallmentsAmount = model(this.installmentsAmount());
+  readonly modelIsToRound = model(this.isRounded());
 
-  constructor(private readonly orderService: OrderService, private readonly snackBarService: SnackBarService) { }
+  constructor() { }
 
   ngOnInit(): void {
     this.setDefaultFirstInstallmentDate();
@@ -32,13 +31,13 @@ export class InstallmentsHeaderComponent {
     this.setDefaultIsToRound();
   }
 
-  changeAmountAndRecreateInstallments() {
+  changeAmountAndRecreateInstallments(installmentsAmount: number) {
     this.dialog.open(CustomDialogComponent, {
       width: '300px',
       data: {
         title: "Alterar quantidade de parcelas",
         content: `Deseja alterar quantidade de parcelas, recriando todas elas?`,
-        onConfirmAction: () => this.generateInstallmentsAndSaveOrder(),
+        onConfirmAction: () => this.generateInstallmentsAndSaveOrder(undefined, installmentsAmount),
         onCancelAction: () => this.setDefaultInstallmentsAmount()
       }
     });
@@ -68,32 +67,25 @@ export class InstallmentsHeaderComponent {
     });
   }
 
-  public generateInstallmentsAndSaveOrder(firstInstallmentDate?: Date) {
-    const orderRequest: OrderRequest = {
-      ...this.order()!,
-      isToRound: this.isToRound(),
-      installmentsAmount: this.installmentsAmount(),
-      firstInstallmentDate: firstInstallmentDate ?? this.firstInstallmentDate()
+  public generateInstallmentsAndSaveOrder(firstInstallmentDate?: Date, installmentsAmount?: number) {
+    const params = {
+      isToRound: this.modelIsToRound(),
+      installmentsAmount: installmentsAmount ?? this.modelInstallmentsAmount(),
+      firstInstallmentDate: firstInstallmentDate ?? this.modelFirstInstallmentDate()
     };
-
-    this.orderService.recreateInstallments(orderRequest).subscribe(updatedInstallments => {
-      this.snackBarService.success('Parcelas atualizadas com sucesso!');
-      this.saveAction.emit({ ...orderRequest, installments: updatedInstallments });
-    });
+    console.log('params', params)
+    this.saveAction.emit(params);
   }
 
   setDefaultFirstInstallmentDate() {
-    const date = this.order()?.installments?.at(0)?.paymentDate ?? this.order()?.firstInstallmentDate ?? null;
-    if (date)
-      this.firstInstallmentDate.set(new Date(date.toString()))
+    this.modelFirstInstallmentDate.set(this.firstInstallmentDate())
   }
 
   setDefaultInstallmentsAmount() {
-    const amount = this.order()?.installments?.length ?? 1;
-    this.installmentsAmount.set(amount);
+    this.modelInstallmentsAmount.set(this.installmentsAmount());
   }
 
   setDefaultIsToRound() {
-    this.isToRound.set(this.order()?.isRounded!);
+    this.modelIsToRound.set(this.isRounded());
   }
 }

@@ -29,6 +29,9 @@ import { InstallmentsHeaderComponent } from "./components/installments-header/in
 import { InstallmentManagementComponent } from "./components/installments/installment-management/installment-management.component";
 import { ItemResponse } from "./interfaces/order-create.interfaces";
 import { getError } from "./utils/order-create.utilts";
+import { IInstallmentHeader } from "./components/installments-header/interfaces";
+import { OrderRequest } from "src/app/models/order/order-request";
+import { OrderInstallment } from "src/app/models/order/order-installment";
 
 @Component({
   selector: 'app-order-create',
@@ -303,11 +306,17 @@ export class OrderCreateComponent implements OnInit {
   }
 
   installmentsManagement() {
+    const { installments, firstInstallmentDate, isRounded, id } = this.order.value!;
     this.dialog.open(InstallmentManagementComponent, {
       width: '1000px',
       data: {
-        order: { ...this.order.value },
-        saveOrder: (order: Order) => this.setOrder(order)
+        installments,
+        firstInstallmentDate,
+        isRounded,
+        installmentsAmount: installments?.length ?? 1,
+        orderId: id,
+        saveHeaderAction: (props: IInstallmentHeader) => this.saveInstallmentsChanges(props),
+        saveInstallments: (installments: OrderInstallment[]) => this.order.setValue({ ... this.order.value!, installments })
       }
     });
   }
@@ -347,5 +356,16 @@ export class OrderCreateComponent implements OnInit {
         this.orderTotal = getBrCurrencyStr(updatedOrder.total);
         this.orderUpdated = getBrDateTimeStr(updatedOrder.updatedDate);
       })
+  }
+
+  saveInstallmentsChanges(params: IInstallmentHeader) {
+    const orderRequest: OrderRequest = {
+      ...this.order.value!,
+      ...params
+    };
+
+    this.orderService.recreateInstallments(orderRequest).subscribe(updatedInstallments => {
+      this.snackBarService.success('Parcelas atualizadas com sucesso!');
+    });
   }
 }

@@ -20,7 +20,7 @@ export class HomeComponent implements OnInit {
   readonly columns: DataTableColumnProp<DashInstallmentsResponse>[] = [
     { description: "Cliente", fieldName: "customerName", width: '50%' },
     { description: "Data da parcela", fieldName: "installmentDate" },
-    { description: "Valor (R$)", fieldName: "installmentAmount" },
+    { description: "Valor (R$)", fieldName: "installmentsAmount" },
   ]
   dashInstallments: DashInstallmentsResponse[] = [];
   dataCount = 0;
@@ -28,7 +28,9 @@ export class HomeComponent implements OnInit {
   installmentsTotal: string | undefined;
   pendingInstallments: string | undefined;
 
-  constructor(private homeService: HomeApiService) { }
+  constructor(
+    private readonly homeService: HomeApiService
+  ) { }
 
   ngOnInit() {
     this.getInstallmentsData({ option: HomeDashOptions.OverdueInstallments, filter: this.TAKE_OFFSET_OPTIONS });
