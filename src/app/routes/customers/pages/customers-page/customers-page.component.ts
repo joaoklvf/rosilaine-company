@@ -17,16 +17,21 @@ import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
   styleUrl: './customers-page.component.scss'
 })
 export class CustomersPageComponent implements OnInit {
-  private searchText$ = new Subject<DataTableFilter | string>();
+  private readonly searchText$ = new Subject<DataTableFilter | string>();
   readonly columns: DataTableColumnProp<Customer>[] = [
     { description: "Nome", fieldName: "name", width: '50%' },
+    { description: "Apelido", fieldName: "nickname" },
     { description: "Telefone", fieldName: "phone" },
   ]
   customers: Customer[] = [];
   dataCount = 0;
   readonly dialog = inject(MatDialog);
 
-  constructor(private customerService: CustomerService, private router: Router, private snackBarService: SnackBarService) { }
+  constructor(
+    private readonly customerService: CustomerService,
+    private readonly router: Router,
+    private readonly snackBarService: SnackBarService
+  ) { }
 
   ngOnInit() {
     this.searchText$.pipe(

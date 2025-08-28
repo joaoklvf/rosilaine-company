@@ -6,7 +6,7 @@
       <mat-tab label="Dados" labelClass="mb-1" [labelClass]="'print-hidden'">
         <div class="data-tab">
           <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-3">
               <label for="customer-name">Nome</label>
               <input
                 class="form-control"
@@ -17,7 +17,18 @@
                 name="name"
               />
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
+              <label for="customer-name">Apelido</label>
+              <input
+                class="form-control"
+                id="customer-nickname"
+                placeholder="Apelido"
+                [(ngModel)]="customer.nickname"
+                [maxLength]="60"
+                name="nickname"
+              />
+            </div>
+            <div class="col-md-3">
               <label for="customer-birth-date">Data de nascimento</label>
               <input
                 class="form-control"
@@ -31,7 +42,7 @@
                 [maxLength]="60"
               />
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
               <label for="customer-phone">Telefone</label>
               <input
                 class="form-control"
@@ -47,7 +58,7 @@
             </div>
           </div>
           <div class="row" [formGroup]="address">
-            <div class="col-md-4">
+            <div class="col-md-3">
               <label for="customer-zip-code">CEP</label>
               <input
                 class="form-control"
@@ -63,7 +74,7 @@
                 [maxLength]="10"
               />
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
               <label for="customer-state">Estado (UF)</label>
               <input
                 class="form-control"
@@ -75,7 +86,7 @@
                 (keyup)="upper($event)"
               />
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
               <label for="customer-city">Cidade</label>
               <input
                 class="form-control"
@@ -86,7 +97,7 @@
                 formControlName="city"
               />
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
               <label for="customer-neighborhood">Bairro</label>
               <input
                 class="form-control"
@@ -97,7 +108,7 @@
                 formControlName="neighborhood"
               />
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
               <label for="customer-street">Rua</label>
               <input
                 class="form-control"
@@ -108,7 +119,7 @@
                 formControlName="street"
               />
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
               <label for="customer-house-number">Número</label>
               <input
                 class="form-control"
@@ -120,7 +131,7 @@
                 [ngModelOptions]="{ standalone: true }"
               />
             </div>
-            <div class="col-md-6">
+            <div class="col-md-3">
               <label for="customer-complemento">Complemento</label>
               <input
                 class="form-control"
@@ -132,7 +143,7 @@
                 [ngModelOptions]="{ standalone: true }"
               />
             </div>
-            <div class="col-md-6">
+            <div class="col-md-3">
               <label for="customer-address-observation">Observação</label>
               <input
                 class="form-control"
@@ -181,9 +192,7 @@
           <mat-form-field>
             <mat-label>Mês</mat-label>
             <mat-select
-              (selectionChange)="
-                fetchMonthInstallments($event.value)
-              "
+              (selectionChange)="fetchMonthInstallments($event.value)"
               [value]="selectMonthValue"
             >
               <mat-option value="01">Janeiro</mat-option>

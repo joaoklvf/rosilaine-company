@@ -20,6 +20,7 @@ export class CustomAutocompleteComponent<T extends object> implements OnChanges 
   readonly creatable = input(false);
   readonly handleOnChange = output<T | null>();
   readonly value = input<T | null>(null);
+  readonly searchField = input<keyof T>();
 
   myControl = new FormControl<T | null>(null);
   filteredData: Observable<T[]> = new Observable<T[]>();
@@ -56,7 +57,7 @@ export class CustomAutocompleteComponent<T extends object> implements OnChanges 
     const filterValue = value?.toLowerCase();
 
     return this.data().filter(option => {
-      const fieldValue = option[this.displayValue()];
+      const fieldValue = option[this.searchField() ?? this.displayValue()];
       return typeof fieldValue === 'string' && fieldValue.toLowerCase().includes(filterValue);
     });
   }
