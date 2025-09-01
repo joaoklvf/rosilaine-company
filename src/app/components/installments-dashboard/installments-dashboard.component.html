@@ -1,4 +1,5 @@
 <div class="row">
+  @if(isDashVisible){
   <div class="col-12 col-lg-7">
     <div class="row mb-3">
       <div class="col">
@@ -35,7 +36,8 @@
       </div>
     </div>
   </div>
-  <div class="col-12 mt-3 mt-lg-0 col-lg-5">
+  }
+  <div class="{{ installmentsTableClass }}">
     <div class="card">
       <div class="card-body">
         <mat-tab-group (selectedTabChange)="onTabChangeAction($event.index)">

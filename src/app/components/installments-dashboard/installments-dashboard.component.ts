@@ -14,17 +14,29 @@ import { GetInstallmentsDataProps } from './interfaces/installments-dashboard';
   styleUrl: './installments-dashboard.component.scss'
 })
 export class InstallmentsDashboardComponent {
-  constructor(private router: Router) { }
+  constructor(
+    private readonly router: Router
+  ) { }
 
   readonly chartLabels = ['Recebido', 'Pendente'];
   readonly columns = input.required<DataTableColumnProp<DashInstallmentsResponse>[]>()
 
   readonly dashInstallments = input<DashInstallmentsResponse[]>();
+  readonly showDash = input(true);
   readonly dataCount = input(0);
   readonly installmentsBalance = input<number[] | undefined>();
   readonly installmentsTotal = input<string | undefined>();
   readonly pendingInstallments = input<string | undefined>();
   readonly getInstallmentsData = output<GetInstallmentsDataProps>();
+
+  get isDashVisible() {
+    return this.showDash();
+  }
+
+  get installmentsTableClass() {
+    return this.isDashVisible ?
+      'col-12 mt-3 mt-lg-0 col-lg-5' : 'col';
+  }
 
   goToOrderPage(orderId: string) {
     this.router.navigate([`order/${orderId}`]);
