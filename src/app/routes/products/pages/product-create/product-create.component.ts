@@ -1,46 +1,42 @@
-import { Component, OnInit, ViewChild, ElementRef, inject } from "@angular/core";
-import { FormsModule } from "@angular/forms";
-import { MatDialog } from "@angular/material/dialog";
-import { CustomAutocompleteComponent } from "src/app/components/custom-autocomplete/custom-autocomplete.component";
-import { CustomDialogComponent } from "src/app/components/custom-dialog/custom-dialog.component";
-import { InputMaskComponent } from "src/app/components/input-mask/input-mask.component";
-import { Product } from "src/app/models/product/product";
-import { ProductCategory } from "src/app/models/product/product-category";
-import { ProductCategoryService } from "src/app/services/product/product-category/product-category.service";
-import { ProductService } from "src/app/services/product/product.service";
-import { getBrCurrencyStr } from "src/app/utils/text-format";
-import { DataTableComponent } from "../../components/data-table/data-table.component";
-import { DataTableColumnProp, FormatValueOptions } from "src/app/interfaces/data-table";
-import { startWith, debounceTime, switchMap, Subject, catchError, of, tap } from "rxjs";
-import { DataTableFilter } from "src/app/components/data-table/data-table-interfaces";
-import { SnackBarService } from "src/app/services/snack-bar/snack-bar.service";
+import { Component, ElementRef, inject, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute, Router } from '@angular/router';
+import { catchError, debounceTime, of, startWith, Subject, switchMap, tap } from 'rxjs';
+import { CustomAutocompleteComponent } from 'src/app/components/custom-autocomplete/custom-autocomplete.component';
+import { CustomDialogComponent } from 'src/app/components/custom-dialog/custom-dialog.component';
+import { DataTableFilter } from 'src/app/components/data-table/data-table-interfaces';
+import { InputMaskComponent } from 'src/app/components/input-mask/input-mask.component';
+import { Product } from 'src/app/models/product/product';
+import { ProductCategory } from 'src/app/models/product/product-category';
+import { ProductCategoryService } from 'src/app/services/product/product-category/product-category.service';
+import { ProductService } from 'src/app/services/product/product.service';
+import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
+import { getBrCurrencyStr } from 'src/app/utils/text-format';
 
 @Component({
-  selector: 'app-products',
-  templateUrl: './products.component.html',
-  styleUrl: './products.component.scss',
-  imports: [InputMaskComponent, CustomAutocompleteComponent, FormsModule, DataTableComponent]
+  selector: 'app-product-create',
+  imports: [InputMaskComponent, CustomAutocompleteComponent, FormsModule],
+  templateUrl: './product-create.component.html',
+  styleUrl: './product-create.component.scss'
 })
-
-export class ProductsComponent implements OnInit {
-  private searchText$ = new Subject<DataTableFilter | string>();
+export class ProductCreateComponent {
+  constructor(
+    private readonly productService: ProductService,
+    private readonly productCategoryService: ProductCategoryService,
+    private readonly snackBarService: SnackBarService,
+    private readonly router: Router,
+    private readonly route: ActivatedRoute,
+  ) { }
+  readonly dialog = inject(MatDialog);
+  private readonly searchText$ = new Subject<DataTableFilter | string>();
   categories: ProductCategory[] = [];
   products: Product[] = [];
   product = new Product();
   dataCount = 0;
   addUpdateButtonText = 'Adicionar';
-
-  readonly columns: DataTableColumnProp<Product>[] = [
-    { description: "Produto", fieldName: "description", width: '50%' },
-    { description: "Código", fieldName: "productCode" },
-    { description: "Preço", fieldName: "productPrice", formatValue: FormatValueOptions.Currency },
-    { description: "Categoria", fieldName: "category.description" },
-  ]
-
+  title = 'Cadastrar Produto';
   @ViewChild("productDescription") productDescriptionField: ElementRef = new ElementRef(null);
-
-  constructor(private productService: ProductService, private productCategoryService: ProductCategoryService, private snackBarService: SnackBarService) { }
-  readonly dialog = inject(MatDialog);
 
   ngOnInit() {
     this.productCategoryService.get()
@@ -59,6 +55,17 @@ export class ProductsComponent implements OnInit {
       this.products = products[0];
       this.dataCount = products[1]
     });
+
+    const id = this.route.snapshot.paramMap.get('id')!;
+    if (!id)
+      return;
+
+    this.productService.getById(id)
+      .subscribe(product => {
+        this.product = ({ ...product });
+        this.title = product.description;
+        this.addUpdateButtonText = 'Atualizar';
+      });
   }
 
   setProduct(value: Product) {
@@ -110,17 +117,14 @@ export class ProductsComponent implements OnInit {
   }
 
   afterRequest(product: Product) {
-    const customerIndex = this.products.findIndex(c => c.id === product.id);
-    if (customerIndex >= 0)
-      this.products[customerIndex] = product;
-    else
-      this.products.push(product);
+    if (product.id) {
+      this.snackBarService.success(`Produto ${this.product.description} atualizado com sucesso!`);
+      this.router.navigate(['products']);
+      return;
+    }
 
-    this.product = new Product();
-    this.productDescriptionField.nativeElement.focus();
-    
-    if (!this.categories.find(x => x.id === product.category.id))
-      this.categories.push(product.category)
+    this.snackBarService.success(`Produto ${this.product.description} criado com sucesso!`);
+    this.router.navigate(['products']);
   }
 
   edit(product: Product): void {
