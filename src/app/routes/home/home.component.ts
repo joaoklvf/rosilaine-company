@@ -20,7 +20,7 @@ export class HomeComponent implements OnInit {
   readonly columns: DataTableColumnProp<DashInstallmentsResponse>[] = [
     { description: "Cliente", fieldName: "customerName", width: '50%' },
     { description: "Data da parcela", fieldName: "installmentDate" },
-    { description: "Valor (R$)", fieldName: "installmentsAmount" },
+    { description: "Valor (R$)", fieldName: "installmentAmount" },
   ]
   dashInstallments: DashInstallmentsResponse[] = [];
   dataCount = 0;
