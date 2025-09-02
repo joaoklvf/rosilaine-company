@@ -420,7 +420,7 @@ export class OrderCreateComponent implements OnInit {
       .pipe(
         map(([value]) => value)
       )
-      .subscribe(customers => this.customers = customers);
+      .subscribe(customers => this.customers = customers.map(x => ({ ...x, name: `${x.name} ${x.nickname}` })));
   }
 
   filterProducts(value: string | Product | null) {
