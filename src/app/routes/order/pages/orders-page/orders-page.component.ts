@@ -13,7 +13,7 @@ import { CustomerService } from 'src/app/services/customer/customer.service';
 import { OrderStatusService } from 'src/app/services/order/order-status/order-status.service';
 import { HttpParams } from '@angular/common/http';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
-import { tap, catchError, of } from 'rxjs';
+import { tap, catchError, of, map } from 'rxjs';
 import { DataTableComponent } from 'src/app/components/data-table/data-table.component';
 
 @Component({
@@ -40,20 +40,20 @@ export class OrdersPageComponent implements OnInit {
   dataCount = 0;
 
   constructor(
-    private orderService: OrderService,
-    private customerService: CustomerService,
-    private orderStatusService: OrderStatusService,
-    private router: Router,
-    private snackBarService: SnackBarService
+    private readonly orderService: OrderService,
+    private readonly customerService: CustomerService,
+    private readonly orderStatusService: OrderStatusService,
+    private readonly router: Router,
+    private readonly snackBarService: SnackBarService
   ) { }
 
   ngOnInit() {
     this.getOrders();
 
-    this.orderStatusService.get()
+    this.orderStatusService.get({ offset: 0, take: 10 })
       .subscribe(status => this.orderStatuses = status[0]);
 
-    this.customerService.get()
+    this.customerService.get({ offset: 0, take: 10 })
       .subscribe(customers => this.customers = customers[0]);
   }
 
@@ -123,5 +123,33 @@ export class OrdersPageComponent implements OnInit {
 
   setCustomer(value: Customer | null) {
     this.customer = value;
+  }
+
+  filterCustomers(value: string | Customer | null) {
+    let name = '';
+    if (typeof value === 'string')
+      name = value;
+    else if (value !== null)
+      name = value.name;
+
+    this.customerService.get({ name, offset: 0, take: 10 })
+      .pipe(
+        map(([value]) => value)
+      )
+      .subscribe(customers => this.customers = customers);
+  }
+
+  filterStatus(value: string | OrderStatus | null) {
+    let description = '';
+    if (typeof value === 'string')
+      description = value;
+    else if (value !== null)
+      description = value.description;
+
+    this.orderStatusService.get({ description, offset: 0, take: 10 })
+      .pipe(
+        map(([value]) => value)
+      )
+      .subscribe(orderStatuses => this.orderStatuses = orderStatuses);
   }
 }

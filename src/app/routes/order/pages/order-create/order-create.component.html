@@ -60,6 +60,7 @@
         [displayValue]="'name'"
         [value]="order.value!.customer"
         class="col-md-3 mb-md-0 mb-2"
+        (searchAction)="filterCustomers($event)"
       ></app-custom-autocomplete>
       <app-custom-autocomplete
         [label]="'Cliente final'"
@@ -68,16 +69,16 @@
         [displayValue]="'name'"
         [value]="endCustomer()"
         class="col-md-3 mb-md-0 mb-2"
-        [creatable]="true"
+        (searchAction)="filterEndCustomers($event)"
       ></app-custom-autocomplete>
       <app-custom-autocomplete
         [label]="'Status'"
         (handleOnChange)="setOrderStatus($event)"
         [data]="orderStatuses"
-        [creatable]="true"
         displayValue="description"
         [value]="order.value!.status"
         class="col-md-3 mb-md-0 mb-2"
+        (searchAction)="filterStatus($event)"
       ></app-custom-autocomplete>
       <app-br-date-picker
         [label]="'Data do pedido'"
@@ -98,6 +99,7 @@
           [data]="products"
           [displayValue]="'description'"
           [value]="orderItem.product"
+          (searchAction)="filterProducts($event)"
         ></app-custom-autocomplete>
       </div>
       <div class="col-lg-2">
@@ -105,9 +107,9 @@
           [label]="'Status'"
           (handleOnChange)="setOrderItemStatus($event)"
           [data]="orderItemStatuses"
-          [creatable]="true"
           displayValue="description"
           [value]="orderItem.itemStatus"
+          (searchAction)="filterItemStatus($event)"
         ></app-custom-autocomplete>
       </div>
       <div class="col-lg-2">

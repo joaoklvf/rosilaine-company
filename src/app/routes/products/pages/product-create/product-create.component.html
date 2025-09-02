@@ -38,9 +38,9 @@
         [label]="'Categoria'"
         (handleOnChange)="setCategory($event)"
         [data]="categories"
-        [creatable]="true"
         displayValue="description"
         [value]="product.category"
+        (searchAction)="filterCategories($event)"
       ></app-custom-autocomplete>
     </div>
     <div class="">

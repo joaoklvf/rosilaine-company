@@ -7,7 +7,9 @@ import { LoaderService } from '../base/loader.service';
 @Injectable()
 export class LoaderInterceptor implements HttpInterceptor {
 
-  constructor(private loaderService: LoaderService) { }
+  constructor(
+    private readonly loaderService: LoaderService
+  ) { }
 
   intercept(req: H<any>, next: HttpHandler): Observable<a<any>> {
     this.loaderService.show();

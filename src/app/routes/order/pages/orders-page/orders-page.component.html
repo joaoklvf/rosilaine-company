@@ -19,15 +19,16 @@
         displayValue="name"
         class="col-md-6 col-sm-12 mb-2"
         [value]="customer"
+        (searchAction)="filterCustomers($event)"
       ></app-custom-autocomplete>
       <app-custom-autocomplete
         [label]="'Status'"
         (handleOnChange)="setOrderStatus($event)"
         [data]="orderStatuses"
-        [creatable]="true"
         displayValue="description"
         class="col-md-6 col-sm-12 mb-2"
         [value]="status"
+        (searchAction)="filterStatus($event)"
       ></app-custom-autocomplete>
       <div class="col">
         <button

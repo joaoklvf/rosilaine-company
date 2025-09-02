@@ -6,14 +6,17 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectChange, MatSelectModule } from "@angular/material/select";
 import { ActivatedRoute, Router } from "@angular/router";
+import { map } from "rxjs";
 import { BrDatePickerComponent } from "src/app/components/br-date-picker/br-date-picker.component";
 import { CustomAutocompleteComponent } from "src/app/components/custom-autocomplete/custom-autocomplete.component";
 import { InputMaskComponent } from "src/app/components/input-mask/input-mask.component";
 import { Customer } from "src/app/models/customer/customer";
 import { EndCustomer } from "src/app/models/customer/end-customer";
 import { Order } from "src/app/models/order/order";
+import { OrderInstallment } from "src/app/models/order/order-installment";
 import { OrderItem } from "src/app/models/order/order-item/order-item";
 import { OrderItemStatus } from "src/app/models/order/order-item/order-item-status";
+import { OrderRequest } from "src/app/models/order/order-request";
 import { OrderStatus } from "src/app/models/order/order-status";
 import { Product } from "src/app/models/product/product";
 import { CustomerService } from "src/app/services/customer/customer.service";
@@ -26,12 +29,10 @@ import { ProductService } from "src/app/services/product/product.service";
 import { SnackBarService } from "src/app/services/snack-bar/snack-bar.service";
 import { getBrCurrencyStr, getBrDateStr, getBrDateTimeStr } from "src/app/utils/text-format";
 import { InstallmentsHeaderComponent } from "./components/installments-header/installments-header.component";
+import { IInstallmentHeader } from "./components/installments-header/interfaces";
 import { InstallmentManagementComponent } from "./components/installments-management/installments-management.component";
 import { ItemResponse } from "./interfaces/order-create.interfaces";
 import { getError } from "./utils/order-create.utilts";
-import { IInstallmentHeader } from "./components/installments-header/interfaces";
-import { OrderRequest } from "src/app/models/order/order-request";
-import { OrderInstallment } from "src/app/models/order/order-installment";
 
 @Component({
   selector: 'app-order-create',
@@ -74,16 +75,16 @@ export class OrderCreateComponent implements OnInit {
     if (id)
       this.loadOrder(id);
 
-    this.customerService.get()
+    this.customerService.get({ offset: 0, take: 10 })
       .subscribe(customers => this.customers = customers[0].map(x => ({ ...x, name: `${x.name} ${x.nickname}` })));
 
-    this.productService.get()
+    this.productService.get({ offset: 0, take: 10 })
       .subscribe(products => this.products = products[0]);
 
-    this.orderStatusService.get()
+    this.orderStatusService.get({ offset: 0, take: 10 })
       .subscribe(status => this.orderStatuses = status[0]);
 
-    this.orderItemStatusService.get()
+    this.orderItemStatusService.get({ offset: 0, take: 10 })
       .subscribe(itemStatus => this.orderItemStatuses = itemStatus[0]);
   }
 
@@ -253,7 +254,7 @@ export class OrderCreateComponent implements OnInit {
 
   getEndCustomers(customerId: string) {
     this.order.setValue({ ...this.order.value!, endCustomer: null })
-    this.endCustomerService.get(customerId)
+    this.endCustomerService.get(customerId, { offset: 0, take: 10 })
       .subscribe(endCustomers => this.endCustomers = endCustomers[0]);
   }
 
@@ -372,5 +373,90 @@ export class OrderCreateComponent implements OnInit {
     this.orderService.recreateInstallments(orderRequest).subscribe(updatedInstallments => {
       this.snackBarService.success('Parcelas atualizadas com sucesso!');
     });
+  }
+
+  filterEndCustomers(value: string | EndCustomer | null) {
+    let name = '';
+    if (typeof value === 'string')
+      name = value;
+    else if (value !== null)
+      name = value.name;
+
+    this.endCustomerService.get(this.order.value!.customer.id!, { name, offset: 0, take: 10 })
+      .pipe(
+        map(([value]) =>
+          value.length ?
+            value : [{ name: `Criar ${name}` } as EndCustomer]
+        )
+      )
+      .subscribe(endCustomers => this.endCustomers = endCustomers);
+  }
+
+  filterStatus(value: string | OrderStatus | null) {
+    let description = '';
+    if (typeof value === 'string')
+      description = value;
+    else if (value !== null)
+      description = value.description;
+
+    this.orderStatusService.get({ description, offset: 0, take: 10 })
+      .pipe(
+        map(([value]) =>
+          value.length ?
+            value : [{ description: `Criar ${description}` } as OrderStatus]
+        )
+      )
+      .subscribe(orderStatuses => this.orderStatuses = orderStatuses);
+  }
+
+  filterCustomers(value: string | Customer | null) {
+    let name = '';
+    if (typeof value === 'string')
+      name = value;
+    else if (value !== null)
+      name = value.name;
+
+    this.customerService.get({ name, offset: 0, take: 10 })
+      .pipe(
+        map(([value]) => value)
+      )
+      .subscribe(customers => this.customers = customers);
+  }
+
+  filterProducts(value: string | Product | null) {
+    let description = '';
+    let productCode = '';
+    if (typeof value === 'string') {
+      const strNumber = Number(value);
+      if (Number.isNaN(strNumber))
+        description = value;
+      else
+        productCode = value;
+    }
+    else if (value !== null)
+      description = value.description;
+
+    this.productService.get({ description, productCode, offset: 0, take: 10 })
+      .pipe(
+        map(([value]) => value)
+      )
+      .subscribe(products => this.products = products);
+  }
+
+  filterItemStatus(value: string | OrderItemStatus | null) {
+    let description = '';
+    if (typeof value === 'string')
+      description = value;
+    else if (value !== null)
+      description = value.description;
+
+    this.orderItemStatusService.get({ description, offset: 0, take: 10 })
+      .pipe(
+        map(([value]) =>
+          value.length ?
+            value : [{ description: `Criar ${description}` } as OrderItemStatus]
+        )
+      )
+      .subscribe(orderItemStatuses => this.orderItemStatuses = orderItemStatuses);
   }
 }

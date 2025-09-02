@@ -1,66 +1,36 @@
-import { AsyncPipe } from '@angular/common';
-import { Component, input, OnChanges, output } from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { Component, input, OnInit, output } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
-import { Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { debounceTime, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-custom-autocomplete',
   templateUrl: './custom-autocomplete.component.html',
   styleUrls: ['./custom-autocomplete.component.scss'],
-  imports: [MatAutocompleteModule, ReactiveFormsModule, AsyncPipe, MatInputModule]
+  imports: [MatAutocompleteModule, ReactiveFormsModule, MatInputModule]
 })
 
-export class CustomAutocompleteComponent<T extends object> implements OnChanges {
+export class CustomAutocompleteComponent<T extends object> implements OnInit {
   readonly label = input('');
   readonly displayValue = input.required<keyof T>();
   readonly data = input.required<T[]>();
-  readonly creatable = input(false);
   readonly handleOnChange = output<T | null>();
   readonly value = input<T | null>(null);
   readonly searchField = input<keyof T>();
+  readonly searchAction = output<T | null | string>();
+  readonly searchText$ = new Subject<T | string>();
 
-  myControl = new FormControl<T | null>(null);
-  filteredData: Observable<T[]> = new Observable<T[]>();
-
-  ngOnChanges() {
-    this.myControl.setValue(this.value(), { emitEvent: false });
-
-    this.filteredData = this.myControl.valueChanges.pipe(
-      startWith(''),
-      map(value => {
-        const dataFiltered = this.getFilteredData(value);
-
-        if (this.creatable() && typeof value === 'string' && value.length > 0 && !dataFiltered.length) {
-          return [{ [this.displayValue()]: `Criar ${value}` } as T, ...dataFiltered];
-        }
-
-        return dataFiltered;
-      })
-    );
+  ngOnInit() {
+    this.searchText$.pipe(
+      debounceTime(1000),
+      map(value => this.searchAction.emit(value))
+    ).subscribe();
   }
 
   displayFn = (customer: T) =>
     customer?.[this.displayValue()] as string;
-
-  private getFilteredData(value: T | string | null) {
-    const filter = typeof value === 'string' ?
-      value : value?.[this.displayValue()];
-
-    return filter ?
-      this._filter(filter as string) : this.data().slice(0, 10);
-  }
-
-  private _filter(value: string) {
-    const filterValue = value?.toLowerCase();
-
-    return this.data().filter(option => {
-      const fieldValue = option[this.searchField() ?? this.displayValue()];
-      return typeof fieldValue === 'string' && fieldValue.toLowerCase().includes(filterValue);
-    });
-  }
 
   update(event: MatAutocompleteSelectedEvent) {
     const currentValue = event.option.value;
@@ -85,5 +55,9 @@ export class CustomAutocompleteComponent<T extends object> implements OnChanges 
 
   onFocus(event: FocusEvent) {
     (event.target as HTMLInputElement).select();
+  }
+
+  onKeyUp(target: any) {
+    this.searchText$.next(target?.value);
   }
 }
