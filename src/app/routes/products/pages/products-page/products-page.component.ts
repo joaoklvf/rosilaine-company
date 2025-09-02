@@ -19,8 +19,8 @@ import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 export class ProductsPageComponent implements OnInit {
   private readonly searchText$ = new Subject<DataTableFilter | string>();
   readonly columns: DataTableColumnProp<Product>[] = [
-    { description: "Nome", fieldName: "description", width: '50%' },
-    { description: "Telefone", fieldName: "category.description" },
+    { description: "Produto", fieldName: "description", width: '50%' },
+    { description: "Categoria", fieldName: "category.description" },
   ]
   products: Product[] = [];
   dataCount = 0;
