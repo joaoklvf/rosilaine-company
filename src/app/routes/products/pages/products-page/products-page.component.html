@@ -9,12 +9,36 @@
   </button>
 </div>
 
+<div class="card mb-3">
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-6 col-sm-12 mb-2">
+        <label for="Pesquisar">Pesquisar</label>
+        <input
+          type="text"
+          name="Pesquisar"
+          id="Pesquisar"
+          class="form-control"
+          (keyup)="onDescriptionKeyUp($event.target!)"
+          placeholder="Busque por nome do produto ou código"
+        />
+      </div>
+      <app-custom-autocomplete
+        [label]="'Categoria'"
+        (handleOnChange)="onSelectedCategoryChange($event)"
+        [data]="categories"
+        displayValue="description"
+        class="col-md-6 col-sm-12 mb-2"
+        (searchAction)="filterCategories($event)"
+      ></app-custom-autocomplete>
+    </div>
+  </div>
+</div>
+
 <app-data-table
   [columns]="columns"
   (removeAction)="openDialog($event)"
   (editAction)="edit($event)"
-  [showSearchField]="true"
-  searchPlaceHolder="Nome"
   (searchAction)="filterData($event)"
   [data]="products"
   [dataCount]="dataCount"
