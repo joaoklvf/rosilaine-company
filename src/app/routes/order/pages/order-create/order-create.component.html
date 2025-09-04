@@ -2,7 +2,7 @@
   <h1>{{ title }}</h1>
   <h5>Atualizado em {{ orderUpdated }}</h5>
 </div>
-@if(order.value!.orderItems.length > 0){
+@if(order().orderItems.length > 0){
 <div class="card mb-3">
   <div class="card-body">
     <div class="d-flex gap-2 flex-wrap white-space-nowrap">
@@ -13,9 +13,9 @@
         </div>
       </div>
       <app-installments-header
-        [installmentsAmount]="order.value!.installments?.length ?? 1"
-        [firstInstallmentDate]="order.value!.firstInstallmentDate"
-        [isRounded]="order.value!.isRounded"
+        [installmentsAmount]="order().installments?.length ?? 1"
+        [firstInstallmentDate]="order().firstInstallmentDate"
+        [isRounded]="order().isRounded"
         (saveAction)="saveInstallmentsChanges($event)"
       />
       <div class="d-flex justify-content-between flex-grow-1 align-items-end">
@@ -58,7 +58,7 @@
         (handleOnChange)="setCustomer($event)"
         [data]="customers"
         [displayValue]="'name'"
-        [value]="order.value!.customer"
+        [value]="order().customer"
         class="col-md-3 mb-md-0 mb-2"
         (searchAction)="filterCustomers($event)"
       ></app-custom-autocomplete>
@@ -76,13 +76,13 @@
         (handleOnChange)="setOrderStatus($event)"
         [data]="orderStatuses"
         displayValue="description"
-        [value]="order.value!.status"
+        [value]="order().status"
         class="col-md-3 mb-md-0 mb-2"
         (searchAction)="filterStatus($event)"
       ></app-custom-autocomplete>
       <app-br-date-picker
         [label]="'Data do pedido'"
-        [value]="order.value!.orderDate"
+        [value]="order().orderDate"
         (handleOnChange)="setOrderDate($event)"
         class="col-md-3"
       ></app-br-date-picker>
@@ -145,7 +145,7 @@
   </div>
 </div>
 
-@if (order.value!.orderItems.length > 0) {
+@if (order().orderItems.length > 0) {
 <div class="card mb-3">
   <div class="card-body table-responsive">
     <table class="table">
@@ -162,7 +162,7 @@
         </tr>
       </thead>
       <tbody>
-        @for(orderItem of order.value!.orderItems; track orderItem){
+        @for(orderItem of order().orderItems; track orderItem){
         <tr>
           <td style="width: 5%">{{ orderItem.itemAmount }}</td>
           <td style="width: 20%">{{ orderItem.product.description }}</td>

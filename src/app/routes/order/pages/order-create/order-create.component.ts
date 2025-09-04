@@ -1,5 +1,5 @@
 import { Component, OnInit, inject, model } from "@angular/core";
-import { FormControl, FormsModule } from "@angular/forms";
+import { FormsModule } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
@@ -42,7 +42,7 @@ import { getError } from "./utils/order-create.utilts";
 })
 
 export class OrderCreateComponent implements OnInit {
-  order = new FormControl(new Order());
+  order = model(new Order());
   orderItem = new OrderItem();
   orderTotal = '';
   orderUpdated = '';
@@ -96,7 +96,7 @@ export class OrderCreateComponent implements OnInit {
           this.router.navigate(['orders']);
         }
 
-        this.order.setValue({ ...order })
+        this.order.set({ ...order })
         this.orderTotal = getBrCurrencyStr(order.total);
         this.orderUpdated = getBrDateTimeStr(order.updatedDate);
         this.getEndCustomers(order.customer.id!)
@@ -107,13 +107,13 @@ export class OrderCreateComponent implements OnInit {
   }
 
   addUpdateItem(): void {
-    const error = getError(this.orderItem, this.order.value!);
+    const error = getError(this.orderItem, this.order());
     if (error) {
       this.snackBarService.error(error);
       return;
     }
 
-    if (!this.order.value!.id) {
+    if (!this.order().id) {
       this.createOrder();
       return;
     }
@@ -127,7 +127,7 @@ export class OrderCreateComponent implements OnInit {
   }
 
   updateItem(orderItem = this.orderItem) {
-    const updateRequest = { ...orderItem, order: this.order.value };
+    const updateRequest = { ...orderItem, order: this.order() };
 
     this.orderItemService
       .update(updateRequest)
@@ -140,13 +140,13 @@ export class OrderCreateComponent implements OnInit {
 
         this.snackBarService.success(`Produto ${response.orderItem.product?.description} atualizado com sucesso!`);
 
-        const items = this.order.value!.orderItems.map(x => x.id === response.orderItem!.id ? response.orderItem! : x);
+        const items = this.order().orderItems.map(x => x.id === response.orderItem!.id ? response.orderItem! : x);
         this.saveOrderChanges(response, items);
       });
   }
 
   addItem() {
-    const addRequest = { ...this.orderItem, order: this.order.value };
+    const addRequest = { ...this.orderItem, order: this.order() };
 
     this.orderItemService
       .add(addRequest)
@@ -158,13 +158,13 @@ export class OrderCreateComponent implements OnInit {
         }
 
         this.snackBarService.success(`Produto ${response.orderItem.product?.description} adicionado com sucesso!`);
-        this.saveOrderChanges(response, [...this.order.value!.orderItems, response.orderItem]);
+        this.saveOrderChanges(response, [...this.order().orderItems, response.orderItem]);
       });
   }
 
   createOrder() {
     const order: Order = {
-      ...this.order.value!,
+      ...this.order(),
       orderItems: [this.orderItem],
     };
 
@@ -185,14 +185,14 @@ export class OrderCreateComponent implements OnInit {
         }
 
         this.snackBarService.success(`Produto ${orderItem.product?.description} removido com sucesso!`);
-        this.saveOrderChanges(response, this.order.value!.orderItems.filter(item => item.id !== orderItem.id));
+        this.saveOrderChanges(response, this.order().orderItems.filter(item => item.id !== orderItem.id));
       });
   }
 
   saveOrderChanges(response: ItemResponse, orderItems: OrderItem[]) {
-    const order = this.order.value!;
+    const order = this.order();
 
-    this.order.setValue({
+    this.order.set({
       ...order,
       ...response,
       orderItems
@@ -218,11 +218,11 @@ export class OrderCreateComponent implements OnInit {
   }
 
   setOrderDate(value: Date) {
-    this.order.value!.orderDate = value;
+    this.order().orderDate = value;
   }
 
   setFirstInstallmentDate(value: Date) {
-    this.order.value!.firstInstallmentDate = value;
+    this.order().firstInstallmentDate = value;
   }
 
   setCustomer(customer: Customer | null) {
@@ -230,16 +230,16 @@ export class OrderCreateComponent implements OnInit {
       return;
 
     this.endCustomer.set(null);
-    this.order.setValue({ ...this.order.value!, customer, endCustomer: null });
+    this.order.set({ ...this.order(), customer, endCustomer: null });
     this.getEndCustomers(customer.id!);
 
-    if (this.order.value?.id)
+    if (this.order()?.id)
       this.updateOrder();
   }
 
   setEndCustomer(endCustomer: EndCustomer | null) {
     this.endCustomer.set(endCustomer);
-    this.order.setValue({ ...this.order.value!, endCustomer });
+    this.order.set({ ...this.order(), endCustomer });
   }
 
   setEndCustomerAndSave(endCustomer: EndCustomer | null) {
@@ -248,12 +248,12 @@ export class OrderCreateComponent implements OnInit {
 
     this.setEndCustomer(endCustomer);
 
-    if (this.order.value?.id)
+    if (this.order()?.id)
       this.updateOrder();
   }
 
   getEndCustomers(customerId: string) {
-    this.order.setValue({ ...this.order.value!, endCustomer: null })
+    this.order.set({ ...this.order(), endCustomer: null })
     this.endCustomerService.get(customerId, { offset: 0, take: 10 })
       .subscribe(endCustomers => this.endCustomers = endCustomers[0]);
   }
@@ -275,9 +275,9 @@ export class OrderCreateComponent implements OnInit {
     if (!status)
       return;
 
-    this.order.setValue({ ...this.order.value!, status });
+    this.order.set({ ...this.order(), status });
 
-    if (this.order.value?.id)
+    if (this.order()?.id)
       this.updateOrder();
   }
 
@@ -303,11 +303,11 @@ export class OrderCreateComponent implements OnInit {
   }
 
   setOrder(order: Order) {
-    this.order.setValue({ ...order });
+    this.order.set({ ...order });
   }
 
   installmentsManagement() {
-    const { installments, firstInstallmentDate, isRounded, id } = this.order.value!;
+    const { installments, firstInstallmentDate, isRounded, id } = this.order();
     this.dialog.open(InstallmentManagementComponent, {
       width: '1000px',
       data: {
@@ -317,13 +317,13 @@ export class OrderCreateComponent implements OnInit {
         installmentsAmount: installments?.length ?? 1,
         orderId: id,
         saveHeaderAction: (props: IInstallmentHeader) => this.saveInstallmentsChanges(props),
-        saveInstallments: (installments: OrderInstallment[]) => this.order.setValue({ ... this.order.value!, installments })
+        saveInstallments: (installments: OrderInstallment[]) => this.order.set({ ... this.order(), installments })
       }
     });
   }
 
   print() {
-    sessionStorage.setItem('order', JSON.stringify(this.order.value))
+    sessionStorage.setItem('order', JSON.stringify(this.order()))
     this.router.navigate(['order-print'])
   }
 
@@ -346,7 +346,7 @@ export class OrderCreateComponent implements OnInit {
   }
 
   updateOrder() {
-    this.orderService.update(this.order.value!)
+    this.orderService.update(this.order())
       .subscribe((updatedOrder) => {
         if (!updatedOrder) {
           this.snackBarService.error('Falha ao atualizar pedido');
@@ -366,13 +366,13 @@ export class OrderCreateComponent implements OnInit {
 
   saveInstallmentsChanges(params: IInstallmentHeader) {
     const orderRequest: OrderRequest = {
-      ...this.order.value!,
+      ...this.order(),
       ...params
     };
 
     this.orderService.recreateInstallments(orderRequest).subscribe(installments => {
       this.snackBarService.success('Parcelas atualizadas com sucesso!');
-      this.order.setValue(({ ...this.order.value!, installments }));
+      this.order.set(({ ...this.order(), installments }));
     });
   }
 
@@ -383,7 +383,7 @@ export class OrderCreateComponent implements OnInit {
     else if (value !== null)
       name = value.name;
 
-    this.endCustomerService.get(this.order.value!.customer.id!, { name, offset: 0, take: 10 })
+    this.endCustomerService.get(this.order().customer.id!, { name, offset: 0, take: 10 })
       .pipe(
         map(([value]) =>
           value.length ?
