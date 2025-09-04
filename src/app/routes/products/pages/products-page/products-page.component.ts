@@ -24,6 +24,8 @@ export class ProductsPageComponent implements OnInit {
   readonly columns: DataTableColumnProp<Product>[] = [
     { description: "Produto", fieldName: "description", width: '50%' },
     { description: "Categoria", fieldName: "category.description" },
+    { description: "Preço", fieldName: "productPrice" },
+    { description: "Código", fieldName: "productCode" },
   ]
   products: Product[] = [];
   categories: ProductCategory[] = [];
