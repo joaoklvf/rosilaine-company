@@ -1,18 +1,19 @@
-<div
-  *ngIf="loaderService.isLoading$ | async"
-  class="modal fade show d-block loader-overlay"
-  id="exampleModal"
-  tabindex="-1"
-  aria-labelledby="exampleModalLabel"
->
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-body">
-        <mat-spinner
-          class="mx-auto my-0"
-          [style]="{ height: '20rem' }"
-        ></mat-spinner>
+@if (loaderService.isLoading$ | async) {
+  <div
+    class="modal fade show d-block loader-overlay"
+    id="exampleModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-body">
+          <mat-spinner
+            class="mx-auto my-0"
+            [style]="{ height: '20rem' }"
+          ></mat-spinner>
+        </div>
       </div>
     </div>
   </div>
-</div>
+}
