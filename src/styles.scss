@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@import "./components.scss";
+
 @font-face {
   font-family: pacifico-regular;
   src: url('./assets/fonts/Pacifico-Regular.ttf') format('truetype');

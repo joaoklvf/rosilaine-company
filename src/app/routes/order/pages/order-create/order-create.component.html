@@ -1,11 +1,11 @@
-<div class="d-flex text-white justify-content-between align-items-end">
+<div class="flex text-white justify-between align-items-end">
   <h1>{{ title }}</h1>
   <h5>Atualizado em {{ orderUpdated }}</h5>
 </div>
 @if(order().orderItems.length > 0){
 <div class="card mb-3">
   <div class="card-body">
-    <div class="d-flex gap-2 flex-wrap white-space-nowrap">
+    <div class="flex gap-2 flex-wrap white-space-nowrap">
       <div>
         <p><b>Total do pedido</b></p>
         <div class="fs-5 fw-medium" style="color: limegreen">
@@ -18,7 +18,7 @@
         [isRounded]="order().isRounded"
         (saveAction)="saveInstallmentsChanges($event)"
       />
-      <div class="d-flex justify-content-between flex-grow-1 align-items-end">
+      <div class="flex justify-between flex-grow-1 align-items-end">
         <div>
           <button
             type="button"
@@ -38,7 +38,7 @@
         <div>
           <button
             type="button"
-            class="btn btn-outline-primary ms-2 btn-sm d-flex"
+            class="btn btn-outline-primary ms-2 btn-sm flex"
             title="Salvar"
             (click)="saveOrderButtonClick()"
           >
