@@ -1,4 +1,4 @@
-import { Component, inject, input, model, OnInit, output } from '@angular/core';
+import { Component, inject, input, model, OnChanges, output } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
@@ -13,7 +13,7 @@ import { IInstallmentHeader } from './interfaces';
   templateUrl: './installments-header.component.html',
   styleUrl: './installments-header.component.scss'
 })
-export class InstallmentsHeaderComponent implements OnInit {
+export class InstallmentsHeaderComponent implements OnChanges {
   readonly saveAction = output<IInstallmentHeader>();
   readonly dialog = inject(MatDialog);
   readonly firstInstallmentDate = input<Date | null>(null);
@@ -25,7 +25,7 @@ export class InstallmentsHeaderComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit(): void {
+  ngOnChanges(): void {
     this.setDefaultFirstInstallmentDate();
     this.setDefaultInstallmentsAmount();
     this.setDefaultIsToRound();
