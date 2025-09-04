@@ -1,4 +1,4 @@
-import { Component, inject, input, model, output } from '@angular/core';
+import { Component, inject, input, model, OnInit, output } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
@@ -13,7 +13,7 @@ import { IInstallmentHeader } from './interfaces';
   templateUrl: './installments-header.component.html',
   styleUrl: './installments-header.component.scss'
 })
-export class InstallmentsHeaderComponent {
+export class InstallmentsHeaderComponent implements OnInit {
   readonly saveAction = output<IInstallmentHeader>();
   readonly dialog = inject(MatDialog);
   readonly firstInstallmentDate = input<Date | null>(null);
@@ -73,7 +73,6 @@ export class InstallmentsHeaderComponent {
       installmentsAmount: installmentsAmount ?? this.modelInstallmentsAmount(),
       firstInstallmentDate: firstInstallmentDate ?? this.modelFirstInstallmentDate()
     };
-    console.log('params', params)
     this.saveAction.emit(params);
   }
 
