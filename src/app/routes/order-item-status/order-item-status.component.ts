@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Subject, startWith, debounceTime, switchMap, catchError, of, tap } from 'rxjs';
@@ -16,8 +16,8 @@ import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
   templateUrl: './order-item-status.component.html',
   styleUrl: './order-item-status.component.scss'
 })
-export class OrderItemStatusComponent {
-  private searchText$ = new Subject<DataTableFilter | string>();
+export class OrderItemStatusComponent implements OnInit {
+  private readonly searchText$ = new Subject<DataTableFilter | string>();
   readonly columns: DataTableColumnProp<OrderItemStatus>[] = [
     { description: "Status", fieldName: "description", width: '85%' },
   ]
@@ -28,7 +28,10 @@ export class OrderItemStatusComponent {
 
   @ViewChild("orderItemStatusDescription") orderItemStatusDescriptionField: ElementRef = new ElementRef(null);
 
-  constructor(private orderItemStatusService: OrderItemStatusService, private snackBarService: SnackBarService) { }
+  constructor(
+    private readonly orderItemStatusService: OrderItemStatusService,
+    private readonly snackBarService: SnackBarService
+  ) { }
 
   ngOnInit() {
     this.searchText$.pipe(

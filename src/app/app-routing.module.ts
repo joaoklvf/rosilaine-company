@@ -18,6 +18,7 @@ const routes: Routes = [
   { path: 'product-category', loadComponent: () => import('./routes/product-category/product-category.component').then(x => x.ProductCategoryComponent) },
   { path: 'order-item-by-status', loadComponent: () => import('./routes/order-item-by-status/order-item-by-status.component').then(x => x.OrderItemByStatusComponent) },
   { path: 'order-print', loadComponent: () => import('./routes/order/pages/order-create/components/order-print/order-print.component').then(x => x.OrderPrintComponent) },
+  { path: 'stock', loadComponent: () => import('./routes/stocks-page/stocks-page.component').then(x => x.StocksPageComponent) },
 ];
 
 @NgModule({
