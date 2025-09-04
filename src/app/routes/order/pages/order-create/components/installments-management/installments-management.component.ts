@@ -95,6 +95,7 @@ export class InstallmentManagementComponent implements OnInit {
 
   saveHeader(headerData: IInstallmentHeader) {
     this.data.saveHeaderAction(headerData);
+    this.dialogRef.close();
   }
 
   saveInstallments() {

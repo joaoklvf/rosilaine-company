@@ -372,7 +372,7 @@ export class OrderCreateComponent implements OnInit {
 
     this.orderService.recreateInstallments(orderRequest).subscribe(installments => {
       this.snackBarService.success('Parcelas atualizadas com sucesso!');
-      this.order.setValue(({ ...this.order.value!, installments }))
+      this.order.setValue(({ ...this.order.value!, installments }));
     });
   }
 
