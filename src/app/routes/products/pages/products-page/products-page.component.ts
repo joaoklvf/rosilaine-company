@@ -12,6 +12,7 @@ import { ProductCategory } from 'src/app/models/product/product-category';
 import { ProductCategoryService } from 'src/app/services/product/product-category/product-category.service';
 import { ProductService } from 'src/app/services/product/product.service';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
+import { getBrCurrencyStr } from 'src/app/utils/text-format';
 
 @Component({
   selector: 'app-products-page',
@@ -60,7 +61,7 @@ export class ProductsPageComponent implements OnInit {
         })
       }),
     ).subscribe(products => {
-      this.products = products[0];
+      this.products = products[0].map(x => ({ ...x, productPrice: getBrCurrencyStr(x.productPrice) }) as any);
       this.dataCount = products[1]
     });
   }
