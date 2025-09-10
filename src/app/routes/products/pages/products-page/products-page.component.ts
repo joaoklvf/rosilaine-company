@@ -6,17 +6,17 @@ import { CustomAutocompleteComponent } from "src/app/components/custom-autocompl
 import { CustomDialogComponent } from 'src/app/components/custom-dialog/custom-dialog.component';
 import { DataTableFilter } from 'src/app/components/data-table/data-table-interfaces';
 import { DataTableComponent } from 'src/app/components/data-table/data-table.component';
-import { DataTableColumnProp } from 'src/app/interfaces/data-table';
+import { DataTableColumnProp, FormatValueOptions } from 'src/app/interfaces/data-table';
 import { Product } from 'src/app/models/product/product';
 import { ProductCategory } from 'src/app/models/product/product-category';
 import { ProductCategoryService } from 'src/app/services/product/product-category/product-category.service';
 import { ProductService } from 'src/app/services/product/product.service';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
-import { getBrCurrencyStr } from 'src/app/utils/text-format';
+import { ProductCreateComponent } from "../product-create/product-create.component";
 
 @Component({
   selector: 'app-products-page',
-  imports: [RouterModule, DataTableComponent, CustomAutocompleteComponent],
+  imports: [RouterModule, DataTableComponent, CustomAutocompleteComponent, ProductCreateComponent],
   templateUrl: './products-page.component.html',
   styleUrl: './products-page.component.scss'
 })
@@ -25,13 +25,14 @@ export class ProductsPageComponent implements OnInit {
   readonly columns: DataTableColumnProp<Product>[] = [
     { description: "Produto", fieldName: "description", width: '50%' },
     { description: "Categoria", fieldName: "category.description" },
-    { description: "Preço", fieldName: "productPrice" },
+    { description: "Preço", fieldName: "productPrice", formatValue: FormatValueOptions.Currency },
     { description: "Código", fieldName: "productCode" },
   ]
   products: Product[] = [];
   categories: ProductCategory[] = [];
   dataCount = 0;
   filter = { description: '', categoryId: '', productCode: '' };
+  product = new Product();
   readonly dialog = inject(MatDialog);
 
   constructor(
@@ -61,7 +62,7 @@ export class ProductsPageComponent implements OnInit {
         })
       }),
     ).subscribe(products => {
-      this.products = products[0].map(x => ({ ...x, productPrice: getBrCurrencyStr(x.productPrice) }) as any);
+      this.products = products[0];
       this.dataCount = products[1]
     });
   }
@@ -90,7 +91,7 @@ export class ProductsPageComponent implements OnInit {
   }
 
   edit(value: Product) {
-    this.router.navigate([`/product/${value.id}`])
+    this.product = value;
   }
 
   addPageNavigate() {
@@ -109,6 +110,7 @@ export class ProductsPageComponent implements OnInit {
   }
 
   onSelectedCategoryChange(category: ProductCategory) {
+    console.log(this.filter);
     this.filter.categoryId = category.id!;
     this.searchResults();
   }
@@ -136,5 +138,16 @@ export class ProductsPageComponent implements OnInit {
 
   filterData(filters: DataTableFilter) {
     this.searchText$.next({ ...filters, filter: this.filter });
+  }
+
+  onSaveProduct(product: Product) {
+    if (this.product.id)
+      this.products = this.products.map(x => x.id === product.id ? product : x);
+    else {
+      this.products.unshift(product);
+      this.products.pop();
+    }
+
+    this.product = new Product();
   }
 }

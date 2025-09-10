@@ -29,12 +29,16 @@ export class OrderItemByStatusComponent implements OnInit {
   ]
   orderItemStatuses: OrderItemStatus[] = [];
   itemsByStatus: OrderItemByStatus[] = [];
-  private $searchStatus = new Subject<DataTableFilter | string>();
+  private readonly $searchStatus = new Subject<DataTableFilter | string>();
   selectedStatusId?: string;
   massiveStatusId?: string;
   dataCount = 0;
 
-  constructor(private orderItemStatusService: OrderItemStatusService, private orderItemService: OrderItemService, private snackBarService: SnackBarService) { }
+  constructor(
+    private readonly orderItemStatusService: OrderItemStatusService,
+    private readonly orderItemService: OrderItemService,
+    private readonly snackBarService: SnackBarService
+  ) { }
 
   ngOnInit(): void {
     this.$searchStatus.pipe(
@@ -59,9 +63,13 @@ export class OrderItemByStatusComponent implements OnInit {
   }
 
   filterData(filter: DataTableFilter | string) {
-    this.$searchStatus.next(filter);
-    this.selectedStatusId = typeof filter === 'string' ?
-      filter : filter.filter;
+    if (typeof filter === 'string') {
+      this.$searchStatus.next(filter);
+      this.selectedStatusId = filter;
+      return;
+    }
+    
+    this.$searchStatus.next({ ...filter, filter: this.selectedStatusId });
   }
 
   openDialog(): void {

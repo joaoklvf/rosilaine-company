@@ -13,3 +13,7 @@ export interface ModalProps extends IInstallmentsManagement {
   saveHeaderAction: (props: IInstallmentHeader) => void;
   saveInstallments: (installments: OrderInstallment[]) => void;
 }
+
+export interface ManagementInstallments extends OrderInstallment{
+  originalAmount: number;
+}

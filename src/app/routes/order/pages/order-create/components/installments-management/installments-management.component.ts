@@ -10,7 +10,7 @@ import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 import { getBrCurrencyStr, getBrDateStr } from 'src/app/utils/text-format';
 import { InstallmentsHeaderComponent } from "../installments-header/installments-header.component";
 import { IInstallmentHeader } from '../installments-header/interfaces';
-import { ModalProps } from './interfaces';
+import { ManagementInstallments, ModalProps } from './interfaces';
 
 @Component({
   selector: 'app-installments-management',
@@ -21,7 +21,7 @@ import { ModalProps } from './interfaces';
 })
 export class InstallmentManagementComponent implements OnInit {
   data: ModalProps = inject(MAT_DIALOG_DATA);
-  installments: OrderInstallment[] = [];
+  installments: ManagementInstallments[] = [];
 
   readonly dialogRef = inject(MatDialogRef<InstallmentManagementComponent>);
 
@@ -32,7 +32,7 @@ export class InstallmentManagementComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.data.installments)
-      this.installments = this.data.installments?.map(x => ({ ...x }));
+      this.installments = this.data.installments?.map(x => ({ ...x, originalAmount: x.amount }));
   }
 
   getBrDate = (value: Date | null) =>
@@ -61,7 +61,7 @@ export class InstallmentManagementComponent implements OnInit {
     if (!paidDifference)
       return;
 
-    const newAmount = nextInstallment.amount - paidDifference;
+    const newAmount = nextInstallment.originalAmount - paidDifference;
     if (newAmount < 0)
       return;
 

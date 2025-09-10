@@ -9,6 +9,7 @@ import { DataTableColumnProp } from 'src/app/interfaces/data-table';
 import { Customer } from 'src/app/models/customer/customer';
 import { CustomerService } from 'src/app/services/customer/customer.service';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
+import { getCustomersNameNickName } from 'src/app/utils/text-format';
 
 @Component({
   selector: 'app-customers-page',
@@ -20,7 +21,6 @@ export class CustomersPageComponent implements OnInit {
   private readonly searchText$ = new Subject<DataTableFilter | string>();
   readonly columns: DataTableColumnProp<Customer>[] = [
     { description: "Nome", fieldName: "name", width: '50%' },
-    { description: "Apelido", fieldName: "nickname" },
     { description: "Telefone", fieldName: "phone" },
   ]
   customers: Customer[] = [];
@@ -44,7 +44,7 @@ export class CustomersPageComponent implements OnInit {
         return this.customerService.get({ name: filters.filter, offset: filters.offset, take: filters.take })
       }),
     ).subscribe(customers => {
-      this.customers = customers[0];
+      this.customers = getCustomersNameNickName(customers[0]);
       this.dataCount = customers[1]
     });
   }

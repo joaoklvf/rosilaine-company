@@ -8,7 +8,9 @@
     class="form-control"
     (focus)="onFocus($event)"
     (keyup)="onKeyUp($event.target)"
+    (input)="onInput($event.target)"
     name="search-input"
+    [formControl]="currentValue"
   />
   <mat-autocomplete
     #auto="matAutocomplete"

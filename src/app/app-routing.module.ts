@@ -10,7 +10,6 @@ const routes: Routes = [
   { path: 'customers/create', loadComponent: () => import('./routes/customers/pages/customer-create/customer-create.component').then(x => x.CustomerCreateComponent) },
   { path: 'customer/:id', loadComponent: () => import('./routes/customers/pages/customer-create/customer-create.component').then(x => x.CustomerCreateComponent) },
   { path: 'products', loadComponent: () => import('./routes/products/pages/products-page/products-page.component').then(x => x.ProductsPageComponent) },
-  { path: 'products/create', loadComponent: () => import('./routes/products/pages/product-create/product-create.component').then(x => x.ProductCreateComponent) },
   { path: 'product/:id', loadComponent: () => import('./routes/products/pages/product-create/product-create.component').then(x => x.ProductCreateComponent) },
   { path: 'order-status', loadComponent: () => import('./routes/order-status/order-status.component').then(x => x.OrderStatusComponent) },
   { path: 'order-item-status', loadComponent: () => import('./routes/order-item-status/order-item-status.component').then(x => x.OrderItemStatusComponent) },
