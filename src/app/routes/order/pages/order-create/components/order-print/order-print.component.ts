@@ -11,7 +11,11 @@ import { getAmountStr, getBrCurrencyStr, getBrDateStr } from 'src/app/utils/text
   styleUrl: './order-print.component.scss'
 })
 export class OrderPrintComponent implements OnInit {
-  constructor(private router: Router, private snackBarService: SnackBarService) { }
+  constructor(
+    private readonly router: Router, 
+    private readonly snackBarService: SnackBarService
+  ) { }
+
   order?: Order;
 
   ngOnInit(): void {

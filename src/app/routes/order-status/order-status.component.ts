@@ -17,7 +17,7 @@ import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
   styleUrl: './order-status.component.scss'
 })
 export class OrderStatusComponent implements OnInit {
-  private searchText$ = new Subject<DataTableFilter | string>();
+  private readonly searchText$ = new Subject<DataTableFilter | string>();
   readonly columns: DataTableColumnProp<OrderStatus>[] = [
     { description: "Status", fieldName: "description", width: '85%' },
   ]
@@ -25,10 +25,14 @@ export class OrderStatusComponent implements OnInit {
   orderStatus: OrderStatus = new OrderStatus();
   orderStatuses: OrderStatus[] = [];
   dataCount = 0;
+  addUpdateButtonText = 'Adicionar';
 
   @ViewChild("orderStatusDescription") orderStatusDescriptionField: ElementRef = new ElementRef(null);
 
-  constructor(private orderStatusService: OrderStatusService, private snackBarService: SnackBarService) { }
+  constructor(
+    private readonly orderStatusService: OrderStatusService,
+    private readonly snackBarService: SnackBarService,
+  ) { }
 
   ngOnInit() {
     this.searchText$.pipe(
@@ -48,6 +52,7 @@ export class OrderStatusComponent implements OnInit {
 
   edit(orderStatus: OrderStatus): void {
     this.orderStatus = { ...orderStatus };
+    this.addUpdateButtonText = 'Atualizar';
   }
 
   add() {
@@ -75,6 +80,8 @@ export class OrderStatusComponent implements OnInit {
 
       this.orderStatusDescriptionField.nativeElement.focus();
     }
+    
+    this.addUpdateButtonText = 'Adicionar';
   }
 
   openDialog(itemStatus: OrderStatus): void {

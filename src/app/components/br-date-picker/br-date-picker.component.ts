@@ -44,6 +44,6 @@ export class BrDatePickerComponent {
   }
 
   doubleClickAction() {
-    this.handleDoubleClick && this.handleDoubleClick.emit();
+    this.handleDoubleClick?.emit();
   }
 }

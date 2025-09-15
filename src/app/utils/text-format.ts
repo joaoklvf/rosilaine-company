@@ -1,3 +1,5 @@
+import { Customer } from "../models/customer/customer";
+
 export const getBrCurrencyStr = (value: number | string) =>
   Number(value).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
@@ -14,3 +16,9 @@ export const getDateFromStr = (value: string | Date) => {
   const dataNascimentoSplitted = String(value).split('/').map(x => Number(x));
   return new Date(dataNascimentoSplitted[2], dataNascimentoSplitted[1] - 1, dataNascimentoSplitted[0])
 }
+
+export const getCustomersNameNickName = (customers: Customer[]) =>
+  customers.map(customer => getCustomerNameNickName(customer));
+
+export const getCustomerNameNickName = (customer: Customer) =>
+  ({ ...customer, name: `${customer.name} ${customer.nickname ?? ''}`.trim() });

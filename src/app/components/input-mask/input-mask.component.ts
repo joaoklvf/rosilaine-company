@@ -22,10 +22,14 @@ export class InputMaskComponent {
     this.handleOnChange.emit(this.value);
   }
 
-  doubleClickAction(){
-    this.handleDoubleClick && this.handleDoubleClick.emit();
+  doubleClickAction() {
+    this.handleDoubleClick?.emit();
   }
 
   get displayValue() { return this.getCurrencyValue(this.value) }
   set displayValue(v) { this.value = (parseFloat(v.replace(/\D/g, '')) || 0) / 100 }
+
+  onFucusEvent(target: any) {
+    target?.select()
+  }
 }

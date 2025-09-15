@@ -1,12 +1,9 @@
 <div class="flex justify-between">
   <h1 class="text-white">Produtos</h1>
-  <button
-    type="button"
-    class="btn btn-primary h-100"
-    (click)="addPageNavigate()"
-  >
-    Criar
-  </button>
+  <app-product-create 
+  [product]="product"
+  (saveProductAction)="onSaveProduct($event)"
+  />
 </div>
 
 <div class="card mb-3">
@@ -19,7 +16,7 @@
           name="Pesquisar"
           id="Pesquisar"
           class="form-control"
-          (keyup)="onDescriptionKeyUp($event.target!)"
+          (input)="onDescriptionKeyUp($event.target!)"
           placeholder="Busque por nome do produto ou código"
         />
       </div>
