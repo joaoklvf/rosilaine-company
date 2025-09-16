@@ -1,5 +1,5 @@
-@import "tailwindcss";
-@import "./components.scss";
+@use "tailwindcss";
+@use "./components.scss";
 
 @font-face {
   font-family: pacifico-regular;
