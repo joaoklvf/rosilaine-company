@@ -4,7 +4,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-import { AppRoutingModule } from './app-routing.module';
 
 import { LoaderComponent } from "./components/loader/loader.component";
 import { NavbarComponent } from './components/navbar/navbar.component';
@@ -12,16 +11,14 @@ import { LoaderInterceptor } from './services/interceptors/loader-interceptor.in
 
 @NgModule({
     declarations: [
-        AppComponent,
     ],
     bootstrap: [
-        AppComponent
     ],
     imports: [
+        AppComponent,
         BrowserModule,
-        AppRoutingModule,
         NavbarComponent,
-        LoaderComponent
+        LoaderComponent,
     ],
     providers: [
         provideHttpClient(withInterceptorsFromDi()),

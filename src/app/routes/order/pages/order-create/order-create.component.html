@@ -1,4 +1,4 @@
-<div class="flex text-white justify-between align-items-end">
+<div class="flex text-white justify-between items-end">
   <h1>{{ title }}</h1>
   <h5>Atualizado em {{ orderUpdated }}</h5>
 </div>
@@ -18,7 +18,7 @@
         [isRounded]="order().isRounded"
         (saveAction)="saveInstallmentsChanges($event)"
       />
-      <div class="flex justify-between flex-grow-1 align-items-end">
+      <div class="flex justify-between flex-grow-1 items-end">
         <div>
           <button
             type="button"
@@ -167,7 +167,7 @@
           <td style="width: 5%">{{ orderItem.itemAmount }}</td>
           <td style="width: 20%">{{ orderItem.product.description }}</td>
           <td style="width: 15%">
-            <mat-form-field class="w-100">
+            <mat-form-field class="w-full">
               <mat-select
                 (selectionChange)="changeItemStatus($event, orderItem)"
                 [(value)]="orderItem.itemStatus.id"

@@ -8,8 +8,8 @@ describe('BrDatePickerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ BrDatePickerComponent ]
-    })
+    imports: [BrDatePickerComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(BrDatePickerComponent);
