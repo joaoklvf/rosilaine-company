@@ -1,4 +1,4 @@
-import { Component, HostBinding, OnInit } from '@angular/core';
+import { Component, HostBinding, OnInit, output } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -7,20 +7,10 @@ import { RouterModule } from '@angular/router';
   styleUrls: ['./navbar.component.scss'],
   imports: [RouterModule]
 })
-export class NavbarComponent implements OnInit {
-  @HostBinding('class.dark') isDarkMode: boolean = false; // Initial theme
+export class NavbarComponent {
+  readonly toggleTheme = output<void>();
 
-  toggleTheme() {
-    this.isDarkMode = !this.isDarkMode;
-    // Optionally, save the preference to local storage
-    localStorage.setItem('theme', this.isDarkMode ? 'dark' : 'light');
-  }
-
-  // Load theme preference on initialization
-  ngOnInit() {
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-      this.isDarkMode = savedTheme === 'dark';
-    }
+  onToggleButtonClick() {
+    this.toggleTheme.emit();
   }
 }

@@ -14,7 +14,6 @@ import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
   selector: 'app-product-create',
   imports: [InputMaskComponent, CustomAutocompleteComponent, FormsModule],
   templateUrl: './product-create.component.html',
-  styleUrl: './product-create.component.scss'
 })
 export class ProductCreateComponent implements OnInit, OnChanges {
   constructor(

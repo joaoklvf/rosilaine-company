@@ -11,7 +11,6 @@ import { IInstallmentHeader } from './interfaces';
   selector: 'app-installments-header',
   imports: [MatSelectModule, ReactiveFormsModule, BrDatePickerComponent, FormsModule, MatSlideToggleModule],
   templateUrl: './installments-header.component.html',
-  styleUrl: './installments-header.component.scss'
 })
 export class InstallmentsHeaderComponent implements OnChanges {
   readonly saveAction = output<IInstallmentHeader>();

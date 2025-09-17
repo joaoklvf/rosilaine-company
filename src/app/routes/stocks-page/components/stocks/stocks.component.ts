@@ -11,7 +11,6 @@ import { Stock } from 'src/app/models/stock/stock';
   selector: 'app-stocks',
   imports: [DataTableComponent, FormsModule],
   templateUrl: './stocks.component.html',
-  styleUrl: './stocks.component.scss'
 })
 export class StocksComponent {
   readonly stocks = input<Stock[]>([]);

@@ -14,7 +14,6 @@ import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
   selector: 'app-customer-tags',
   imports: [DataTableComponent, FormsModule],
   templateUrl: './customer-tags.component.html',
-  styleUrl: './customer-tags.component.scss'
 })
 export class CustomerTagsComponent {
   readonly columns: DataTableColumnProp<CustomerTag>[] = [

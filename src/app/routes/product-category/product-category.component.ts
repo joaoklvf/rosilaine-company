@@ -14,7 +14,6 @@ import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
   selector: 'app-product-category',
   imports: [DataTableComponent, FormsModule],
   templateUrl: './product-category.component.html',
-  styleUrl: './product-category.component.scss'
 })
 export class ProductCategoryComponent {
   private searchText$ = new Subject<DataTableFilter | string>();

@@ -23,7 +23,6 @@ export interface CustomDialogComponentProps {
   imports: [MatDialogActions, MatDialogClose, MatDialogTitle, MatDialogContent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './custom-dialog.component.html',
-  styleUrl: './custom-dialog.component.scss'
 })
 export class CustomDialogComponent {
   data: CustomDialogComponentProps = inject(MAT_DIALOG_DATA);

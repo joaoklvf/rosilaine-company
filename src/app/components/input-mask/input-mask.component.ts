@@ -5,7 +5,6 @@ import { getBrCurrencyStr } from 'src/app/utils/text-format';
 @Component({
   selector: 'app-input-mask',
   templateUrl: './input-mask.component.html',
-  styleUrls: ['./input-mask.component.scss'],
   imports: [FormsModule]
 })
 export class InputMaskComponent {

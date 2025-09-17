@@ -8,7 +8,6 @@ import { debounceTime, map } from 'rxjs/operators';
 @Component({
   selector: 'app-custom-autocomplete',
   templateUrl: './custom-autocomplete.component.html',
-  styleUrls: ['./custom-autocomplete.component.scss'],
   imports: [MatAutocompleteModule, ReactiveFormsModule, MatInputModule, FormsModule]
 })
 

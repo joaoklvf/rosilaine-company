@@ -18,7 +18,6 @@ import { ProductCreateComponent } from "../product-create/product-create.compone
   selector: 'app-products-page',
   imports: [RouterModule, DataTableComponent, CustomAutocompleteComponent, ProductCreateComponent],
   templateUrl: './products-page.component.html',
-  styleUrl: './products-page.component.scss'
 })
 export class ProductsPageComponent implements OnInit {
   private readonly searchText$ = new Subject<DataTableFilter<{ description: string, productCode: string, categoryId: string }> | string>();

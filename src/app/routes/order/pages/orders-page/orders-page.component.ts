@@ -20,7 +20,6 @@ import { DataTableComponent } from 'src/app/components/data-table/data-table.com
   selector: 'app-orders-page',
   imports: [RouterModule, DataTableComponent, CustomAutocompleteComponent],
   templateUrl: './orders-page.component.html',
-  styleUrl: './orders-page.component.scss'
 })
 
 export class OrdersPageComponent implements OnInit {

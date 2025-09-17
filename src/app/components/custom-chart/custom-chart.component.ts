@@ -9,7 +9,6 @@ import { getBrCurrencyStr } from 'src/app/utils/text-format';
   standalone: true,
   imports: [BaseChartDirective],
   templateUrl: './custom-chart.component.html',
-  styleUrl: './custom-chart.component.scss',
   providers: [provideCharts(withDefaultRegisterables())]
 })
 export class CustomChartComponent implements OnInit {

@@ -1,5 +1,6 @@
 @use "tailwindcss";
 @use "./components.scss";
+@custom-variant dark (&:where(.dark, .dark *));
 
 @font-face {
   font-family: pacifico-regular;
@@ -64,5 +65,4 @@ app-br-date-picker .mat-mdc-form-field-subscript-wrapper {
 
 .pacifico-font {
   font-family: 'pacifico-regular', 'arial', sans-serif;
-  /* Or other fallback fonts */
 }

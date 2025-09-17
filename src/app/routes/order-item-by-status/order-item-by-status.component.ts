@@ -18,7 +18,6 @@ import { DataTableComponent } from "../../components/data-table/data-table.compo
   selector: 'app-order-item-by-status',
   imports: [DataTableComponent, MatFormFieldModule, MatSelectModule, FormsModule],
   templateUrl: './order-item-by-status.component.html',
-  styleUrl: './order-item-by-status.component.scss'
 })
 export class OrderItemByStatusComponent implements OnInit {
   readonly dialog = inject(MatDialog);

@@ -14,7 +14,6 @@ import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
   selector: 'app-order-status',
   imports: [DataTableComponent, FormsModule],
   templateUrl: './order-status.component.html',
-  styleUrl: './order-status.component.scss'
 })
 export class OrderStatusComponent implements OnInit {
   private readonly searchText$ = new Subject<DataTableFilter | string>();

@@ -10,7 +10,6 @@ import { MatIconModule } from '@angular/material/icon';
 @Component({
   selector: 'app-custom-chips-autocomplete',
   templateUrl: './custom-chips-autocomplete.component.html',
-  styleUrl: './custom-chips-autocomplete.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [MatFormFieldModule, MatChipsModule, FormsModule, MatAutocompleteModule, MatIconModule]
 })

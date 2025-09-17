@@ -8,7 +8,6 @@ import { getAmountStr, getBrCurrencyStr, getBrDateStr } from 'src/app/utils/text
   selector: 'app-order-print',
   imports: [],
   templateUrl: './order-print.component.html',
-  styleUrl: './order-print.component.scss'
 })
 export class OrderPrintComponent implements OnInit {
   constructor(

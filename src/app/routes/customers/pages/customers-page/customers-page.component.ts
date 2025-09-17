@@ -15,7 +15,6 @@ import { getCustomersNameNickName } from 'src/app/utils/text-format';
   selector: 'app-customers-page',
   imports: [RouterModule, DataTableComponent],
   templateUrl: './customers-page.component.html',
-  styleUrl: './customers-page.component.scss'
 })
 export class CustomersPageComponent implements OnInit {
   private readonly searchText$ = new Subject<DataTableFilter | string>();

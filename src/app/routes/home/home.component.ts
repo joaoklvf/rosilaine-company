@@ -12,7 +12,6 @@ import { HomeDashOptions } from './interfaces/home';
   selector: 'app-home',
   imports: [InstallmentsDashboardComponent, MatTabsModule, InstallmentsDashboardComponent],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.scss'
 })
 export class HomeComponent implements OnInit {
   readonly TAKE_OFFSET_OPTIONS = { take: 15, offset: 0 };

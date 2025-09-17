@@ -22,7 +22,6 @@ export const MY_FORMATS = {
 @Component({
   selector: 'app-br-date-picker',
   templateUrl: './br-date-picker.component.html',
-  styleUrls: ['./br-date-picker.component.scss'],
   providers: [
     {
       provide: DateAdapter,

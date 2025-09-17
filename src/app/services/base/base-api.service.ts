@@ -9,7 +9,10 @@ import { DeleteResult } from './delete-result';
   providedIn: 'root'
 })
 export class BaseApiService<T extends { id?: string }> {
-  constructor(public http: HttpClient, public messageService: MessageService, @Inject('collection') public collection: string) { }
+  constructor
+  (public http: HttpClient, 
+    public messageService: MessageService, 
+    @Inject('collection') public collection: string) { }
   public apiUrl = `${environment.apiUrl}/${this.collection}`;// URL to web api
 
   /** GET orders from the server */
