@@ -61,46 +61,42 @@
         }
       </mat-select>
     </mat-form-field>
-    <div class="card mb-3">
-      <div class="card-body table-responsive">
-        <table
-          class="table table-responsive table-striped table-hover table-bordered"
-        >
-          <thead>
-            <tr>
-              <th scope="col">Quantidade</th>
-              <th scope="col">Código</th>
-              <th scope="col">Produto</th>
-              <th scope="col">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            @for(item of itemsByStatus; track item){
-            <tr>
-              <td>{{ item.amount }}</td>
-              <td>{{ item.productCode }}</td>
-              <td>{{ item.productDescription }}</td>
-              <mat-form-field class="w-100">
-                <mat-select
-                  (selectionChange)="changeItemStatus($event, item.productId)"
-                  [(value)]="item.statusId"
-                >
-                  @for (status of orderItemStatuses; track status) {
-                  <mat-option [value]="status.id">
-                    {{ status.description }}
-                  </mat-option>
-                  }
-                </mat-select>
-              </mat-form-field>
-            </tr>
-            }
-          </tbody>
-        </table>
-        <app-data-table-pagination
-          (searchAction)="changePageAction($event)"
-          [totalPages]="pagesCount"
-        />
-      </div>
-    </div>
+    <table
+      class="table table-responsive table-striped table-hover table-bordered mb-3"
+    >
+      <thead>
+        <tr>
+          <th scope="col">Quantidade</th>
+          <th scope="col">Código</th>
+          <th scope="col">Produto</th>
+          <th scope="col">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for(item of itemsByStatus; track item){
+        <tr>
+          <td>{{ item.amount }}</td>
+          <td>{{ item.productCode }}</td>
+          <td>{{ item.productDescription }}</td>
+          <mat-form-field class="w-100">
+            <mat-select
+              (selectionChange)="changeItemStatus($event, item.productId)"
+              [(value)]="item.statusId"
+            >
+              @for (status of orderItemStatuses; track status) {
+              <mat-option [value]="status.id">
+                {{ status.description }}
+              </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </tr>
+        }
+      </tbody>
+    </table>
+    <app-data-table-pagination
+      (searchAction)="changePageAction($event)"
+      [totalPages]="pagesCount"
+    />
   </div>
 </div>
