@@ -2,21 +2,22 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelectModule } from '@angular/material/select';
+import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { catchError, debounceTime, of, Subject, switchMap, tap } from 'rxjs';
 import { CustomDialogComponent } from 'src/app/components/custom-dialog/custom-dialog.component';
 import { DataTableFilter } from 'src/app/components/data-table/data-table-interfaces';
 import { DataTableColumnProp } from 'src/app/interfaces/data-table';
 import { OrderItemByStatus } from 'src/app/interfaces/order-item-by-status';
+import { OrderItem } from 'src/app/models/order/order-item/order-item';
 import { OrderItemStatus } from 'src/app/models/order/order-item/order-item-status';
 import { OrderItemStatusService } from 'src/app/services/order/order-item-status/order-item-status.service';
 import { OrderItemService } from 'src/app/services/order/order-item/order-item.service';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
-import { DataTableComponent } from "../../components/data-table/data-table.component";
+import { DataTablePaginationComponent } from "src/app/components/data-table/data-table-pagination/data-table-pagination.component";
 
 @Component({
   selector: 'app-order-item-by-status',
-  imports: [DataTableComponent, MatFormFieldModule, MatSelectModule, FormsModule],
+  imports: [MatFormFieldModule, MatSelectModule, FormsModule, DataTablePaginationComponent],
   templateUrl: './order-item-by-status.component.html',
   styleUrl: './order-item-by-status.component.scss'
 })
@@ -26,7 +27,9 @@ export class OrderItemByStatusComponent implements OnInit {
     { description: "Quantidade", fieldName: "amount" },
     { description: "Produto", fieldName: "productDescription" },
     { description: "Status", fieldName: "statusDescription" },
+    { description: "Status", fieldName: "statusDescription" },
   ]
+
   orderItemStatuses: OrderItemStatus[] = [];
   itemsByStatus: OrderItemByStatus[] = [];
   private readonly $searchStatus = new Subject<DataTableFilter | string>();
@@ -68,7 +71,7 @@ export class OrderItemByStatusComponent implements OnInit {
       this.selectedStatusId = filter;
       return;
     }
-    
+
     this.$searchStatus.next({ ...filter, filter: this.selectedStatusId });
   }
 
@@ -91,7 +94,7 @@ export class OrderItemByStatusComponent implements OnInit {
   }
 
   updateItems(oldId: string, newId: string) {
-    this.orderItemService.manyStatusChange(oldId, newId)
+    this.orderItemService.changeManyStatus(oldId, newId)
       .pipe(
         tap(_ => {
           this.snackBarService.success('Alteração realizada com sucesso');
@@ -100,6 +103,33 @@ export class OrderItemByStatusComponent implements OnInit {
         catchError(() => of(this.snackBarService.error('Falha ao alterar status')))
       )
       .subscribe();
+  }
 
+  changeItemStatus(selectEvent: MatSelectChange<string>, productId: string) {
+    const optionSelected = this.orderItemStatuses.find(x => x.id === selectEvent.value);
+    if (!optionSelected)
+      return;
+
+    this.updateItem(optionSelected.id!, productId);
+  }
+
+  updateItem(statusId: string, productId: string) {
+    this.orderItemService.changeStatusByProduct(statusId, productId)
+      .pipe(
+        tap(_ => {
+          this.snackBarService.success('Alteração realizada com sucesso');
+          this.$searchStatus.next(this.selectedStatusId!)
+        }),
+        catchError(() => of(this.snackBarService.error('Falha ao alterar status')))
+      )
+      .subscribe();
+  }
+
+  changePageAction(skip: number) {
+    this.filterData({ filter: '', offset: skip, take: 15 })
+  }
+
+  get pagesCount() {
+    return Math.ceil(this.dataCount / 15);
   }
 }

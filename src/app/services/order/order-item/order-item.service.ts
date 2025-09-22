@@ -23,8 +23,15 @@ export class OrderItemService extends BaseApiService<OrderItem> {
       );
   }
 
-  manyStatusChange(oldStatusId: string, newStatusId: string) {
+  changeManyStatus(oldStatusId: string, newStatusId: string) {
     return this.http.put<any>(`${this.apiUrl}/many-status-change`, { oldStatusId, newStatusId }).pipe(
+      tap(_ => this.log(`updated installments`)),
+      catchError(this.handleError<any>('updateT'))
+    );
+  }
+
+  changeStatusByProduct(newStatusId: string, productId: string) {
+    return this.http.put<any>(`${this.apiUrl}/product-status-change`, { newStatusId, productId }).pipe(
       tap(_ => this.log(`updated installments`)),
       catchError(this.handleError<any>('updateT'))
     );

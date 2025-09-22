@@ -4,4 +4,5 @@ export interface OrderItemByStatus {
   statusId: string;
   productId: string;
   productDescription: string;
+  productCode: string;
 }
