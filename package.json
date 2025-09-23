@@ -2,7 +2,7 @@
   "name": "angular-tour-of-heroes",
   "version": "0.0.0",
   "scripts": {
-    "preinstall": "npx only-allow npm",
+    "preinstall": "npx only-allow pnpm",
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",

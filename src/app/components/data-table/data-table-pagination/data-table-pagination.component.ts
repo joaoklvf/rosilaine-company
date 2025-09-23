@@ -9,23 +9,42 @@ import { getPages } from './utils/data-table-pagination-util';
 })
 export class DataTablePaginationComponent {
   readonly searchAction = output<number>();
-  readonly totalPages = input(1);
+  readonly dataPerPage = input(15);
+  readonly dataCount = input(0);
+
   currentOffset = 0;
+
+  get limitResults() {
+    return this.dataPerPage();
+  }
+
+  get totalResults() {
+    return this.dataCount();
+  }
+
+  get firstResultOffset() {
+    return this.limitResults * this.currentOffset + 1
+  }
+
+  get lastResultOffset() {
+    const value = this.limitResults * this.currentPage;
+    return value > this.totalResults ? this.totalResults : value;
+  }
+
+  get pagesCount() {
+    return Math.ceil(this.totalResults / this.limitResults);
+  }
 
   get currentPage() {
     return this.currentOffset + 1;
   }
 
-  get _totalPages() {
-    return this.totalPages();
-  }
-
   get pages() {
-    return getPages(this._totalPages, this.currentPage)
+    return getPages(this.pagesCount, this.currentPage)
   }
 
   get hasMoreData() {
-    return this._totalPages > 1
+    return this.pagesCount > 1
   }
 
   onPrevButtonClick() {
@@ -37,7 +56,7 @@ export class DataTablePaginationComponent {
   }
 
   onNextButtonClick() {
-    if (this.currentOffset === this._totalPages - 1)
+    if (this.currentOffset === this.pagesCount - 1)
       return;
 
     this.currentOffset++;

@@ -97,6 +97,7 @@
   </table>
   <app-data-table-pagination
     (searchAction)="changePageAction($event)"
-    [totalPages]="pagesCount"
+    [dataCount]="dataCount"
+    [dataPerPage]="15"
   />
 </div>

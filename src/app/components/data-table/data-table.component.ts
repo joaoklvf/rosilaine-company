@@ -42,10 +42,6 @@ export class DataTableComponent<T> {
     return false;
   }
 
-  get pagesCount() {
-    return Math.ceil(this.dataCount() / this.dataPerPage());
-  }
-
   get readyData() {
     return this.data()
   }

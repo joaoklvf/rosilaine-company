@@ -6,14 +6,13 @@ import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { catchError, debounceTime, of, Subject, switchMap, tap } from 'rxjs';
 import { CustomDialogComponent } from 'src/app/components/custom-dialog/custom-dialog.component';
 import { DataTableFilter } from 'src/app/components/data-table/data-table-interfaces';
+import { DataTablePaginationComponent } from "src/app/components/data-table/data-table-pagination/data-table-pagination.component";
 import { DataTableColumnProp } from 'src/app/interfaces/data-table';
 import { OrderItemByStatus } from 'src/app/interfaces/order-item-by-status';
-import { OrderItem } from 'src/app/models/order/order-item/order-item';
 import { OrderItemStatus } from 'src/app/models/order/order-item/order-item-status';
 import { OrderItemStatusService } from 'src/app/services/order/order-item-status/order-item-status.service';
 import { OrderItemService } from 'src/app/services/order/order-item/order-item.service';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
-import { DataTablePaginationComponent } from "src/app/components/data-table/data-table-pagination/data-table-pagination.component";
 
 @Component({
   selector: 'app-order-item-by-status',
@@ -127,9 +126,5 @@ export class OrderItemByStatusComponent implements OnInit {
 
   changePageAction(skip: number) {
     this.filterData({ filter: '', offset: skip, take: 15 })
-  }
-
-  get pagesCount() {
-    return Math.ceil(this.dataCount / 15);
   }
 }
