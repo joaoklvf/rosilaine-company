@@ -20,20 +20,24 @@
     <h1>{{ _title }}</h1>
     }
     <table
-      class="table table-responsive table-striped table-hover table-bordered"
+      class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
     >
-      <thead>
+      <thead
+        class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+      >
         <tr>
           @for(column of columns(); track column) {
-          <th scope="col">{{ column.description }}</th>
+          <th scope="col" class="px-6 py-3">{{ column.description }}</th>
           } @if(showActions) {
-          <th scope="col">Ações</th>
+          <th scope="col" class="px-6 py-3">Ações</th>
           }
         </tr>
       </thead>
       <tbody>
         @for(row of readyData; track row){
-        <tr>
+        <tr
+          class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600"
+        >
           @for(column of columns(); track column){
           <td
             width="{{ getColumnWidth(column) }}"
