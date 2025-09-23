@@ -3,151 +3,153 @@
   <h5>Atualizado em {{ orderUpdated }}</h5>
 </div>
 @if(order().orderItems.length > 0){
-<div class="card mb-3">
-  <div class="card-body">
-    <div class="flex gap-2 flex-wrap white-space-nowrap">
+<div
+  class="w-full p-4 text-center bg-white border border-gray-200 rounded-lg shadow-sm sm:p-8 dark:bg-gray-800 dark:border-gray-700 mb-3"
+>
+  <div class="flex gap-2 flex-wrap white-space-nowrap">
+    <div>
+      <p><b>Total do pedido</b></p>
+      <div class="fs-5 fw-medium" style="color: limegreen">
+        {{ orderTotal }}
+      </div>
+    </div>
+    <app-installments-header
+      [installmentsAmount]="order().installments?.length ?? 1"
+      [firstInstallmentDate]="order().firstInstallmentDate"
+      [isRounded]="order().isRounded"
+      (saveAction)="saveInstallmentsChanges($event)"
+    />
+    <div class="flex justify-between flex-grow-1 items-end">
       <div>
-        <p><b>Total do pedido</b></p>
-        <div class="fs-5 fw-medium" style="color: limegreen">
-          {{ orderTotal }}
-        </div>
-      </div>
-      <app-installments-header
-        [installmentsAmount]="order().installments?.length ?? 1"
-        [firstInstallmentDate]="order().firstInstallmentDate"
-        [isRounded]="order().isRounded"
-        (saveAction)="saveInstallmentsChanges($event)"
-      />
-      <div class="flex justify-between flex-grow-1 items-end">
-        <div>
-          <button
-            type="button"
-            class="btn btn-primary text-white"
-            (click)="installmentsManagement()"
-          >
-            Visualizar
-          </button>
-          <button
-            type="button"
-            class="btn btn-primary text-white ms-2"
-            (click)="print()"
-          >
-            Imprimir
-          </button>
-        </div>
-        <div>
-          <button
-            type="button"
-            class="btn btn-outline-primary ms-2 btn-sm flex"
-            title="Salvar"
-            (click)="saveOrderButtonClick()"
-          >
-            <mat-icon fontIcon="save" />
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-}
-<div class="card mb-3">
-  <div class="card-body">
-    <div class="row">
-      <app-custom-autocomplete
-        [label]="'Cliente'"
-        (handleOnChange)="setCustomer($event)"
-        [data]="customers"
-        [displayValue]="'name'"
-        [value]="order().customer"
-        class="col-md-3 mb-md-0 mb-2"
-        (searchAction)="filterCustomers($event)"
-      ></app-custom-autocomplete>
-      <app-custom-autocomplete
-        [label]="'Cliente final'"
-        (handleOnChange)="setEndCustomerAndSave($event)"
-        [data]="endCustomers"
-        [displayValue]="'name'"
-        [value]="endCustomer()"
-        class="col-md-3 mb-md-0 mb-2"
-        (searchAction)="filterEndCustomers($event)"
-      ></app-custom-autocomplete>
-      <app-custom-autocomplete
-        [label]="'Status'"
-        (handleOnChange)="setOrderStatus($event)"
-        [data]="orderStatuses"
-        displayValue="description"
-        [value]="order().status"
-        class="col-md-3 mb-md-0 mb-2"
-        (searchAction)="filterStatus($event)"
-      ></app-custom-autocomplete>
-      <app-br-date-picker
-        [label]="'Data do pedido'"
-        [value]="order().orderDate"
-        (handleOnChange)="setOrderDate($event)"
-        class="col-md-3"
-      ></app-br-date-picker>
-    </div>
-  </div>
-</div>
-<div class="card mb-3">
-  <div class="card-body">
-    <div class="row">
-      <div class="col-lg-4">
-        <app-custom-autocomplete
-          [label]="'Produto'"
-          (handleOnChange)="setProduct($event)"
-          [data]="products"
-          [displayValue]="'description'"
-          [value]="orderItem.product"
-          (searchAction)="filterProducts($event)"
-        ></app-custom-autocomplete>
-      </div>
-      <div class="col-lg-2">
-        <app-custom-autocomplete
-          [label]="'Status'"
-          (handleOnChange)="setOrderItemStatus($event)"
-          [data]="orderItemStatuses"
-          displayValue="description"
-          [value]="orderItem.itemStatus"
-          (searchAction)="filterItemStatus($event)"
-        ></app-custom-autocomplete>
-      </div>
-      <div class="col-lg-2">
-        <app-input-mask
-          [label]="'De (R$)'"
-          [value]="orderItem.itemOriginalPrice"
-          [disabled]="true"
-        />
-      </div>
-      <div class="col-lg-2">
-        <app-input-mask
-          [label]="'Por (R$)'"
-          [value]="orderItem.itemSellingPrice"
-          (handleOnChange)="setPrice($event)"
+        <button
+          type="button"
+          class="btn btn-primary text-white"
+          (click)="installmentsManagement()"
         >
-        </app-input-mask>
+          Visualizar
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary text-white ms-2"
+          (click)="print()"
+        >
+          Imprimir
+        </button>
       </div>
-      <div class="col-lg-2">
-        <label for="product-amount">Quantidade</label>
-        <input
-          type="number"
-          class="form-control"
-          id="product-amount"
-          [(ngModel)]="orderItem.itemAmount"
-        />
-      </div>
-      <div class="col-lg-12 align-content-end text-end mt-lg-2">
-        <button type="button" class="btn btn-primary" (click)="addUpdateItem()">
-          {{ addUpdateItemButtonText }}
+      <div>
+        <button
+          type="button"
+          class="btn btn-outline-primary ms-2 btn-sm flex"
+          title="Salvar"
+          (click)="saveOrderButtonClick()"
+        >
+          <mat-icon fontIcon="save" />
         </button>
       </div>
     </div>
   </div>
 </div>
+}
+<div
+  class="w-full p-4 text-center bg-white border border-gray-200 rounded-lg shadow-sm sm:p-8 dark:bg-gray-800 dark:border-gray-700 mb-3"
+>
+  <div class="row">
+    <app-custom-autocomplete
+      [label]="'Cliente'"
+      (handleOnChange)="setCustomer($event)"
+      [data]="customers"
+      [displayValue]="'name'"
+      [value]="order().customer"
+      class="col-md-3 mb-md-0 mb-2"
+      (searchAction)="filterCustomers($event)"
+    ></app-custom-autocomplete>
+    <app-custom-autocomplete
+      [label]="'Cliente final'"
+      (handleOnChange)="setEndCustomerAndSave($event)"
+      [data]="endCustomers"
+      [displayValue]="'name'"
+      [value]="endCustomer()"
+      class="col-md-3 mb-md-0 mb-2"
+      (searchAction)="filterEndCustomers($event)"
+    ></app-custom-autocomplete>
+    <app-custom-autocomplete
+      [label]="'Status'"
+      (handleOnChange)="setOrderStatus($event)"
+      [data]="orderStatuses"
+      displayValue="description"
+      [value]="order().status"
+      class="col-md-3 mb-md-0 mb-2"
+      (searchAction)="filterStatus($event)"
+    ></app-custom-autocomplete>
+    <app-br-date-picker
+      [label]="'Data do pedido'"
+      [value]="order().orderDate"
+      (handleOnChange)="setOrderDate($event)"
+      class="col-md-3"
+    ></app-br-date-picker>
+  </div>
+</div>
+<div
+  class="w-full p-4 text-center bg-white border border-gray-200 rounded-lg shadow-sm sm:p-8 dark:bg-gray-800 dark:border-gray-700 mb-3"
+>
+  <div class="row">
+    <div class="col-lg-4">
+      <app-custom-autocomplete
+        [label]="'Produto'"
+        (handleOnChange)="setProduct($event)"
+        [data]="products"
+        [displayValue]="'description'"
+        [value]="orderItem.product"
+        (searchAction)="filterProducts($event)"
+      ></app-custom-autocomplete>
+    </div>
+    <div class="col-lg-2">
+      <app-custom-autocomplete
+        [label]="'Status'"
+        (handleOnChange)="setOrderItemStatus($event)"
+        [data]="orderItemStatuses"
+        displayValue="description"
+        [value]="orderItem.itemStatus"
+        (searchAction)="filterItemStatus($event)"
+      ></app-custom-autocomplete>
+    </div>
+    <div class="col-lg-2">
+      <app-input-mask
+        [label]="'De (R$)'"
+        [value]="orderItem.itemOriginalPrice"
+        [disabled]="true"
+      />
+    </div>
+    <div class="col-lg-2">
+      <app-input-mask
+        [label]="'Por (R$)'"
+        [value]="orderItem.itemSellingPrice"
+        (handleOnChange)="setPrice($event)"
+      >
+      </app-input-mask>
+    </div>
+    <div class="col-lg-2">
+      <label for="product-amount">Quantidade</label>
+      <input
+        type="number"
+        class="form-control"
+        id="product-amount"
+        [(ngModel)]="orderItem.itemAmount"
+      />
+    </div>
+    <div class="col-lg-12 align-content-end text-end mt-lg-2">
+      <button type="button" class="btn btn-primary" (click)="addUpdateItem()">
+        {{ addUpdateItemButtonText }}
+      </button>
+    </div>
+  </div>
+</div>
 
 @if (order().orderItems.length > 0) {
-<div class="card mb-3">
-  <div class="card-body table-responsive">
+<div
+  class="w-full p-4 text-center bg-white border border-gray-200 rounded-lg shadow-sm sm:p-8 dark:bg-gray-800 dark:border-gray-700 mb-3"
+>
+  <div class="table-responsive">
     <table class="table">
       <thead>
         <tr>

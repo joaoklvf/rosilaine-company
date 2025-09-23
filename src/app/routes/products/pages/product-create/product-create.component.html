@@ -1,52 +1,52 @@
-<div class="card mb-3">
-  <div class="card-body">
-    <div class="row row-gap-2">
-      <div class="col-12">
-        <label for="product-description">Produto</label>
-        <input
-          #productDescription
-          class="form-control"
-          id="product-description"
-          placeholder="Produto"
-          [(ngModel)]="modelProduct()!.description"
-          name="name"
-          [maxlength]="150"
-          (input)="onDescriptionInput($event.target)"
-        />
-      </div>
-      <div class="col-12 col-sm-4">
-        <label for="product-description">Código</label>
-        <input
-          class="form-control"
-          id="product-productCode"
-          placeholder="Código"
-          [(ngModel)]="modelProduct()!.productCode"
-          name="name"
-        />
-      </div>
-      <div class="col-12 col-sm-4">
-        <app-input-mask
-          [label]="'Preço (R$)'"
-          [value]="modelProduct()!.productPrice"
-          (handleOnChange)="setPrice($event)"
-        >
-        </app-input-mask>
-      </div>
-      <div class="col-12 col-sm-4">
-        <app-custom-autocomplete
-          [label]="'Categoria'"
-          (handleOnChange)="setCategory($event)"
-          [data]="categories"
-          displayValue="description"
-          [value]="modelProduct()!.category"
-          (searchAction)="filterCategories($event)"
-        ></app-custom-autocomplete>
-      </div>
-      <div class="col-12">
-        <button type="button" class="btn btn-primary float-end" (click)="add()">
-          {{ addUpdateButtonText }}
-        </button>
-      </div>
+<div
+  class="w-full p-4 text-center bg-white border border-gray-200 rounded-lg shadow-sm sm:p-8 dark:bg-gray-800 dark:border-gray-700 mb-3"
+>
+  <div class="row row-gap-2">
+    <div class="col-12">
+      <label for="product-description">Produto</label>
+      <input
+        #productDescription
+        class="form-control"
+        id="product-description"
+        placeholder="Produto"
+        [(ngModel)]="modelProduct()!.description"
+        name="name"
+        [maxlength]="150"
+        (input)="onDescriptionInput($event.target)"
+      />
+    </div>
+    <div class="col-12 col-sm-4">
+      <label for="product-description">Código</label>
+      <input
+        class="form-control"
+        id="product-productCode"
+        placeholder="Código"
+        [(ngModel)]="modelProduct()!.productCode"
+        name="name"
+      />
+    </div>
+    <div class="col-12 col-sm-4">
+      <app-input-mask
+        [label]="'Preço (R$)'"
+        [value]="modelProduct()!.productPrice"
+        (handleOnChange)="setPrice($event)"
+      >
+      </app-input-mask>
+    </div>
+    <div class="col-12 col-sm-4">
+      <app-custom-autocomplete
+        [label]="'Categoria'"
+        (handleOnChange)="setCategory($event)"
+        [data]="categories"
+        displayValue="description"
+        [value]="modelProduct()!.category"
+        (searchAction)="filterCategories($event)"
+      ></app-custom-autocomplete>
+    </div>
+    <div class="col-12">
+      <button type="button" class="btn btn-primary float-end" (click)="add()">
+        {{ addUpdateButtonText }}
+      </button>
     </div>
   </div>
 </div>

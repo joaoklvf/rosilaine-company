@@ -55,11 +55,11 @@ export class DataTablePaginationComponent {
 
   getClassName(page: string) {
     if (page === '...')
-      return 'disabled';
+      return 'relative inline-flex items-center px-4 py-2 text-sm cursor-pointer text-gray-400 inset-ring inset-ring-gray-300 dark:inset-ring-gray-700 focus:outline-offset-0';
 
     if (Number(page) === this.currentPage)
-      return 'active'
+      return 'relative z-10 inline-flex items-center bg-indigo-500 px-4 py-2 text-sm cursor-pointer text-white focus:z-20 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500'
 
-    return '';
+    return "relative inline-flex items-center px-4 py-2 text-sm cursor-pointer dark:text-gray-200 text-gray-900 inset-ring inset-ring-gray-300 dark:inset-ring-gray-700 hover:bg-white/5 focus:z-20 focus:outline-offset-0";
   }
 }

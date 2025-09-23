@@ -9,43 +9,43 @@
   </button>
 </div>
 
-<div class="card mb-3">
-  <div class="card-body">
-    <div class="row">
-      <app-custom-autocomplete
-        [label]="'Cliente'"
-        (handleOnChange)="setCustomer($event)"
-        [data]="customers"
-        displayValue="name"
-        class="col-md-6 col-sm-12 mb-2"
-        [value]="customer"
-        (searchAction)="filterCustomers($event)"
-      ></app-custom-autocomplete>
-      <app-custom-autocomplete
-        [label]="'Status'"
-        (handleOnChange)="setOrderStatus($event)"
-        [data]="orderStatuses"
-        displayValue="description"
-        class="col-md-6 col-sm-12 mb-2"
-        [value]="status"
-        (searchAction)="filterStatus($event)"
-      ></app-custom-autocomplete>
-      <div class="col">
-        <button
-          type="button"
-          class="btn btn-outline-primary float-end"
-          (click)="getOrders()"
-        >
-          Buscar
-        </button>
-        <button
-          type="button"
-          class="btn btn-outline-secondary float-end me-2"
-          (click)="clearFilters()"
-        >
-          Limpar filtros
-        </button>
-      </div>
+<div
+  class="w-full p-4 text-center bg-white border border-gray-200 rounded-lg shadow-sm sm:p-8 dark:bg-gray-800 dark:border-gray-700 mb-3"
+>
+  <div class="row">
+    <app-custom-autocomplete
+      [label]="'Cliente'"
+      (handleOnChange)="setCustomer($event)"
+      [data]="customers"
+      displayValue="name"
+      class="col-md-6 col-sm-12 mb-2"
+      [value]="customer"
+      (searchAction)="filterCustomers($event)"
+    ></app-custom-autocomplete>
+    <app-custom-autocomplete
+      [label]="'Status'"
+      (handleOnChange)="setOrderStatus($event)"
+      [data]="orderStatuses"
+      displayValue="description"
+      class="col-md-6 col-sm-12 mb-2"
+      [value]="status"
+      (searchAction)="filterStatus($event)"
+    ></app-custom-autocomplete>
+    <div class="col">
+      <button
+        type="button"
+        class="btn btn-outline-primary float-end"
+        (click)="getOrders()"
+      >
+        Buscar
+      </button>
+      <button
+        type="button"
+        class="btn btn-outline-secondary float-end me-2"
+        (click)="clearFilters()"
+      >
+        Limpar filtros
+      </button>
     </div>
   </div>
 </div>

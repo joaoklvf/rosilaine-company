@@ -37,11 +37,14 @@
       >
         @for(column of columns(); track column){
         <td
-          width="{{ getColumnWidth(column) }}"
-          (click)="cellAction($index, row)"
           [attr.role]="getRole($index)"
+          class="px-6 py-3 w-[{{ getColumnWidth(column) }}]"
         >
-          {{ displayCell(row, column) }}
+          <button (click)="cellAction($index, row)">
+            <span>
+              {{ displayCell(row, column) }}
+            </span>
+          </button>
         </td>
         } @if (showActions) {
         <td class="td-icons">
