@@ -4,7 +4,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
-import { MatSelectChange, MatSelectModule } from "@angular/material/select";
+import { MatSelectModule } from "@angular/material/select";
 import { ActivatedRoute, Router } from "@angular/router";
 import { map } from "rxjs";
 import { BrDatePickerComponent } from "src/app/components/br-date-picker/br-date-picker.component";
@@ -27,18 +27,19 @@ import { OrderStatusService } from "src/app/services/order/order-status/order-st
 import { OrderService } from "src/app/services/order/order.service";
 import { ProductService } from "src/app/services/product/product.service";
 import { SnackBarService } from "src/app/services/snack-bar/snack-bar.service";
-import { getBrCurrencyStr, getBrDateStr, getBrDateTimeStr, getCustomersNameNickName } from "src/app/utils/text-format";
+import { getBrCurrencyStr, getBrDateTimeStr, getCustomersNameNickName } from "src/app/utils/text-format";
 import { InstallmentsHeaderComponent } from "./components/installments-header/installments-header.component";
 import { IInstallmentHeader } from "./components/installments-header/interfaces";
 import { InstallmentManagementComponent } from "./components/installments-management/installments-management.component";
 import { ItemResponse } from "./interfaces/order-create.interfaces";
 import { getError } from "./utils/order-create.utilts";
+import { OrderItemsTable } from "./components/order-items-table/order-items-table";
 
 @Component({
   selector: 'app-order-create',
   templateUrl: './order-create.component.html',
   styleUrl: './order-create.component.scss',
-  imports: [InputMaskComponent, CustomAutocompleteComponent, FormsModule, BrDatePickerComponent, MatSelectModule, MatFormFieldModule, MatIconModule, MatInputModule, InstallmentsHeaderComponent],
+  imports: [InputMaskComponent, CustomAutocompleteComponent, FormsModule, BrDatePickerComponent, MatSelectModule, MatFormFieldModule, MatIconModule, MatInputModule, InstallmentsHeaderComponent, OrderItemsTable],
 })
 
 export class OrderCreateComponent implements OnInit {
@@ -286,18 +287,6 @@ export class OrderCreateComponent implements OnInit {
       this.orderItem.itemStatus = value;
   }
 
-  changeItemStatus(selectEvent: MatSelectChange<string>, orderItemSelected: OrderItem) {
-    const optionSelected = this.orderItemStatuses.find(x => x.id === selectEvent.value);
-    if (!optionSelected)
-      return;
-
-    this.updateItem({ ...orderItemSelected, itemStatus: optionSelected });
-  }
-
-  getBrDate(value: Date | null) {
-    return value && getBrDateStr(value);
-  }
-
   getBrDateTime(value?: Date | null) {
     return value && getBrDateTimeStr(value);
   }
@@ -335,14 +324,6 @@ export class OrderCreateComponent implements OnInit {
   changeAddUpdateItemButtonText() {
     this.addUpdateItemButtonText = this.orderItem.id ?
       'Atualizar' : 'Adicionar';
-  }
-
-  setOrderItemDeliveryDate(value: Date, item: OrderItem) {
-    this.updateItem({ ...item, deliveryDate: value ?? null });
-  }
-
-  setOrderItemDeliveryToday(item: OrderItem) {
-    this.updateItem({ ...item, deliveryDate: new Date() });
   }
 
   updateOrder() {

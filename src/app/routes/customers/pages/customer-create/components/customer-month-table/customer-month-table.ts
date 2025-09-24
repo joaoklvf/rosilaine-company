@@ -8,5 +8,5 @@ import { CustomerInstallmentsMonthlyResponse } from 'src/app/interfaces/home-res
   styleUrl: './customer-month-table.scss'
 })
 export class CustomerMonthTable {
-  monthInstallments = input<CustomerInstallmentsMonthlyResponse[]>();
+  readonly monthInstallments = input<CustomerInstallmentsMonthlyResponse[]>();
 }

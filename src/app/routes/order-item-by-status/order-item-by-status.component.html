@@ -1,84 +1,76 @@
 <h1 class="text-white">Produtos por status no pedido</h1>
 
-<div class="accordion mb-4" id="accordionExample">
-  <div class="accordion-item">
-    <h2 class="accordion-header mb-0">
+<div
+  class="w-full p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 mb-3"
+>
+  <p class="text-lg font-medium text-gray-900 dark:text-white">
+    Alteração em massa
+  </p>
+  <div class="flex justify-between">
+    <mat-form-field>
+      <mat-label>Status do produto</mat-label>
+      <mat-select [(ngModel)]="massiveStatusId">
+        @for (status of orderItemStatuses; track status) {
+        <mat-option [value]="status.id">
+          {{ status.description }}
+        </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <div class="align-self-end">
       <button
-        class="accordion-button collapsed"
         type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#collapseTwo"
-        aria-expanded="false"
-        aria-controls="collapseTwo"
+        class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800"
+        (click)="openDialog()"
       >
-        Alteração em massa
+        Atualizar
       </button>
-    </h2>
-    <div
-      id="collapseTwo"
-      class="accordion-collapse collapse"
-      data-bs-parent="#accordionExample"
-    >
-      <div class="accordion-body">
-        <div class="flex justify-between">
-          <mat-form-field class="mb-3">
-            <mat-label>Status do produto</mat-label>
-            <mat-select [(ngModel)]="massiveStatusId">
-              @for (status of orderItemStatuses; track status) {
-              <mat-option [value]="status.id">
-                {{ status.description }}
-              </mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
-          <div class="align-self-end">
-            <button
-              type="button"
-              class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800"
-              (click)="openDialog()"
-            >
-              Atualizar
-            </button>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 </div>
 
 <div
-  class="w-full p-4 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700"
+  class="w-full p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700"
 >
-  <mat-form-field class="mb-3">
-    <mat-label>Status do produto</mat-label>
-    <mat-select
-      [value]="selectedStatusId"
-      (selectionChange)="filterData($event.value)"
-    >
-      @for (status of orderItemStatuses; track status) {
-      <mat-option [value]="status.id">
-        {{ status.description }}
-      </mat-option>
-      }
-    </mat-select>
-  </mat-form-field>
+  <div>
+    <p class="text-lg font-medium text-gray-900 dark:text-white">
+      Filtrar itens por status
+    </p>
+    <mat-form-field class="mb-4">
+      <mat-label>Status do produto</mat-label>
+      <mat-select
+        [value]="selectedStatusId"
+        (selectionChange)="filterData($event.value)"
+      >
+        @for (status of orderItemStatuses; track status) {
+        <mat-option [value]="status.id">
+          {{ status.description }}
+        </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
   <table
-    class="table table-responsive table-striped table-hover table-bordered mb-3"
+    class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
   >
-    <thead>
+    <thead
+      class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+    >
       <tr>
-        <th scope="col">Quantidade</th>
-        <th scope="col">Código</th>
-        <th scope="col">Produto</th>
-        <th scope="col">Status</th>
+        <th scope="col" class="px-6 py-3">Quantidade</th>
+        <th scope="col" class="px-6 py-3">Código</th>
+        <th scope="col" class="px-6 py-3">Produto</th>
+        <th scope="col" class="px-6 py-3">Status</th>
       </tr>
     </thead>
     <tbody>
       @for(item of itemsByStatus; track item){
-      <tr>
-        <td>{{ item.amount }}</td>
-        <td>{{ item.productCode }}</td>
-        <td>{{ item.productDescription }}</td>
+      <tr
+        class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600"
+      >
+        <td class="px-6 py-3">{{ item.amount }}</td>
+        <td class="px-6 py-3">{{ item.productCode }}</td>
+        <td class="px-6 py-3">{{ item.productDescription }}</td>
         <mat-form-field class="w-full">
           <mat-select
             (selectionChange)="changeItemStatus($event, item.productId)"
