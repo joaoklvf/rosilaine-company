@@ -21,12 +21,13 @@ import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 import { ViaCepService } from 'src/app/services/via-cep/via-cep.service';
 import { CURRENT_MONTH } from 'src/app/utils/date-util';
 import { getAmountStr, getBrCurrencyStr, getBrDateStr } from 'src/app/utils/text-format';
+import { CustomerMonthTable } from "./customer-month-table/customer-month-table";
 
 @Component({
   selector: 'app-customer-create',
   templateUrl: './customer-create.component.html',
   styleUrl: './customer-create.component.scss',
-  imports: [FormsModule, NgxMaskDirective, ReactiveFormsModule, CustomChipsAutocompleteComponent, MatInputModule, MatTabsModule, InstallmentsDashboardComponent, MatSelectModule, MatIconModule],
+  imports: [FormsModule, NgxMaskDirective, ReactiveFormsModule, CustomChipsAutocompleteComponent, MatInputModule, MatTabsModule, InstallmentsDashboardComponent, MatSelectModule, MatIconModule, CustomerMonthTable],
   providers: [provideNgxMask()]
 })
 

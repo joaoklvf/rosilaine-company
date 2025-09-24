@@ -48,7 +48,10 @@
           [attr.role]="getRole($index)"
           class="px-6 py-3 w-[{{ getColumnWidth(column) }}]"
         >
-          <button (click)="cellAction($index, row)">
+          <button
+            class="w-full h-full text-left"
+            (click)="cellAction($index, row)"
+          >
             <span>
               {{ displayCell(row, column) }}
             </span>

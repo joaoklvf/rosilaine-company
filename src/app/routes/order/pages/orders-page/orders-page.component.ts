@@ -110,7 +110,7 @@ export class OrdersPageComponent implements OnInit {
   }
 
   edit(value: Order) {
-    this.router.navigate([`/order/${value.id}`])
+    this.router.navigate([`/orders/${value.id}`])
   }
 
   addPageNavigate() {

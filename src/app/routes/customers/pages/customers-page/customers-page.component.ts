@@ -73,7 +73,7 @@ export class CustomersPageComponent implements OnInit {
   }
 
   edit(value: Customer) {
-    this.router.navigate([`/customer/${value.id}`])
+    this.router.navigate([`/customers/${value.id}`])
   }
 
   addPageNavigate() {

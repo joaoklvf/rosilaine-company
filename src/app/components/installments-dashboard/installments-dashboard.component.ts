@@ -33,11 +33,6 @@ export class InstallmentsDashboardComponent {
     return this.showDash();
   }
 
-  get installmentsTableClass() {
-    return this.isDashVisible ?
-      'col-12 mt-3 mt-lg-0 col-lg-5' : 'col';
-  }
-
   goToOrderPage(orderId: string) {
     this.router.navigate([`order/${orderId}`]);
   }
