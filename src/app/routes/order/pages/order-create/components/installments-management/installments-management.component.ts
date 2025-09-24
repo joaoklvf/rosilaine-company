@@ -99,11 +99,11 @@ export class InstallmentManagementComponent implements OnInit {
   }
 
   saveInstallments() {
-    this.orderService.updateInstallments(this.installments, this.data.orderId)
+    const installmentsRequest = this.installments.map(({ originalAmount, ...rest }) => ({ ...rest }));
+    this.orderService.updateInstallments(installmentsRequest, this.data.orderId)
       .pipe(
         tap(_ => {
-          const installments = this.installments.map(x => ({ ...x }));
-          this.data.saveInstallments(installments);
+          this.data.saveInstallments(installmentsRequest);
           this.snackBarService.success('Parcelas atualizadas com sucesso');
           this.dialogRef.close();
         }),
