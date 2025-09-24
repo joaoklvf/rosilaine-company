@@ -4,7 +4,7 @@
 </div>
 @if(order().orderItems.length > 0){
 <div
-  class="w-full p-4 text-center bg-white border border-gray-200 rounded-lg shadow-sm sm:p-8 dark:bg-gray-800 dark:border-gray-700 mb-3"
+  class="w-full p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 mb-3"
 >
   <div class="flex gap-2 flex-wrap white-space-nowrap">
     <div>
@@ -23,14 +23,14 @@
       <div>
         <button
           type="button"
-          class="btn btn-primary text-white"
+          class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 text-white"
           (click)="installmentsManagement()"
         >
           Visualizar
         </button>
         <button
           type="button"
-          class="btn btn-primary text-white ms-2"
+          class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 text-white ms-2"
           (click)="print()"
         >
           Imprimir
@@ -39,7 +39,7 @@
       <div>
         <button
           type="button"
-          class="btn btn-outline-primary ms-2 btn-sm flex"
+          class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800 ms-2 btn-sm flex"
           title="Salvar"
           (click)="saveOrderButtonClick()"
         >
@@ -51,7 +51,7 @@
 </div>
 }
 <div
-  class="w-full p-4 text-center bg-white border border-gray-200 rounded-lg shadow-sm sm:p-8 dark:bg-gray-800 dark:border-gray-700 mb-3"
+  class="w-full p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 mb-3"
 >
   <div class="row">
     <app-custom-autocomplete
@@ -90,7 +90,7 @@
   </div>
 </div>
 <div
-  class="w-full p-4 text-center bg-white border border-gray-200 rounded-lg shadow-sm sm:p-8 dark:bg-gray-800 dark:border-gray-700 mb-3"
+  class="w-full p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 mb-3"
 >
   <div class="row">
     <div class="col-lg-4">
@@ -129,16 +129,16 @@
       </app-input-mask>
     </div>
     <div class="col-lg-2">
-      <label for="product-amount">Quantidade</label>
+      <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="product-amount">Quantidade</label>
       <input
         type="number"
-        class="form-control"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         id="product-amount"
         [(ngModel)]="orderItem.itemAmount"
       />
     </div>
     <div class="col-lg-12 align-content-end text-end mt-lg-2">
-      <button type="button" class="btn btn-primary" (click)="addUpdateItem()">
+      <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" (click)="addUpdateItem()">
         {{ addUpdateItemButtonText }}
       </button>
     </div>
@@ -147,7 +147,7 @@
 
 @if (order().orderItems.length > 0) {
 <div
-  class="w-full p-4 text-center bg-white border border-gray-200 rounded-lg shadow-sm sm:p-8 dark:bg-gray-800 dark:border-gray-700 mb-3"
+  class="w-full p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 mb-3"
 >
   <div class="table-responsive">
     <table class="table">
@@ -169,7 +169,7 @@
           <td style="width: 5%">{{ orderItem.itemAmount }}</td>
           <td style="width: 20%">{{ orderItem.product.description }}</td>
           <td style="width: 15%">
-            <mat-form-field class="w-100">
+            <mat-form-field class="w-full">
               <mat-select
                 (selectionChange)="changeItemStatus($event, orderItem)"
                 [(value)]="orderItem.itemStatus.id"

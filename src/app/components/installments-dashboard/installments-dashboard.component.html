@@ -4,7 +4,7 @@
     <div class="row mb-3">
       <div class="col">
         <div
-          class="w-full p-4 text-center bg-white border border-gray-200 rounded-lg shadow-sm sm:p-8 dark:bg-gray-800 dark:border-gray-700"
+          class="w-full p-4 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700"
         >
           <h2>Total deste mês 💰</h2>
           <h1 class="mb-0">{{ installmentsTotal() }}</h1>
@@ -12,7 +12,7 @@
       </div>
       <div class="col open-installments-margin">
         <div
-          class="w-full p-4 text-center bg-white border border-gray-200 rounded-lg shadow-sm sm:p-8 dark:bg-gray-800 dark:border-gray-700"
+          class="w-full p-4 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700"
         >
           <h2>Parcelas em aberto 📑</h2>
           <h1 class="mb-0">{{ pendingInstallments() }}</h1>
@@ -22,7 +22,7 @@
     <div class="row">
       <div class="col">
         <div
-          class="w-full p-4 text-center bg-white border border-gray-200 rounded-lg shadow-sm sm:p-8 dark:bg-gray-800 dark:border-gray-700"
+          class="w-full p-4 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700"
         >
           <h1>Balanço das parcelas</h1>
           @if(installmentsBalance()) {
@@ -39,7 +39,7 @@
   }
   <div class="{{ installmentsTableClass }}">
     <div
-      class="w-full p-4 text-center bg-white border border-gray-200 rounded-lg shadow-sm sm:p-8 dark:bg-gray-800 dark:border-gray-700"
+      class="w-full p-4 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700"
     >
       <mat-tab-group (selectedTabChange)="onTabChangeAction($event.index)">
         <mat-tab label="Parcels vencidas">
