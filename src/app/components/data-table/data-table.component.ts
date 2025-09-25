@@ -5,11 +5,10 @@ import { DataTableColumnProp, } from 'src/app/interfaces/data-table';
 import { getCellValue } from 'src/app/utils/data-table-format';
 import { DataTablePaginationComponent } from './data-table-pagination/data-table-pagination.component';
 import { DataTableFilter } from './data-table-interfaces';
-import { CustomerMonthTable } from "src/app/routes/customers/pages/customer-create/components/customer-month-table/customer-month-table";
 
 @Component({
   selector: 'app-data-table',
-  imports: [MatIconModule, ReactiveFormsModule, DataTablePaginationComponent, CustomerMonthTable],
+  imports: [MatIconModule, ReactiveFormsModule, DataTablePaginationComponent],
   templateUrl: './data-table.component.html',
   styleUrl: './data-table.component.scss',
   host: {
