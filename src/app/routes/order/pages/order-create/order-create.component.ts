@@ -305,8 +305,10 @@ export class OrderCreateComponent implements OnInit {
         isRounded,
         installmentsAmount: installments?.length ?? 1,
         orderId: id,
+        order: this.order(),
         saveHeaderAction: (props: IInstallmentHeader) => this.saveInstallmentsChanges(props),
-        saveInstallments: (installments: OrderInstallment[]) => this.order.set({ ... this.order(), installments })
+        saveInstallments: (installments: OrderInstallment[]) => this.order.set({ ... this.order(), installments }),
+        saveOrder: (updatedOrder: Order) => this.order.set({ ...updatedOrder }),
       }
     });
   }

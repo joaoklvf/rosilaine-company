@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, model, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
 import { catchError, of, tap } from 'rxjs';
@@ -11,6 +11,7 @@ import { getBrCurrencyStr, getBrDateStr } from 'src/app/utils/text-format';
 import { InstallmentsHeaderComponent } from "../installments-header/installments-header.component";
 import { IInstallmentHeader } from '../installments-header/interfaces';
 import { ManagementInstallments, ModalProps } from './interfaces';
+import { OrderRequest } from 'src/app/models/order/order-request';
 
 @Component({
   selector: 'app-installments-management',
@@ -21,7 +22,7 @@ import { ManagementInstallments, ModalProps } from './interfaces';
 })
 export class InstallmentManagementComponent implements OnInit {
   data: ModalProps = inject(MAT_DIALOG_DATA);
-  installments: ManagementInstallments[] = [];
+  readonly installments = model<ManagementInstallments[]>([]);
 
   readonly dialogRef = inject(MatDialogRef<InstallmentManagementComponent>);
 
@@ -32,7 +33,7 @@ export class InstallmentManagementComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.data.installments)
-      this.installments = this.data.installments?.map(x => ({ ...x, originalAmount: x.amount }));
+      this.installments.set(this.data.installments.map(x => ({ ...x, originalAmount: x.amount })));
   }
 
   getBrDate = (value: Date | null) =>
@@ -50,7 +51,7 @@ export class InstallmentManagementComponent implements OnInit {
     if (valuePaid === 0)
       return;
 
-    const installments = [...this.installments];
+    const installments = [...this.installments()];
     const currentInstallmentIndex = installments.findIndex(x => x.id === prevInstallment.id);
     const nextInstallmentIndex = currentInstallmentIndex + 1;
     const nextInstallment = installments[nextInstallmentIndex];
@@ -66,7 +67,7 @@ export class InstallmentManagementComponent implements OnInit {
       return;
 
     installments[nextInstallmentIndex].amount = newAmount;
-    this.installments = [...installments];
+    this.installments.set([...installments]);
   }
 
   setInstallmentsAmount(value: number, installment: OrderInstallment) {
@@ -94,12 +95,20 @@ export class InstallmentManagementComponent implements OnInit {
   }
 
   saveHeader(headerData: IInstallmentHeader) {
-    this.data.saveHeaderAction(headerData);
-    this.dialogRef.close();
+    const orderRequest: OrderRequest = {
+      ...this.data.order,
+      ...headerData
+    };
+
+    this.orderService.recreateInstallments(orderRequest).subscribe(installments => {
+      this.snackBarService.success('Parcelas atualizadas com sucesso!');
+      this.installments.set(installments.map(x => ({ ...x, originalAmount: x.amount })));
+      this.data.saveOrder(({ ...orderRequest, installments, isRounded: orderRequest.isToRound! }));
+    });
   }
 
   saveInstallments() {
-    const installmentsRequest = this.installments.map(({ originalAmount, ...rest }) => ({ ...rest }));
+    const installmentsRequest = this.installments().map(({ originalAmount, ...rest }) => ({ ...rest }));
     this.orderService.updateInstallments(installmentsRequest, this.data.orderId)
       .pipe(
         tap(_ => {
