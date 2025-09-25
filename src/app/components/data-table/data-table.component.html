@@ -46,10 +46,10 @@
         @for(column of columns(); track column){
         <td
           [attr.role]="getRole($index)"
-          class="px-6 py-3 w-[{{ getColumnWidth(column) }}]"
+          class="w-[{{ getColumnWidth(column) }}]"
         >
           <button
-            class="w-full h-full text-left"
+            class="w-full h-full text-left px-6 py-3"
             (click)="cellAction($index, row)"
           >
             <span>
