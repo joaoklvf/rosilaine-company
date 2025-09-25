@@ -22,8 +22,9 @@ import { OrderRequest } from 'src/app/models/order/order-request';
 })
 export class InstallmentManagementComponent implements OnInit {
   data: ModalProps = inject(MAT_DIALOG_DATA);
-  readonly installments = model<ManagementInstallments[]>([]);
+  installmentsAmount = 1;
 
+  readonly installments = model<ManagementInstallments[]>([]);
   readonly dialogRef = inject(MatDialogRef<InstallmentManagementComponent>);
 
   constructor(
@@ -32,8 +33,12 @@ export class InstallmentManagementComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    if (this.data.installments)
-      this.installments.set(this.data.installments.map(x => ({ ...x, originalAmount: x.amount })));
+    if (!this.data.order.installments)
+      return;
+    
+    const orderInstallments = this.data.order.installments.map(x => ({ ...x, originalAmount: x.amount }));
+    this.installmentsAmount = orderInstallments.length;
+    this.installments.set(orderInstallments);
   }
 
   getBrDate = (value: Date | null) =>
@@ -82,10 +87,6 @@ export class InstallmentManagementComponent implements OnInit {
     installment.debitDate = value;
   }
 
-  setFirstInstallmentDate(value: Date) {
-    this.data.firstInstallmentDate = value;
-  }
-
   setInstallmentPaidAmount(installment: OrderInstallment) {
     installment.amountPaid = installment.amount;
   }
@@ -103,16 +104,16 @@ export class InstallmentManagementComponent implements OnInit {
     this.orderService.recreateInstallments(orderRequest).subscribe(installments => {
       this.snackBarService.success('Parcelas atualizadas com sucesso!');
       this.installments.set(installments.map(x => ({ ...x, originalAmount: x.amount })));
-      this.data.saveOrder(({ ...orderRequest, installments, isRounded: orderRequest.isToRound! }));
+      this.data.saveOrderAction(({ ...orderRequest, installments, isRounded: orderRequest.isToRound! }));
     });
   }
 
   saveInstallments() {
     const installmentsRequest = this.installments().map(({ originalAmount, ...rest }) => ({ ...rest }));
-    this.orderService.updateInstallments(installmentsRequest, this.data.orderId)
+    this.orderService.updateInstallments(installmentsRequest, this.data.order.id!)
       .pipe(
         tap(_ => {
-          this.data.saveInstallments(installmentsRequest);
+          this.data.saveInstallmentsAction(installmentsRequest);
           this.snackBarService.success('Parcelas atualizadas com sucesso');
           this.dialogRef.close();
         }),

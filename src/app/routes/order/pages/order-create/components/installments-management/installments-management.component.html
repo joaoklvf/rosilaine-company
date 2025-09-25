@@ -1,9 +1,9 @@
 <h2 mat-dialog-title>Parcelas</h2>
 <mat-dialog-content class="text-dark">
   <app-installments-header
-    [installmentsAmount]="this.data.installmentsAmount"
-    [firstInstallmentDate]="this.data.firstInstallmentDate"
-    [isRounded]="this.data.isRounded"
+    [installmentsAmount]="installmentsAmount"
+    [firstInstallmentDate]="this.data.order.firstInstallmentDate"
+    [isRounded]="this.data.order.isRounded"
     (saveAction)="saveHeader($event)"
   />
   <table

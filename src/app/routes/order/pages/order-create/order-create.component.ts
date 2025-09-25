@@ -296,19 +296,12 @@ export class OrderCreateComponent implements OnInit {
   }
 
   installmentsManagement() {
-    const { installments, firstInstallmentDate, isRounded, id } = this.order();
     this.dialog.open(InstallmentManagementComponent, {
       width: '1000px',
       data: {
-        installments,
-        firstInstallmentDate,
-        isRounded,
-        installmentsAmount: installments?.length ?? 1,
-        orderId: id,
         order: this.order(),
-        saveHeaderAction: (props: IInstallmentHeader) => this.saveInstallmentsChanges(props),
-        saveInstallments: (installments: OrderInstallment[]) => this.order.set({ ... this.order(), installments }),
-        saveOrder: (updatedOrder: Order) => this.order.set({ ...updatedOrder }),
+        saveInstallmentsAction: (installments: OrderInstallment[]) => this.order.set({ ... this.order(), installments }),
+        saveOrderAction: (updatedOrder: Order) => this.order.set({ ...updatedOrder }),
       }
     });
   }
