@@ -1,12 +1,18 @@
 @if(showSearchField()) {
-<div class="{{ mainFormClass + ' mb-3' }}">
-  <div class="{{ bodyFormClass }}">
-    <label for="Pesquisar">Pesquisar</label>
+<div
+  class="w-full p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 mb-3"
+>
+  <div>
+    <label
+      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+      for="Pesquisar"
+      >Pesquisar</label
+    >
     <input
       type="text"
       name="Pesquisar"
       id="Pesquisar"
-      class="form-control"
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
       (keyup)="filterData($event)"
       placeholder="{{ searchPlaceHolder() }}"
     />
@@ -14,61 +20,70 @@
 </div>
 }
 
-<div class="{{ mainFormClass }}">
-  <div class="{{ bodyFormClass }}">
-    @if (_title) {
-    <h1>{{ _title }}</h1>
-    }
-    <table
-      class="table table-responsive table-striped table-hover table-bordered"
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+  @if (_title) {
+  <h1>{{ _title }}</h1>
+  }
+  <table
+    class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
+  >
+    <thead
+      class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
     >
-      <thead>
-        <tr>
-          @for(column of columns(); track column) {
-          <th scope="col">{{ column.description }}</th>
-          } @if(showActions) {
-          <th scope="col">Ações</th>
-          }
-        </tr>
-      </thead>
-      <tbody>
-        @for(row of readyData; track row){
-        <tr>
-          @for(column of columns(); track column){
-          <td
-            width="{{ getColumnWidth(column) }}"
-            (click)="cellAction($index, row)"
-            [attr.role]="getRole($index)"
-          >
-            {{ displayCell(row, column) }}
-          </td>
-          } @if (showActions) {
-          <td class="td-icons">
-            <button
-              type="button"
-              class="btn btn-outline-danger me-2"
-              title="Remover"
-              (click)="remove(row)"
-            >
-              <mat-icon fontIcon="delete" />
-            </button>
-            <button
-              type="button"
-              class="btn btn-outline-success"
-              title="Editar"
-              (click)="edit(row)"
-            >
-              <mat-icon fontIcon="edit" />
-            </button>
-          </td>
-          }
-        </tr>
+      <tr>
+        @for(column of columns(); track column) {
+        <th scope="col" class="px-6 py-3">{{ column.description }}</th>
+        } @if(showActions) {
+        <th scope="col" class="px-6 py-3">Ações</th>
         }
-      </tbody>
-    </table>
-    <app-data-table-pagination
-      (searchAction)="changePageAction($event)"
-      [totalPages]="pagesCount"
-    />
-  </div>
+      </tr>
+    </thead>
+    <tbody>
+      @for(row of readyData; track row){
+      <tr
+        class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600"
+      >
+        @for(column of columns(); track column){
+        <td
+          [attr.role]="getRole($index)"
+          class="w-[{{ getColumnWidth(column) }}]"
+        >
+          <button
+            class="w-full h-full text-left px-6 py-3"
+            (click)="cellAction($index, row)"
+          >
+            <span>
+              {{ displayCell(row, column) }}
+            </span>
+          </button>
+        </td>
+        } @if (showActions) {
+        <td class="td-icons">
+          <button
+            type="button"
+            class="btn btn-outline-danger me-2"
+            title="Remover"
+            (click)="remove(row)"
+          >
+            <mat-icon fontIcon="delete" />
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-success"
+            title="Editar"
+            (click)="edit(row)"
+          >
+            <mat-icon fontIcon="edit" />
+          </button>
+        </td>
+        }
+      </tr>
+      }
+    </tbody>
+  </table>
+  <app-data-table-pagination
+    (searchAction)="changePageAction($event)"
+    [dataCount]="dataCount()"
+    [dataPerPage]="dataPerPage()"
+  />
 </div>

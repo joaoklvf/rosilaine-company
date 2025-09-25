@@ -1,9 +1,11 @@
+@use "tailwindcss";
 @font-face {
   font-family: pacifico-regular;
   src: url('./assets/fonts/Pacifico-Regular.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
+@custom-variant dark (&:where(.dark, .dark *));
 
 @media print {
   .container {
@@ -53,6 +55,10 @@ body {
 
 app-br-date-picker .mat-mdc-form-field-subscript-wrapper {
   display: none;
+}
+
+button {
+  cursor: pointer;
 }
 
 .mat-mdc-form-field-subscript-wrapper {

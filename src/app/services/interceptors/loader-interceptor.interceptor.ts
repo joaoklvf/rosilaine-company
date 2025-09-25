@@ -1,5 +1,4 @@
-import { HttpHandler, HttpInterceptor } from '@angular/common/http';
-import { H, a } from '@angular/common/module.d-BJA_GXII';
+import { HttpHandler, HttpInterceptor, HttpRequest, HttpEvent } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, finalize } from 'rxjs';
 import { LoaderService } from '../base/loader.service';
@@ -11,7 +10,7 @@ export class LoaderInterceptor implements HttpInterceptor {
     private readonly loaderService: LoaderService
   ) { }
 
-  intercept(req: H<any>, next: HttpHandler): Observable<a<any>> {
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     this.loaderService.show();
 
     return next.handle(req).pipe(

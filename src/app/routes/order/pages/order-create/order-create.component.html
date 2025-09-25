@@ -1,218 +1,158 @@
-<div class="d-flex text-white justify-content-between align-items-end">
+<div class="flex text-white justify-between items-end">
   <h1>{{ title }}</h1>
   <h5>Atualizado em {{ orderUpdated }}</h5>
 </div>
 @if(order().orderItems.length > 0){
-<div class="card mb-3">
-  <div class="card-body">
-    <div class="d-flex gap-2 flex-wrap white-space-nowrap">
+<div
+  class="w-full p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 mb-3"
+>
+  <div class="flex gap-2 flex-wrap white-space-nowrap">
+    <div>
+      <p class="text-md font-medium text-gray-900 dark:text-white">
+        Total do pedido
+      </p>
+      <div class="text-2xl text-green-500">
+        {{ orderTotal }}
+      </div>
+    </div>
+    <app-installments-header
+      [installmentsAmount]="order().installments?.length ?? 1"
+      [firstInstallmentDate]="order().firstInstallmentDate"
+      [isRounded]="order().isRounded"
+      (saveAction)="saveInstallmentsChanges($event)"
+    />
+    <div class="flex justify-between flex-grow-1 items-end">
       <div>
-        <p><b>Total do pedido</b></p>
-        <div class="fs-5 fw-medium" style="color: limegreen">
-          {{ orderTotal }}
-        </div>
-      </div>
-      <app-installments-header
-        [installmentsAmount]="order().installments?.length ?? 1"
-        [firstInstallmentDate]="order().firstInstallmentDate"
-        [isRounded]="order().isRounded"
-        (saveAction)="saveInstallmentsChanges($event)"
-      />
-      <div class="d-flex justify-content-between flex-grow-1 align-items-end">
-        <div>
-          <button
-            type="button"
-            class="btn btn-primary text-white"
-            (click)="installmentsManagement()"
-          >
-            Visualizar
-          </button>
-          <button
-            type="button"
-            class="btn btn-primary text-white ms-2"
-            (click)="print()"
-          >
-            Imprimir
-          </button>
-        </div>
-        <div>
-          <button
-            type="button"
-            class="btn btn-outline-primary ms-2 btn-sm d-flex"
-            title="Salvar"
-            (click)="saveOrderButtonClick()"
-          >
-            <mat-icon fontIcon="save" />
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-}
-<div class="card mb-3">
-  <div class="card-body">
-    <div class="row">
-      <app-custom-autocomplete
-        [label]="'Cliente'"
-        (handleOnChange)="setCustomer($event)"
-        [data]="customers"
-        [displayValue]="'name'"
-        [value]="order().customer"
-        class="col-md-3 mb-md-0 mb-2"
-        (searchAction)="filterCustomers($event)"
-      ></app-custom-autocomplete>
-      <app-custom-autocomplete
-        [label]="'Cliente final'"
-        (handleOnChange)="setEndCustomerAndSave($event)"
-        [data]="endCustomers"
-        [displayValue]="'name'"
-        [value]="endCustomer()"
-        class="col-md-3 mb-md-0 mb-2"
-        (searchAction)="filterEndCustomers($event)"
-      ></app-custom-autocomplete>
-      <app-custom-autocomplete
-        [label]="'Status'"
-        (handleOnChange)="setOrderStatus($event)"
-        [data]="orderStatuses"
-        displayValue="description"
-        [value]="order().status"
-        class="col-md-3 mb-md-0 mb-2"
-        (searchAction)="filterStatus($event)"
-      ></app-custom-autocomplete>
-      <app-br-date-picker
-        [label]="'Data do pedido'"
-        [value]="order().orderDate"
-        (handleOnChange)="setOrderDate($event)"
-        class="col-md-3"
-      ></app-br-date-picker>
-    </div>
-  </div>
-</div>
-<div class="card mb-3">
-  <div class="card-body">
-    <div class="row">
-      <div class="col-lg-4">
-        <app-custom-autocomplete
-          [label]="'Produto'"
-          (handleOnChange)="setProduct($event)"
-          [data]="products"
-          [displayValue]="'description'"
-          [value]="orderItem.product"
-          (searchAction)="filterProducts($event)"
-        ></app-custom-autocomplete>
-      </div>
-      <div class="col-lg-2">
-        <app-custom-autocomplete
-          [label]="'Status'"
-          (handleOnChange)="setOrderItemStatus($event)"
-          [data]="orderItemStatuses"
-          displayValue="description"
-          [value]="orderItem.itemStatus"
-          (searchAction)="filterItemStatus($event)"
-        ></app-custom-autocomplete>
-      </div>
-      <div class="col-lg-2">
-        <app-input-mask
-          [label]="'De (R$)'"
-          [value]="orderItem.itemOriginalPrice"
-          [disabled]="true"
-        />
-      </div>
-      <div class="col-lg-2">
-        <app-input-mask
-          [label]="'Por (R$)'"
-          [value]="orderItem.itemSellingPrice"
-          (handleOnChange)="setPrice($event)"
+        <button
+          type="button"
+          class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 text-white"
+          (click)="installmentsManagement()"
         >
-        </app-input-mask>
+          Visualizar
+        </button>
+        <button
+          type="button"
+          class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 text-white ms-2"
+          (click)="print()"
+        >
+          Imprimir
+        </button>
       </div>
-      <div class="col-lg-2">
-        <label for="product-amount">Quantidade</label>
-        <input
-          type="number"
-          class="form-control"
-          id="product-amount"
-          [(ngModel)]="orderItem.itemAmount"
-        />
-      </div>
-      <div class="col-lg-12 align-content-end text-end mt-lg-2">
-        <button type="button" class="btn btn-primary" (click)="addUpdateItem()">
-          {{ addUpdateItemButtonText }}
+      <div>
+        <button
+          type="button"
+          class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800 ms-2 btn-sm flex"
+          title="Salvar"
+          (click)="saveOrderButtonClick()"
+        >
+          <mat-icon fontIcon="save" />
         </button>
       </div>
     </div>
   </div>
 </div>
-
-@if (order().orderItems.length > 0) {
-<div class="card mb-3">
-  <div class="card-body table-responsive">
-    <table class="table">
-      <thead>
-        <tr>
-          <th scope="col">Quantidade</th>
-          <th scope="col">Produto</th>
-          <th scope="col">Status</th>
-          <th scope="col">Data de entrega</th>
-          <th scope="col">De</th>
-          <th scope="col">Por</th>
-          <th scope="col">Total</th>
-          <th scope="col" class="text-center">Ações</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for(orderItem of order().orderItems; track orderItem){
-        <tr>
-          <td style="width: 5%">{{ orderItem.itemAmount }}</td>
-          <td style="width: 20%">{{ orderItem.product.description }}</td>
-          <td style="width: 15%">
-            <mat-form-field class="w-100">
-              <mat-select
-                (selectionChange)="changeItemStatus($event, orderItem)"
-                [(value)]="orderItem.itemStatus.id"
-              >
-                @for (status of orderItemStatuses; track status) {
-                <mat-option [value]="status.id">
-                  {{ status.description }}
-                </mat-option>
-                }
-              </mat-select>
-            </mat-form-field>
-          </td>
-          <td style="width: 15%">
-            <app-br-date-picker
-              [label]="'Data de entrega'"
-              [value]="orderItem.deliveryDate"
-              (handleOnChange)="setOrderItemDeliveryDate($event, orderItem)"
-              (handleDoubleClick)="setOrderItemDeliveryToday(orderItem)"
-            ></app-br-date-picker>
-          </td>
-          <td>{{ getCurrencyValue(orderItem.itemOriginalPrice) }}</td>
-          <td>{{ getCurrencyValue(orderItem.itemSellingPrice) }}</td>
-          <td>{{ getCurrencyValue(orderItem.itemSellingTotal) }}</td>
-          <td class="td-icons text-center">
-            <button
-              type="button"
-              class="btn btn-outline-danger me-2"
-              title="Remover produto"
-              (click)="remove(orderItem)"
-            >
-              <mat-icon fontIcon="delete" />
-            </button>
-            <button
-              type="button"
-              class="btn btn-outline-success me-2"
-              title="Editar produto"
-              (click)="edit(orderItem)"
-            >
-              <mat-icon fontIcon="edit" />
-            </button>
-          </td>
-        </tr>
-        }
-      </tbody>
-    </table>
+}
+<div
+  class="w-full p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 mb-3"
+>
+  <div class="grid gap-6 md:grid-cols-4">
+    <app-custom-autocomplete
+      [label]="'Cliente'"
+      (handleOnChange)="setCustomer($event)"
+      [data]="customers"
+      [displayValue]="'name'"
+      [value]="order().customer"
+      (searchAction)="filterCustomers($event)"
+    ></app-custom-autocomplete>
+    <app-custom-autocomplete
+      [label]="'Cliente final'"
+      (handleOnChange)="setEndCustomerAndSave($event)"
+      [data]="endCustomers"
+      [displayValue]="'name'"
+      [value]="endCustomer()"
+      (searchAction)="filterEndCustomers($event)"
+    ></app-custom-autocomplete>
+    <app-custom-autocomplete
+      [label]="'Status'"
+      (handleOnChange)="setOrderStatus($event)"
+      [data]="orderStatuses"
+      displayValue="description"
+      [value]="order().status"
+      (searchAction)="filterStatus($event)"
+    ></app-custom-autocomplete>
+    <app-br-date-picker
+      [label]="'Data do pedido'"
+      [value]="order().orderDate"
+      (handleOnChange)="setOrderDate($event)"
+    ></app-br-date-picker>
   </div>
 </div>
+<div
+  class="w-full p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 mb-3"
+>
+  <div class="grid gap-6 md:grid-cols-3">
+    <div>
+      <app-custom-autocomplete
+        [label]="'Produto'"
+        (handleOnChange)="setProduct($event)"
+        [data]="products"
+        [displayValue]="'description'"
+        [value]="orderItem.product"
+        (searchAction)="filterProducts($event)"
+      ></app-custom-autocomplete>
+    </div>
+    <div>
+      <app-custom-autocomplete
+        [label]="'Status'"
+        (handleOnChange)="setOrderItemStatus($event)"
+        [data]="orderItemStatuses"
+        displayValue="description"
+        [value]="orderItem.itemStatus"
+        (searchAction)="filterItemStatus($event)"
+      ></app-custom-autocomplete>
+    </div>
+    <div>
+      <app-input-mask
+        [label]="'De (R$)'"
+        [value]="orderItem.itemOriginalPrice"
+        [disabled]="true"
+      />
+    </div>
+    <div>
+      <app-input-mask
+        [label]="'Por (R$)'"
+        [value]="orderItem.itemSellingPrice"
+        (handleOnChange)="setPrice($event)"
+      >
+      </app-input-mask>
+    </div>
+    <div>
+      <label for="product-amount" class="text-gray-900 dark:text-white">Quantidade</label>
+      <input
+        type="number"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        id="product-amount"
+        [(ngModel)]="orderItem.itemAmount"
+      />
+    </div>
+  </div>
+  <div class="flex justify-end">
+    <button
+      type="button"
+      class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+      (click)="addUpdateItem()"
+    >
+      {{ addUpdateItemButtonText }}
+    </button>
+  </div>
+</div>
+
+@if (order().orderItems.length > 0) {
+<app-order-items-table
+  (editAction)="edit($event)"
+  (removeAction)="remove($event)"
+  (updateItemAction)="updateItem($event)"
+  [statuses]="orderItemStatuses"
+  [orderItems]="order().orderItems"
+/>
 }

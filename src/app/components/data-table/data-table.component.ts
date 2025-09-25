@@ -5,10 +5,11 @@ import { DataTableColumnProp, } from 'src/app/interfaces/data-table';
 import { getCellValue } from 'src/app/utils/data-table-format';
 import { DataTablePaginationComponent } from './data-table-pagination/data-table-pagination.component';
 import { DataTableFilter } from './data-table-interfaces';
+import { CustomerMonthTable } from "src/app/routes/customers/pages/customer-create/components/customer-month-table/customer-month-table";
 
 @Component({
   selector: 'app-data-table',
-  imports: [MatIconModule, ReactiveFormsModule, DataTablePaginationComponent],
+  imports: [MatIconModule, ReactiveFormsModule, DataTablePaginationComponent, CustomerMonthTable],
   templateUrl: './data-table.component.html',
   styleUrl: './data-table.component.scss',
   host: {
@@ -29,15 +30,6 @@ export class DataTableComponent<T> {
   readonly showActionsColumn = input(true);
   readonly title = input<string | null>(null);
   readonly cardMode = input(true);
-
-
-  get mainFormClass() {
-    return this.cardMode() ? 'card' : '';
-  }
-
-  get bodyFormClass() {
-    return this.cardMode() ? 'card-body' : '';
-  }
   
   get _title() {
     return this.title();
@@ -49,10 +41,6 @@ export class DataTableComponent<T> {
 
   get hasMoreData() {
     return false;
-  }
-
-  get pagesCount() {
-    return Math.ceil(this.dataCount() / this.dataPerPage());
   }
 
   get readyData() {
