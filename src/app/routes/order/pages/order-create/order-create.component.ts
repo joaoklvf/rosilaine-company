@@ -308,7 +308,7 @@ export class OrderCreateComponent implements OnInit {
 
   print() {
     sessionStorage.setItem('order', JSON.stringify(this.order()))
-    this.router.navigate(['order-print'])
+    this.router.navigate(['/orders/print'])
   }
 
   clearItem() {

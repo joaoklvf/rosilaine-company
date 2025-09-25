@@ -24,18 +24,18 @@ export const routes: Routes = [
           ),
       },
       {
-        path: ':id',
-        loadComponent: () =>
-          import('./routes/order/pages/order-create/order-create.component').then(
-            m => m.OrderCreateComponent
-          ),
-      },
-      {
         path: 'print',
         loadComponent: () =>
           import(
             './routes/order/pages/order-create/components/order-print/order-print.component'
           ).then(m => m.OrderPrintComponent),
+      },
+      {
+        path: ':id',
+        loadComponent: () =>
+          import('./routes/order/pages/order-create/order-create.component').then(
+            m => m.OrderCreateComponent
+          ),
       },
     ],
   },
