@@ -36,7 +36,6 @@ export class CustomerCreateComponent implements OnInit {
   readonly TAKE_OFFSET_OPTIONS = { take: 15, offset: 0 };
 
   customer = new Customer();
-  title = 'Cadastrar Cliente';
   buttonText = 'Adicionar';
   address = new FormGroup({
     street: new FormControl<null | string>(null),
@@ -87,11 +86,14 @@ export class CustomerCreateComponent implements OnInit {
           street: customer.street,
           zipCode: customer.zipCode
         });
-
-        this.title = customer.name;
       });
 
     this.buttonText = 'Atualizar';
+  }
+
+  get title() {
+    return this.customer.id ?
+      `${this.customer.name} ${this.customer.nickname}`.trim() : 'Cadastrar Cliente';
   }
 
   add() {
