@@ -172,7 +172,7 @@ export class OrderCreateComponent implements OnInit {
     const orderRequest = { ...order, installmentsAmount: 1 };
     this.orderService.add(orderRequest)
       .subscribe(orderResponse => {
-        this.router.navigate([`/order/${orderResponse.id}`])
+        this.router.navigate([`/orders/${orderResponse.id}`])
       });
   }
 
