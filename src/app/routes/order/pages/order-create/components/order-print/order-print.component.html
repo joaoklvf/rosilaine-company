@@ -1,4 +1,21 @@
+<div class="flex w-full gap-6 mb-4">
+  <button
+    type="button"
+    class="print-hidden w-full cursor-pointer flex items-center w-9 h-9 justify-center text-xs font-medium text-gray-700 bg-white border border-gray-200 rounded-lg toggle-dark-state-example hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-500 dark:bg-gray-800 focus:outline-none dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+    (click)="captureScreenshot()"
+  >
+    Gerar Imagem
+  </button>
+  <button
+    type="button"
+    class="print-hidden w-full cursor-pointer flex items-center w-9 h-9 justify-center text-xs font-medium text-gray-700 bg-white border border-gray-200 rounded-lg toggle-dark-state-example hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-500 dark:bg-gray-800 focus:outline-none dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+    (click)="pdfPrint()"
+  >
+    Gerar PDF
+  </button>
+</div>
 <div
+  #orderPrint
   class="w-full p-4 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 print-main"
 >
   <div class="flex justify-between">
@@ -52,7 +69,9 @@
               <tr
                 class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600"
               >
-                <th class="px-6 py-3" scope="row">{{ getDate(installment.debitDate) }}</th>
+                <th class="px-6 py-3" scope="row">
+                  {{ getDate(installment.debitDate) }}
+                </th>
                 <td class="px-6 py-3">{{ getCurrency(installment.amount) }}</td>
               </tr>
               }
