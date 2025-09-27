@@ -1,3 +1,5 @@
+import { Customer } from "../models/customer/customer";
+
 export interface OrderItemByStatus {
   amount: number;
   statusDescription: string;
@@ -5,4 +7,9 @@ export interface OrderItemByStatus {
   productId: string;
   productDescription: string;
   productCode: string;
+}
+
+export interface OrderItemByCustomer {
+  customer: Customer;
+  items: OrderItemByStatus[]
 }

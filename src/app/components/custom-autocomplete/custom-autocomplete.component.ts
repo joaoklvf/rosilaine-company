@@ -33,7 +33,7 @@ export class CustomAutocompleteComponent<T extends object> implements OnInit, On
   ngOnChanges(changes: SimpleChanges): void {
     if (Array.isArray(changes['data']?.currentValue))
       return;
-    
+
     this.currentValue.setValue(this.value(), { emitEvent: false });
   }
 
@@ -64,12 +64,15 @@ export class CustomAutocompleteComponent<T extends object> implements OnInit, On
   onFocus(event: FocusEvent) {
     (event.target as HTMLInputElement).select();
   }
-
+  
   onKeyUp(target: any) {
     this.searchText$.next(target?.value);
   }
 
   onInput(target: any) {
-    target.value = target.value.charAt(0).toUpperCase() + target.value.slice(1);
+    if (target.value)
+      target.value = target.value.charAt(0).toUpperCase() + target.value.slice(1);
+    else
+      this.handleOnChange.emit(null);
   }
 }

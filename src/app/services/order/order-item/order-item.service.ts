@@ -3,7 +3,7 @@ import { BaseApiService } from '../../base/base-api.service';
 import { HttpClient } from '@angular/common/http';
 import { MessageService } from '../../message/message.service';
 import { OrderItem } from 'src/app/models/order/order-item/order-item';
-import { OrderItemByStatus } from 'src/app/interfaces/order-item-by-status';
+import { OrderItemByStatus, OrderItemByCustomer } from 'src/app/interfaces/order-item-by-status';
 import { Observable, tap, catchError } from 'rxjs';
 
 @Injectable({
@@ -15,11 +15,19 @@ export class OrderItemService extends BaseApiService<OrderItem> {
   }
 
   /** GET orders from the server */
-  getByStatusId(params: any): Observable<[OrderItemByStatus[], number]> {
-    return this.http.get<[OrderItemByStatus[], number]>(`${this.apiUrl}/order-item-status`, { params })
+  getByItemStatus(params: any): Observable<[OrderItemByStatus[], number]> {
+    return this.http.get<[OrderItemByStatus[], number]>(`${this.apiUrl}/items-by-status`, { params })
       .pipe(
         tap(_ => this.log('fetched data')),
         catchError(this.handleError<[OrderItemByStatus[], number]>('getTs'))
+      );
+  }
+
+  getByItemCustomerAndStatus(params: any): Observable<[OrderItemByCustomer[], number]> {
+    return this.http.get<[OrderItemByCustomer[], number]>(`${this.apiUrl}/items-by-customer`, { params })
+      .pipe(
+        tap(_ => this.log('fetched data')),
+        catchError(this.handleError<[OrderItemByCustomer[], number]>('getTs'))
       );
   }
 
@@ -30,8 +38,8 @@ export class OrderItemService extends BaseApiService<OrderItem> {
     );
   }
 
-  changeStatusByProduct(newStatusId: string, productId: string) {
-    return this.http.put<any>(`${this.apiUrl}/product-status-change`, { newStatusId, productId }).pipe(
+  changeStatusByProduct(newStatusId: string, productId: string, customerId?: string) {
+    return this.http.put<any>(`${this.apiUrl}/product-status-change`, { newStatusId, productId, customerId }).pipe(
       tap(_ => this.log(`updated installments`)),
       catchError(this.handleError<any>('updateT'))
     );
