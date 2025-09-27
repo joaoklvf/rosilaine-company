@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import html2canvas from 'html2canvas-pro';
 import { Order } from 'src/app/models/order/order';
+import { PrintService } from 'src/app/services/print/print.service';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 import { getAmountStr, getBrCurrencyStr, getBrDateStr } from 'src/app/utils/text-format';
 
@@ -14,7 +14,8 @@ import { getAmountStr, getBrCurrencyStr, getBrDateStr } from 'src/app/utils/text
 export class OrderPrintComponent implements OnInit {
   constructor(
     private readonly router: Router,
-    private readonly snackBarService: SnackBarService
+    private readonly snackBarService: SnackBarService,
+    private readonly printService: PrintService,
   ) { }
   @ViewChild('orderPrint') captureElement = new ElementRef(null);
 
@@ -43,26 +44,11 @@ export class OrderPrintComponent implements OnInit {
     return getBrDateStr(value ?? '');
   }
 
-  captureScreenshot() {
-    html2canvas(this.captureElement.nativeElement!).then(canvas => {
-      canvas.toBlob(async (blob) => {
-        if (blob) {
-          try {
-            const item = new ClipboardItem({ 'image/png': blob });
-            await navigator.clipboard.write([item]);
-            this.snackBarService.success('Imagem copiada para o clipboard!');
-          } catch (err) {
-            this.snackBarService.error('Erro ao copiar imagem:');
-            console.log(err);
-          }
-        }
-      });
-    });
+  pdfPrint() {
+    this.printService.printDocument(`${this.order!.customer.name} - ${getBrDateStr(this.order?.orderDate!)}`)
   }
 
-  pdfPrint() {
-    document.title = `${this.order!.customer.name} - ${getBrDateStr(this.order?.orderDate!)}`;
-    window.print();
-    document.title = "Rosilaine cosméticos";
+  captureScreenshot() {
+    this.printService.captureDocumentScreenshot(this.captureElement.nativeElement!)
   }
 }

@@ -19,9 +19,10 @@ import { CustomerService } from 'src/app/services/customer/customer.service';
 import { CustomerInstallmentsService } from 'src/app/services/customer/installments/customer-installments.service';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 import { ViaCepService } from 'src/app/services/via-cep/via-cep.service';
-import { CURRENT_MONTH } from 'src/app/utils/date-util';
+import { CURRENT_MONTH, mapMonthName } from 'src/app/utils/date-util';
 import { getAmountStr, getBrCurrencyStr, getBrDateStr } from 'src/app/utils/text-format';
 import { CustomerMonthTable } from "./components/customer-month-table/customer-month-table";
+import { PrintService } from 'src/app/services/print/print.service';
 
 @Component({
   selector: 'app-customer-create',
@@ -65,7 +66,8 @@ export class CustomerCreateComponent implements OnInit {
     private readonly snackBarService: SnackBarService,
     private readonly router: Router,
     private readonly customerTagService: CustomerTagService,
-    private readonly customerInstallmentsService: CustomerInstallmentsService
+    private readonly customerInstallmentsService: CustomerInstallmentsService,
+    private readonly printService: PrintService,
   ) { }
 
   ngOnInit(): void {
@@ -222,6 +224,6 @@ export class CustomerCreateComponent implements OnInit {
   }
 
   print() {
-    window.print();
+    this.printService.printDocument(`${this.customer.name} - ${mapMonthName[this.selectMonthValue]}`)
   }
 }
