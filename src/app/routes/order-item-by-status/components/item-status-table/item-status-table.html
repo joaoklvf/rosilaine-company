@@ -35,3 +35,7 @@
     }
   </tbody>
 </table>
+<app-data-table-pagination
+  (searchAction)="onChangePage($event)"
+  [dataCount]="dataCount()"
+/>

@@ -3,27 +3,26 @@ import { FormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
+import { MatTabsModule } from "@angular/material/tabs";
 import { catchError, debounceTime, map, of, Subject, switchMap, tap } from 'rxjs';
+import { CustomAutocompleteComponent } from "src/app/components/custom-autocomplete/custom-autocomplete.component";
 import { CustomDialogComponent } from 'src/app/components/custom-dialog/custom-dialog.component';
-import { DataTableFilter } from 'src/app/components/data-table/data-table-interfaces';
-import { DataTablePaginationComponent } from "src/app/components/data-table/data-table-pagination/data-table-pagination.component";
 import { DataTableColumnProp } from 'src/app/interfaces/data-table';
-import { OrderItemByStatus, OrderItemByCustomer } from 'src/app/interfaces/order-item-by-status';
+import { OrderItemByCustomer, OrderItemByStatus } from 'src/app/interfaces/order-item-by-status';
+import { Customer } from 'src/app/models/customer/customer';
 import { OrderItemStatus } from 'src/app/models/order/order-item/order-item-status';
+import { CustomerService } from 'src/app/services/customer/customer.service';
 import { OrderItemStatusService } from 'src/app/services/order/order-item-status/order-item-status.service';
 import { OrderItemService } from 'src/app/services/order/order-item/order-item.service';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
-import { ItemStatusTable } from "./components/item-status-table/item-status-table";
-import { ItemCustomerTable } from "./components/item-customer-table/item-customer-table";
-import { MatTabsModule } from "@angular/material/tabs";
-import { CustomAutocompleteComponent } from "src/app/components/custom-autocomplete/custom-autocomplete.component";
-import { Customer } from 'src/app/models/customer/customer';
-import { CustomerService } from 'src/app/services/customer/customer.service';
 import { getCustomersNameNickName } from 'src/app/utils/text-format';
+import { ItemCustomerTable } from "./components/item-customer-table/item-customer-table";
+import { ItemStatusTable } from "./components/item-status-table/item-status-table";
+import { DEFAULT_FILTER } from './interfaces';
 
 @Component({
   selector: 'app-order-item-by-status',
-  imports: [MatFormFieldModule, MatSelectModule, FormsModule, DataTablePaginationComponent, ItemStatusTable, MatTabsModule, ItemCustomerTable, CustomAutocompleteComponent],
+  imports: [MatFormFieldModule, MatSelectModule, FormsModule, ItemStatusTable, MatTabsModule, ItemCustomerTable, CustomAutocompleteComponent],
   templateUrl: './order-item-by-status.component.html',
   styleUrl: './order-item-by-status.component.scss'
 })
@@ -40,13 +39,12 @@ export class OrderItemByStatusComponent implements OnInit {
   itemsByStatus: OrderItemByStatus[] = [];
   itemsByCustomer: OrderItemByCustomer[] = [];
   selectedStatusId?: string;
-  selectedCustomerId?: string;
   massiveStatusId?: string;
   dataCount = 0;
   selectedIndex = 0;
   customers: Customer[] = [];
-  private readonly $searchStatus =
-    new Subject<DataTableFilter | string>();
+  private readonly filters = { ...DEFAULT_FILTER };
+  private readonly $searchStatus = new Subject();
 
   constructor(
     private readonly orderItemStatusService: OrderItemStatusService,
@@ -58,56 +56,32 @@ export class OrderItemByStatusComponent implements OnInit {
   ngOnInit(): void {
     this.$searchStatus.pipe(
       debounceTime(1000),
-      switchMap((filters) => {
-        if (this.selectedIndex === 0) {
-          if (typeof filters === 'string')
-            return this.orderItemService.getByItemStatus({ statusId: filters, offset: 0, take: 15 })
+      switchMap(() => {
+        if (this.selectedIndex === 0)
+          return this.orderItemService.getByItemStatus(this.filters)
 
-          return this.orderItemService.getByItemStatus({ statusId: filters.filter, offset: filters.offset, take: filters.take })
-        }
-
-        if (typeof filters === 'string')
-          return this.orderItemService.getByItemCustomerAndStatus({ statusId: this.selectedStatusId, customerId: this.selectedCustomerId, offset: 0, take: 15 })
-
-        return this.orderItemService.getByItemCustomerAndStatus({ statusId: filters.filter, offset: filters.offset, take: filters.take })
+        return this.orderItemService.getByItemCustomerAndStatus(this.filters)
       }),
     ).subscribe(items => {
-      if (this.selectedIndex === 0) {
+      if (this.selectedIndex === 0)
         this.itemsByStatus = items[0] as OrderItemByStatus[];
-        this.dataCount = items[1];
-        return;
-      }
 
-      this.itemsByCustomer = items[0] as OrderItemByCustomer[];
+      else
+        this.itemsByCustomer = items[0] as OrderItemByCustomer[];
+
       this.dataCount = items[1];
     });
 
     this.orderItemStatusService.get().subscribe(statuses => {
       this.orderItemStatuses = statuses[0]
       const id = this.orderItemStatuses[0].id;
-      if (id)
-        this.filterDataByStatusId(id)
+      if (!id)
+        return;
+
+      this.selectedStatusId = id;
+      this.filters.statusId = id;
+      this.filterData();
     });
-  }
-
-  filterDataByStatusId(filter: DataTableFilter | string) {
-    if (typeof filter === 'string') {
-      this.selectedStatusId = filter;
-      this.$searchStatus.next(filter);
-      return;
-    }
-
-    this.$searchStatus.next({ ...filter, filter: this.selectedStatusId });
-  }
-
-  filterDataByCustomerId(filter: DataTableFilter | string) {
-    if (typeof filter === 'string') {
-      this.$searchStatus.next(filter);
-      this.selectedCustomerId = filter;
-      return;
-    }
-
-    this.$searchStatus.next({ ...filter, filter: this.selectedCustomerId });
   }
 
   filterCustomers(value: string | Customer | null) {
@@ -171,16 +145,29 @@ export class OrderItemByStatusComponent implements OnInit {
       .subscribe();
   }
 
-  changePageAction(skip: number) {
-    this.filterDataByStatusId({ filter: '', offset: skip, take: 15 })
+  changePageAction(offset: number) {
+    this.filters.offset = offset;
+    this.filterData();
   }
 
   onTabChangeAction(index: number) {
     this.selectedIndex = index;
-    this.filterDataByStatusId({ filter: '', offset: 0, take: 15 });
+    this.filters.customerId = '';
+    this.filters.offset = 0;
+    this.filterData();
   }
 
   setCustomer(customer: Customer | null) {
-    this.filterDataByCustomerId(customer?.id ?? '');
+    this.filters.customerId = customer?.id!;
+    this.filterData();
+  }
+
+  filterData() {
+    this.$searchStatus.next(this.filters);
+  }
+
+  onStatusChange(statusId: string) {
+    this.filters.statusId = statusId;
+    this.filterData();
   }
 }

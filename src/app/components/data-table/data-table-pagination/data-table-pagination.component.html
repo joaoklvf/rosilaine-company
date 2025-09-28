@@ -31,11 +31,11 @@
     >
       <ul class="flex items-center -space-x-px h-8 text-sm">
         <li
-          class="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 inset-ring inset-ring-gray-300 dark:inset-ring-gray-700 hover:bg-white/5 focus:z-20 focus:outline-offset-0"
+          class="relative inline-flex items-center rounded-l-md text-gray-400 inset-ring inset-ring-gray-300 dark:inset-ring-gray-700 hover:bg-white/5 focus:z-20 focus:outline-offset-0"
         >
           <button
             type="button"
-            class="cursor-pointer"
+            class="p-2"
             aria-label="Anterior"
             [disabled]="!hasMoreData"
             (click)="onPrevButtonClick()"
@@ -68,11 +68,11 @@
         </li>
         }
         <li
-          class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 inset-ring inset-ring-gray-300 dark:inset-ring-gray-700 hover:bg-white/5 focus:z-20 focus:outline-offset-0"
+          class="relative inline-flex items-center rounded-r-md text-gray-400 inset-ring inset-ring-gray-300 dark:inset-ring-gray-700 hover:bg-white/5 focus:z-20 focus:outline-offset-0"
         >
           <button
             type="button"
-            class="cursor-pointer"
+            class="p-2"
             aria-label="Próximo"
             [disabled]="!hasMoreData"
             (click)="onNextButtonClick()"
