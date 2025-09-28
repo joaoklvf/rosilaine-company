@@ -19,10 +19,11 @@ import { getCustomersNameNickName } from 'src/app/utils/text-format';
 import { ItemCustomerTable } from "./components/item-customer-table/item-customer-table";
 import { ItemStatusTable } from "./components/item-status-table/item-status-table";
 import { DEFAULT_FILTER } from './interfaces';
+import { DataTablePaginationComponent } from "src/app/components/data-table/data-table-pagination/data-table-pagination.component";
 
 @Component({
   selector: 'app-order-item-by-status',
-  imports: [MatFormFieldModule, MatSelectModule, FormsModule, ItemStatusTable, MatTabsModule, ItemCustomerTable, CustomAutocompleteComponent],
+  imports: [MatFormFieldModule, MatSelectModule, FormsModule, ItemStatusTable, MatTabsModule, ItemCustomerTable, CustomAutocompleteComponent, DataTablePaginationComponent],
   templateUrl: './order-item-by-status.component.html',
   styleUrl: './order-item-by-status.component.scss'
 })
@@ -43,6 +44,8 @@ export class OrderItemByStatusComponent implements OnInit {
   dataCount = 0;
   selectedIndex = 0;
   customers: Customer[] = [];
+  page = 1;
+
   private readonly filters = { ...DEFAULT_FILTER };
   private readonly $searchStatus = new Subject();
 
@@ -98,6 +101,10 @@ export class OrderItemByStatusComponent implements OnInit {
       .subscribe(customers => this.customers = getCustomersNameNickName(customers));
   }
 
+  resetPage() {
+    this.page = 1;
+    this.filters.offset = 0;
+  }
 
   openDialog(): void {
     if (!this.massiveStatusId || !this.selectedStatusId)
@@ -145,20 +152,22 @@ export class OrderItemByStatusComponent implements OnInit {
       .subscribe();
   }
 
-  changePageAction(offset: number) {
-    this.filters.offset = offset;
+  changePageAction(page: number) {
+    this.filters.offset = page - 1;
+    this.page = page;
     this.filterData();
   }
 
   onTabChangeAction(index: number) {
     this.selectedIndex = index;
     this.filters.customerId = '';
-    this.filters.offset = 0;
+    this.resetPage();
     this.filterData();
   }
 
   setCustomer(customer: Customer | null) {
     this.filters.customerId = customer?.id!;
+    this.resetPage();
     this.filterData();
   }
 
@@ -168,6 +177,7 @@ export class OrderItemByStatusComponent implements OnInit {
 
   onStatusChange(statusId: string) {
     this.filters.statusId = statusId;
+    this.resetPage();
     this.filterData();
   }
 }

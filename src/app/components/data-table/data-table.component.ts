@@ -29,7 +29,8 @@ export class DataTableComponent<T> {
   readonly showActionsColumn = input(true);
   readonly title = input<string | null>(null);
   readonly cardMode = input(true);
-  
+  page = 1;
+
   get _title() {
     return this.title();
   }
@@ -62,12 +63,14 @@ export class DataTableComponent<T> {
     return getCellValue(value, columnProp)
   }
 
-  filterData(event: Event) {
+  changeFilter(event: Event) {
+    this.page = 1;
     this.searchAction.emit({ filter: (event.target as HTMLInputElement).value, offset: 0, take: this.dataPerPage() });
   }
 
-  changePageAction(skip: number) {
-    this.searchAction.emit({ filter: '', offset: skip, take: this.dataPerPage() })
+  changePageAction(page: number) {
+    this.page = page;
+    this.searchAction.emit({ filter: '', offset: page - 1, take: this.dataPerPage() })
   }
 
   cellAction(index: number, row: T) {

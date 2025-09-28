@@ -65,8 +65,6 @@
         [orderItemStatuses]="orderItemStatuses"
         [data]="itemsByStatus"
         (changeItemStatusAction)="changeItemStatus($event)"
-        [dataCount]="dataCount"
-        (changePageAction)="changePageAction($event)"
       />
     </mat-tab>
     <mat-tab label="Produtos por cliente e status" labelClass="mb-1">
@@ -74,9 +72,12 @@
         [orderItemStatuses]="orderItemStatuses"
         [data]="itemsByCustomer"
         (changeItemStatusAction)="changeItemStatus($event)"
-        [dataCount]="dataCount"
-        (changePageAction)="changePageAction($event)"
       />
     </mat-tab>
   </mat-tab-group>
+  <app-data-table-pagination
+    (searchAction)="changePageAction($event)"
+    [dataCount]="dataCount"
+    [page]="page"
+  />
 </div>

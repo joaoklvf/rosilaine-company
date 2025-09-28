@@ -11,8 +11,7 @@ export class DataTablePaginationComponent {
   readonly searchAction = output<number>();
   readonly dataPerPage = input(15);
   readonly dataCount = input(0);
-
-  currentOffset = 0;
+  readonly page = input(1);
 
   get limitResults() {
     return this.dataPerPage();
@@ -23,11 +22,11 @@ export class DataTablePaginationComponent {
   }
 
   get firstResultOffset() {
-    return this.limitResults * this.currentOffset + 1
+    return this.limitResults * (this.page() - 1) + 1
   }
 
   get lastResultOffset() {
-    const value = this.limitResults * this.currentPage;
+    const value = this.limitResults * this.page();
     return value > this.totalResults ? this.totalResults : value;
   }
 
@@ -35,12 +34,9 @@ export class DataTablePaginationComponent {
     return Math.ceil(this.totalResults / this.limitResults);
   }
 
-  get currentPage() {
-    return this.currentOffset + 1;
-  }
 
   get pages() {
-    return getPages(this.pagesCount, this.currentPage)
+    return getPages(this.pagesCount, this.page())
   }
 
   get hasMoreData() {
@@ -48,35 +44,35 @@ export class DataTablePaginationComponent {
   }
 
   onPrevButtonClick() {
-    if (this.currentOffset === 0)
-      return;
+    let page = this.page();
+    if (page !== 1)
+      page--;
 
-    this.currentOffset--;
-    this.getData();
+    this.getData(page);
   }
 
   onNextButtonClick() {
-    if (this.currentOffset === this.pagesCount - 1)
-      return;
+    let page = this.page();
+    if (page !== this.pagesCount)
+      page++;
 
-    this.currentOffset++;
-    this.getData();
+    this.getData(page);
   }
 
   onPageButtonClick(page: string) {
-    this.currentOffset = Number(page) - 1;
-    this.getData();
+    if (page !== '...')
+      this.getData(Number(page));
   }
 
-  getData() {
-    this.searchAction.emit(this.currentOffset)
+  getData(page: number) {
+    this.searchAction.emit(page)
   }
 
   getClassName(page: string) {
     if (page === '...')
       return 'relative inline-flex items-center px-4 py-2 text-sm cursor-pointer text-gray-400 inset-ring inset-ring-gray-300 dark:inset-ring-gray-700 focus:outline-offset-0';
 
-    if (Number(page) === this.currentPage)
+    if (Number(page) === this.page())
       return 'relative z-10 inline-flex items-center bg-indigo-500 px-4 py-2 text-sm cursor-pointer text-white focus:z-20 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500'
 
     return "relative inline-flex items-center px-4 py-2 text-sm cursor-pointer dark:text-gray-200 text-gray-900 inset-ring inset-ring-gray-300 dark:inset-ring-gray-700 hover:bg-white/5 focus:z-20 focus:outline-offset-0";
