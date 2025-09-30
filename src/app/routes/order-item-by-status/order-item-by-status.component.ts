@@ -20,6 +20,8 @@ import { ItemCustomerTable } from "./components/item-customer-table/item-custome
 import { ItemStatusTable } from "./components/item-status-table/item-status-table";
 import { DEFAULT_FILTER } from './interfaces';
 import { DataTablePaginationComponent } from "src/app/components/data-table/data-table-pagination/data-table-pagination.component";
+import { Product } from 'src/app/models/product/product';
+import { ProductService } from 'src/app/services/product/product.service';
 
 @Component({
   selector: 'app-order-item-by-status',
@@ -44,6 +46,7 @@ export class OrderItemByStatusComponent implements OnInit {
   dataCount = 0;
   selectedIndex = 0;
   customers: Customer[] = [];
+  products: Product[] = [];
   page = 1;
 
   private readonly filters = { ...DEFAULT_FILTER };
@@ -53,7 +56,8 @@ export class OrderItemByStatusComponent implements OnInit {
     private readonly orderItemStatusService: OrderItemStatusService,
     private readonly orderItemService: OrderItemService,
     private readonly snackBarService: SnackBarService,
-    private readonly customerService: CustomerService
+    private readonly customerService: CustomerService,
+    private readonly productService: ProductService,
   ) { }
 
   ngOnInit(): void {
@@ -99,6 +103,26 @@ export class OrderItemByStatusComponent implements OnInit {
         map(([value]) => value)
       )
       .subscribe(customers => this.customers = getCustomersNameNickName(customers));
+  }
+
+  filterProducts(value: string | Product | null) {
+    let description = '';
+    let productCode = '';
+    if (typeof value === 'string') {
+      const strNumber = Number(value);
+      if (Number.isNaN(strNumber))
+        description = value;
+      else
+        productCode = value;
+    }
+    else if (value !== null)
+      description = value.description;
+
+    this.productService.get({ description, productCode, offset: 0, take: 10 })
+      .pipe(
+        map(([value]) => value)
+      )
+      .subscribe(products => this.products = products);
   }
 
   resetPage() {
@@ -167,6 +191,12 @@ export class OrderItemByStatusComponent implements OnInit {
 
   setCustomer(customer: Customer | null) {
     this.filters.customerId = customer?.id!;
+    this.resetPage();
+    this.filterData();
+  }
+
+  setProduct(product: Product | null) {
+    this.filters.productId = product?.id!;
     this.resetPage();
     this.filterData();
   }

@@ -5,6 +5,7 @@ import { MessageService } from '../../message/message.service';
 import { OrderItem } from 'src/app/models/order/order-item/order-item';
 import { OrderItemByStatus, OrderItemByCustomer } from 'src/app/interfaces/order-item-by-status';
 import { Observable, tap, catchError } from 'rxjs';
+import { getHttpParams } from 'src/app/utils/http-util';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,7 @@ export class OrderItemService extends BaseApiService<OrderItem> {
 
   /** GET orders from the server */
   getByItemStatus(params: any): Observable<[OrderItemByStatus[], number]> {
-    return this.http.get<[OrderItemByStatus[], number]>(`${this.apiUrl}/items-by-status`, { params })
+    return this.http.get<[OrderItemByStatus[], number]>(`${this.apiUrl}/items-by-status`, { params: getHttpParams(params) })
       .pipe(
         tap(_ => this.log('fetched data')),
         catchError(this.handleError<[OrderItemByStatus[], number]>('getTs'))
@@ -24,7 +25,7 @@ export class OrderItemService extends BaseApiService<OrderItem> {
   }
 
   getByItemCustomerAndStatus(params: any): Observable<[OrderItemByCustomer[], number]> {
-    return this.http.get<[OrderItemByCustomer[], number]>(`${this.apiUrl}/items-by-customer`, { params })
+    return this.http.get<[OrderItemByCustomer[], number]>(`${this.apiUrl}/items-by-customer`, { params: getHttpParams(params) })
       .pipe(
         tap(_ => this.log('fetched data')),
         catchError(this.handleError<[OrderItemByCustomer[], number]>('getTs'))
