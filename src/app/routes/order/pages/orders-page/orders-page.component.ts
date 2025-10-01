@@ -4,7 +4,7 @@ import { Router, RouterModule } from '@angular/router';
 import { CustomDialogComponent } from 'src/app/components/custom-dialog/custom-dialog.component';
 import { Order } from 'src/app/models/order/order';
 import { OrderService } from 'src/app/services/order/order.service';
-import { getBrDateStr, getCustomerNameNickName, getCustomersNameNickName } from 'src/app/utils/text-format';
+import { getBrDateStr, getCustomerNamecustomer_nick_name, getCustomersNamecustomer_nick_name } from 'src/app/utils/text-format';
 import { DataTableColumnProp, FormatValueOptions } from 'src/app/interfaces/data-table';
 import { CustomAutocompleteComponent } from 'src/app/components/custom-autocomplete/custom-autocomplete.component';
 import { Customer } from 'src/app/models/customer/customer';
@@ -54,7 +54,7 @@ export class OrdersPageComponent implements OnInit {
       .subscribe(status => this.orderStatuses = status[0]);
 
     this.customerService.get({ offset: 0, take: 10 })
-      .subscribe(customers => this.customers = getCustomersNameNickName(customers[0]));
+      .subscribe(customers => this.customers = getCustomersNamecustomer_nick_name(customers[0]));
   }
 
   getOrders() {
@@ -68,7 +68,7 @@ export class OrdersPageComponent implements OnInit {
 
     this.orderService.get(params)
       .subscribe(orders => {
-        this.orders = orders[0].map(order => ({ ...order, customer: getCustomerNameNickName(order.customer) }));
+        this.orders = orders[0].map(order => ({ ...order, customer: getCustomerNamecustomer_nick_name(order.customer) }));
         this.dataCount = orders[1];
       });
   }
@@ -136,7 +136,7 @@ export class OrdersPageComponent implements OnInit {
       .pipe(
         map(([value]) => value)
       )
-      .subscribe(customers => this.customers = getCustomersNameNickName(customers));
+      .subscribe(customers => this.customers = getCustomersNamecustomer_nick_name(customers));
   }
 
   filterStatus(value: string | OrderStatus | null) {

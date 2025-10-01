@@ -95,7 +95,7 @@ export class CustomerCreateComponent implements OnInit {
 
   get title() {
     return this.customer.id ?
-      `${this.customer.name} ${this.customer.nickname}`.trim() : 'Cadastrar Cliente';
+      `${this.customer.name} ${this.customer.customer_nick_name}`.trim() : 'Cadastrar Cliente';
   }
 
   add() {

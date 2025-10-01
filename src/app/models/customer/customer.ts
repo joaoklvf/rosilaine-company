@@ -3,7 +3,7 @@ import { CustomerTag } from "./customer-tag";
 
 export class Customer extends BaseEntity {
   name = '';
-  nickname?: string;
+  customer_nick_name?: string;
   phone = '';
   birthDate: Date | string | null = null;
   zipCode: string | null = null;

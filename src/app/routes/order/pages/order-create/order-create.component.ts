@@ -27,7 +27,7 @@ import { OrderStatusService } from "src/app/services/order/order-status/order-st
 import { OrderService } from "src/app/services/order/order.service";
 import { ProductService } from "src/app/services/product/product.service";
 import { SnackBarService } from "src/app/services/snack-bar/snack-bar.service";
-import { getBrCurrencyStr, getBrDateTimeStr, getCustomersNameNickName } from "src/app/utils/text-format";
+import { getBrCurrencyStr, getBrDateTimeStr, getCustomersNamecustomer_nick_name } from "src/app/utils/text-format";
 import { InstallmentsHeaderComponent } from "./components/installments-header/installments-header.component";
 import { IInstallmentHeader } from "./components/installments-header/interfaces";
 import { InstallmentManagementComponent } from "./components/installments-management/installments-management.component";
@@ -77,7 +77,7 @@ export class OrderCreateComponent implements OnInit {
       this.loadOrder(id);
 
     this.customerService.get({ offset: 0, take: 10 })
-      .subscribe(customers => this.customers = getCustomersNameNickName(customers[0]));
+      .subscribe(customers => this.customers = getCustomersNamecustomer_nick_name(customers[0]));
 
     this.productService.get({ offset: 0, take: 10 })
       .subscribe(products => this.products = products[0]);
@@ -397,7 +397,7 @@ export class OrderCreateComponent implements OnInit {
       .pipe(
         map(([value]) => value)
       )
-      .subscribe(customers => this.customers = getCustomersNameNickName(customers));
+      .subscribe(customers => this.customers = getCustomersNamecustomer_nick_name(customers));
   }
 
   filterProducts(value: string | Product | null) {

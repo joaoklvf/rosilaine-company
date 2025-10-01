@@ -9,7 +9,7 @@ import { DataTableColumnProp } from 'src/app/interfaces/data-table';
 import { Customer } from 'src/app/models/customer/customer';
 import { CustomerService } from 'src/app/services/customer/customer.service';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
-import { getCustomersNameNickName } from 'src/app/utils/text-format';
+import { getCustomersNamecustomer_nick_name } from 'src/app/utils/text-format';
 
 @Component({
   selector: 'app-customers-page',
@@ -44,7 +44,7 @@ export class CustomersPageComponent implements OnInit {
         return this.customerService.get({ name: filters.filter, offset: filters.offset, take: filters.take })
       }),
     ).subscribe(customers => {
-      this.customers = getCustomersNameNickName(customers[0]);
+      this.customers = getCustomersNamecustomer_nick_name(customers[0]);
       this.dataCount = customers[1]
     });
   }
