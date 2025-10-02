@@ -15,7 +15,7 @@ import { CustomerService } from 'src/app/services/customer/customer.service';
 import { OrderItemStatusService } from 'src/app/services/order/order-item-status/order-item-status.service';
 import { OrderItemService } from 'src/app/services/order/order-item/order-item.service';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
-import { getCustomersNamecustomer_nick_name } from 'src/app/utils/text-format';
+import { getCustomersNameNickName } from 'src/app/utils/text-format';
 import { ItemCustomerTable } from "./components/item-customer-table/item-customer-table";
 import { ItemStatusTable } from "./components/item-status-table/item-status-table";
 import { DEFAULT_FILTER } from './interfaces';
@@ -102,7 +102,7 @@ export class OrderItemByStatusComponent implements OnInit {
       .pipe(
         map(([value]) => value)
       )
-      .subscribe(customers => this.customers = getCustomersNamecustomer_nick_name(customers));
+      .subscribe(customers => this.customers = getCustomersNameNickName(customers));
   }
 
   filterProducts(value: string | Product | null) {

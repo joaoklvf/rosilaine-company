@@ -4,7 +4,7 @@ import { Router, RouterModule } from '@angular/router';
 import { CustomDialogComponent } from 'src/app/components/custom-dialog/custom-dialog.component';
 import { Order } from 'src/app/models/order/order';
 import { OrderService } from 'src/app/services/order/order.service';
-import { getBrDateStr, getCustomerNamecustomer_nick_name, getCustomersNamecustomer_nick_name } from 'src/app/utils/text-format';
+import { getBrDateStr, getCustomerNameNickName, getCustomersNameNickName } from 'src/app/utils/text-format';
 import { DataTableColumnProp, FormatValueOptions } from 'src/app/interfaces/data-table';
 import { CustomAutocompleteComponent } from 'src/app/components/custom-autocomplete/custom-autocomplete.component';
 import { Customer } from 'src/app/models/customer/customer';
@@ -15,6 +15,7 @@ import { HttpParams } from '@angular/common/http';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 import { tap, catchError, of, map } from 'rxjs';
 import { DataTableComponent } from 'src/app/components/data-table/data-table.component';
+import { DataTableFilter } from 'src/app/components/data-table/data-table-interfaces';
 
 @Component({
   selector: 'app-orders-page',
@@ -54,10 +55,10 @@ export class OrdersPageComponent implements OnInit {
       .subscribe(status => this.orderStatuses = status[0]);
 
     this.customerService.get({ offset: 0, take: 10 })
-      .subscribe(customers => this.customers = getCustomersNamecustomer_nick_name(customers[0]));
+      .subscribe(customers => this.customers = getCustomersNameNickName(customers[0]));
   }
 
-  getOrders() {
+  getOrders(filters: DataTableFilter = { offset: 0, take: 15 }) {
     let params = new HttpParams();
 
     if (this.customer?.id)
@@ -66,9 +67,14 @@ export class OrdersPageComponent implements OnInit {
     if (this.status?.id)
       params = params.set('statusId', this.status.id)
 
+    Object.entries(filters).forEach(([entry, value]) => {
+      if (value !== '' && value !== null && value !== undefined)
+        params = params.set(entry, value)
+    })
+
     this.orderService.get(params)
       .subscribe(orders => {
-        this.orders = orders[0].map(order => ({ ...order, customer: getCustomerNamecustomer_nick_name(order.customer) }));
+        this.orders = orders[0].map(order => ({ ...order, customer: getCustomerNameNickName(order.customer) }));
         this.dataCount = orders[1];
       });
   }
@@ -136,7 +142,7 @@ export class OrdersPageComponent implements OnInit {
       .pipe(
         map(([value]) => value)
       )
-      .subscribe(customers => this.customers = getCustomersNamecustomer_nick_name(customers));
+      .subscribe(customers => this.customers = getCustomersNameNickName(customers));
   }
 
   filterStatus(value: string | OrderStatus | null) {
@@ -151,5 +157,9 @@ export class OrdersPageComponent implements OnInit {
         map(([value]) => value)
       )
       .subscribe(orderStatuses => this.orderStatuses = orderStatuses);
+  }
+
+  filterData(filters: DataTableFilter) {
+    this.getOrders(filters);
   }
 }

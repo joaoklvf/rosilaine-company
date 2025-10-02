@@ -17,8 +17,8 @@ export const getDateFromStr = (value: string | Date) => {
   return new Date(dataNascimentoSplitted[2], dataNascimentoSplitted[1] - 1, dataNascimentoSplitted[0])
 }
 
-export const getCustomersNamecustomer_nick_name = (customers: Customer[]) =>
-  customers.map(customer => getCustomerNamecustomer_nick_name(customer));
+export const getCustomersNameNickName = (customers: Customer[]) =>
+  customers.map(customer => getCustomerNameNickName(customer));
 
-export const getCustomerNamecustomer_nick_name = (customer: Customer) =>
+export const getCustomerNameNickName = (customer: Customer) =>
   ({ ...customer, name: `${customer.name} ${customer.customer_nick_name ?? ''}`.trim() });
