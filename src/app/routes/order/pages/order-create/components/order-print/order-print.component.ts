@@ -21,6 +21,11 @@ export class OrderPrintComponent implements OnInit {
 
   order?: Order;
 
+  get title() {
+    return this.order?.endCustomer?.name ?
+      `${this.order.customer.name} - ${this.order.endCustomer.name}` : this.order?.customer.name;
+  }
+
   ngOnInit(): void {
     const orderStr = sessionStorage.getItem('order');
     if (!orderStr) {
