@@ -19,7 +19,7 @@
   class="w-full p-4 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 print-main"
 >
   <div class="flex justify-between">
-    <h2>{{ order?.customer?.name }}</h2>
+    <h2>{{ order?.endCustomer?.name || order?.customer?.name }}</h2>
     <h2>{{ getDate(order?.orderDate) }}</h2>
   </div>
   <table
